@@ -10,7 +10,7 @@
 
 #include <ros/ros.h>
 #include <eigen3/Eigen/Eigen>
-//#include "thormang3_walking_module_msgs/AddStepDataArray.h"
+#include "alice_walking_module_msgs/AddStepDataArray.h"
 #include "alice_foot_step_generator/Step2DArray.h"
 
 #define STOP_WALKING           (0)
@@ -34,13 +34,13 @@ public:
 
   void initialize();
 
-  /*void getStepData(thormang3_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
-      const thormang3_walking_module_msgs::StepData& ref_step_data,
+  void getStepData(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+      const alice_walking_module_msgs::StepData& ref_step_data,
       int desired_step_type);
 
-  void getStepDataFromStepData2DArray(thormang3_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
-      const thormang3_walking_module_msgs::StepData& ref_step_data,
-      const thormang3_foot_step_generator::Step2DArray::ConstPtr& request_step_2d);*/
+  void getStepDataFromStepData2DArray(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+      const alice_walking_module_msgs::StepData& ref_step_data,
+      const alice_foot_step_generator::Step2DArray::ConstPtr& request_step_2d);
 
   int    num_of_step_;
   double fb_step_length_m_;
@@ -57,19 +57,19 @@ public:
   double default_y_feet_offset_m_;
 
 private:
-  /*bool calcStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type);
+  bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type);
 
-  void calcFBStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction);
-  void calcRLStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction);
-  void calcRoStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction);
-  void calcStopStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction);*/
+  void calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+  void calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+  void calcRoStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+  void calcStopStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
 
   Eigen::MatrixXd getTransformationXYZRPY(double position_x, double position_y, double position_z, double roll, double pitch, double yaw);
   void getPosefromTransformMatrix(const Eigen::MatrixXd &matTransform, double *position_x, double *position_y, double *position_z, double *roll, double *pitch, double *yaw);
-  //thormang3_walking_module_msgs::PoseXYZRPY getPosefromTransformMatrix(const Eigen::MatrixXd &matTransform);
+  alice_walking_module_msgs::PoseXYZRPY getPosefromTransformMatrix(const Eigen::MatrixXd &matTransform);
   Eigen::MatrixXd getInverseTransformation(Eigen::MatrixXd transform);
 
-  //thormang3_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type step_data_array_;
+  alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type step_data_array_;
 
   int previous_step_type_;
 

@@ -102,9 +102,9 @@ void FootStepGenerator::getPosefromTransformMatrix(const Eigen::MatrixXd &matTra
   *yaw        = atan2( matTransform.coeff(1,0), matTransform.coeff(0,0));
 }
 
-/*thormang3_walking_module_msgs::PoseXYZRPY FootStepGenerator::getPosefromTransformMatrix(const Eigen::MatrixXd &matTransform)
+alice_walking_module_msgs::PoseXYZRPY FootStepGenerator::getPosefromTransformMatrix(const Eigen::MatrixXd &matTransform)
 {
-  thormang3_walking_module_msgs::PoseXYZRPY pose;
+	alice_walking_module_msgs::PoseXYZRPY pose;
 
   double pose_x     = 0;
   double pose_y     = 0;
@@ -123,7 +123,7 @@ void FootStepGenerator::getPosefromTransformMatrix(const Eigen::MatrixXd &matTra
   pose.yaw   = pose_yaw;
 
   return pose;
-}*/
+}
 
 Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd transform)
 {
@@ -150,7 +150,7 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
   return inv_t;
 }
 
-/*void FootStepGenerator::getStepData(thormang3_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array, const thormang3_walking_module_msgs::StepData& ref_step_data, int desired_step_type)
+void FootStepGenerator::getStepData(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array, const alice_walking_module_msgs::StepData& ref_step_data, int desired_step_type)
 {
   step_data_array->clear();
   step_data_array_.clear();
@@ -167,22 +167,22 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
   {
     return;
   }
-}*/
+}
 
 
 
-/*void FootStepGenerator::getStepDataFromStepData2DArray(thormang3_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
-    const thormang3_walking_module_msgs::StepData& ref_step_data,
-    const thormang3_foot_step_generator::Step2DArray::ConstPtr& request_step_2d)
+void FootStepGenerator::getStepDataFromStepData2DArray(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+    const alice_walking_module_msgs::StepData& ref_step_data,
+    const alice_foot_step_generator::Step2DArray::ConstPtr& request_step_2d)
 {
   step_data_array->clear();
 
-  thormang3_walking_module_msgs::StepData stp_data;
+  alice_walking_module_msgs::StepData stp_data;
 
   stp_data = ref_step_data;
   stp_data.time_data.abs_step_time += start_end_time_sec_;
   stp_data.time_data.dsp_ratio = dsp_ratio_;
-  stp_data.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
+  stp_data.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
   stp_data.time_data.start_time_delay_ratio_x     = 0.0;
   stp_data.time_data.start_time_delay_ratio_y     = 0.0;
   stp_data.time_data.start_time_delay_ratio_z     = 0.0;
@@ -196,7 +196,7 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
   stp_data.time_data.finish_time_advance_ratio_pitch = 0.0;
   stp_data.time_data.finish_time_advance_ratio_yaw   = 0.0;
 
-  stp_data.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+  stp_data.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
   stp_data.position_data.foot_z_swap = 0;
   stp_data.position_data.body_z_swap = 0;
 
@@ -205,11 +205,11 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
   for(unsigned int stp_idx = 0; stp_idx < request_step_2d->footsteps_2d.size(); stp_idx++)
   {
     stp_data.time_data.abs_step_time += step_time_sec_;
-    stp_data.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+    stp_data.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
 
-    if(request_step_2d->footsteps_2d[stp_idx].moving_foot == thormang3_foot_step_generator::Step2D::LEFT_FOOT_SWING)
+    if(request_step_2d->footsteps_2d[stp_idx].moving_foot == alice_foot_step_generator::Step2D::LEFT_FOOT_SWING)
     {
-      stp_data.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data.position_data.body_z_swap = body_z_swap_m_;
       stp_data.position_data.foot_z_swap = foot_z_swap_m_;
       stp_data.position_data.left_foot_pose.x   = request_step_2d->footsteps_2d[stp_idx].step2d.x;
@@ -217,9 +217,9 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
       stp_data.position_data.left_foot_pose.yaw = request_step_2d->footsteps_2d[stp_idx].step2d.theta;
 
     }
-    else if(request_step_2d->footsteps_2d[stp_idx].moving_foot == thormang3_foot_step_generator::Step2D::RIGHT_FOOT_SWING)
+    else if(request_step_2d->footsteps_2d[stp_idx].moving_foot == alice_foot_step_generator::Step2D::RIGHT_FOOT_SWING)
     {
-      stp_data.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data.position_data.body_z_swap = body_z_swap_m_;
       stp_data.position_data.foot_z_swap = foot_z_swap_m_;
       stp_data.position_data.right_foot_pose.x   = request_step_2d->footsteps_2d[stp_idx].step2d.x;
@@ -249,7 +249,7 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
 
   stp_data.time_data.abs_step_time += start_end_time_sec_;
   stp_data.time_data.dsp_ratio = dsp_ratio_;
-  stp_data.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+  stp_data.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
   stp_data.time_data.start_time_delay_ratio_x     = 0.0;
   stp_data.time_data.start_time_delay_ratio_y     = 0.0;
   stp_data.time_data.start_time_delay_ratio_z     = 0.0;
@@ -263,7 +263,7 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
   stp_data.time_data.finish_time_advance_ratio_pitch = 0.0;
   stp_data.time_data.finish_time_advance_ratio_yaw   = 0.0;
 
-  stp_data.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+  stp_data.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
   stp_data.position_data.foot_z_swap = 0;
   stp_data.position_data.body_z_swap = 0;
 
@@ -271,13 +271,13 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
 }
 
 //
-bool FootStepGenerator::calcStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type)
+bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type)
 {
   int direction = 0;
-  thormang3_walking_module_msgs::StepData stp_data[2];
+  alice_walking_module_msgs::StepData stp_data[2];
 
-  thormang3_walking_module_msgs::PoseXYZRPY poseGtoRF, poseGtoLF;
-  thormang3_walking_module_msgs::PoseXYZRPY poseLtoRF, poseLtoLF;
+  alice_walking_module_msgs::PoseXYZRPY poseGtoRF, poseGtoLF;
+  alice_walking_module_msgs::PoseXYZRPY poseLtoRF, poseLtoLF;
 
   poseGtoRF = ref_step_data.position_data.right_foot_pose;
   poseGtoLF = ref_step_data.position_data.left_foot_pose;
@@ -292,7 +292,7 @@ bool FootStepGenerator::calcStep(const thormang3_walking_module_msgs::StepData& 
   Eigen::MatrixXd mat_lf_to_local = getTransformationXYZRPY(0, -0.5*default_y_feet_offset_m_, 0, 0, 0, 0);
   Eigen::MatrixXd mat_rf_to_local = getTransformationXYZRPY(0,  0.5*default_y_feet_offset_m_, 0, 0, 0, 0);
   Eigen::MatrixXd mat_global_to_local, mat_local_to_global;
-  if(ref_step_data.position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING)
+  if(ref_step_data.position_data.moving_foot == alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING)
   {
     mat_global_to_local = mat_g_to_rf*mat_rf_to_local;
     mat_local_to_global = getInverseTransformation(mat_global_to_local);
@@ -340,7 +340,7 @@ bool FootStepGenerator::calcStep(const thormang3_walking_module_msgs::StepData& 
   stp_data[0].time_data.finish_time_advance_ratio_yaw   = 0.0;
 
 
-  if(stp_data[0].time_data.walking_state != thormang3_walking_module_msgs::StepTimeData::IN_WALKING)
+  if(stp_data[0].time_data.walking_state != alice_walking_module_msgs::StepTimeData::IN_WALKING)
   {
     if(desired_step_type == FORWARD_WALKING || desired_step_type == BACKWARD_WALKING )
       calcFBStep(stp_data[0], direction);
@@ -357,22 +357,22 @@ bool FootStepGenerator::calcStep(const thormang3_walking_module_msgs::StepData& 
   {
     if(desired_step_type != previous_step_type)
     {
-      stp_data[0].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+      stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
       if((fabs(poseLtoRF.yaw - poseLtoLF.yaw) > 0)
           || (fabs(poseLtoRF.y - poseLtoLF.y) > default_y_feet_offset_m_)
           || (fabs(poseLtoRF.x - poseLtoLF.x) > 0))
       {
         stp_data[0].time_data.abs_step_time += step_time_sec_;
-        if(ref_step_data.position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+        if(ref_step_data.position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
         {
-          stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+          stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
           stp_data[0].position_data.right_foot_pose.x   = stp_data[0].position_data.left_foot_pose.x;
           stp_data[0].position_data.right_foot_pose.y   = stp_data[0].position_data.left_foot_pose.y - default_y_feet_offset_m_;
           stp_data[0].position_data.right_foot_pose.yaw = stp_data[0].position_data.left_foot_pose.yaw;
         }
         else
         {
-          stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+          stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
           stp_data[0].position_data.left_foot_pose.x   = stp_data[0].position_data.right_foot_pose.x;
           stp_data[0].position_data.left_foot_pose.y   = stp_data[0].position_data.right_foot_pose.y + default_y_feet_offset_m_;
           stp_data[0].position_data.left_foot_pose.yaw = stp_data[0].position_data.right_foot_pose.yaw;
@@ -478,19 +478,19 @@ bool FootStepGenerator::calcStep(const thormang3_walking_module_msgs::StepData& 
       }
       else if(desired_step_type == LEFTWARD_WALKING || desired_step_type == LEFT_ROTATING_WALKING)
       {
-        if(stp_data[0].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+        if(stp_data[0].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
         {
           stp_data[1].time_data.abs_step_time += step_time_sec_;
-          stp_data[1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+          stp_data[1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
           step_data_array_.push_back(stp_data[1]);
         }
       }
       else if(desired_step_type == RIGHTWARD_WALKING || desired_step_type == RIGHT_ROTATING_WALKING)
       {
-        if(stp_data[0].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING)
+        if(stp_data[0].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING)
         {
           stp_data[1].time_data.abs_step_time += step_time_sec_;
-          stp_data[1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+          stp_data[1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
           step_data_array_.push_back(stp_data[1]);
         }
       }
@@ -582,25 +582,25 @@ bool FootStepGenerator::calcStep(const thormang3_walking_module_msgs::StepData& 
 }
 
 
-void FootStepGenerator::calcFBStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction)
+void FootStepGenerator::calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
 {
-  thormang3_walking_module_msgs::StepData stp_data[num_of_step_];
+	alice_walking_module_msgs::StepData stp_data[num_of_step_];
   stp_data[0] = ref_step_data;
 
-  if(ref_step_data.time_data.walking_state == thormang3_walking_module_msgs::StepTimeData::IN_WALKING)
+  if(ref_step_data.time_data.walking_state == alice_walking_module_msgs::StepTimeData::IN_WALKING)
   {
     stp_data[0].time_data.abs_step_time += step_time_sec_;
     stp_data[0].time_data.dsp_ratio = dsp_ratio_;
     stp_data[0].position_data.body_z_swap = body_z_swap_m_;
     stp_data[0].position_data.foot_z_swap = foot_z_swap_m_;
-    if(stp_data[0].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[0].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[0].position_data.right_foot_pose.x = stp_data[0].position_data.left_foot_pose.x + (double)direction*fb_step_length_m_;
     }
     else
     {
-      stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[0].position_data.left_foot_pose.x = stp_data[0].position_data.right_foot_pose.x + (double)direction*fb_step_length_m_;
     }
 
@@ -608,82 +608,82 @@ void FootStepGenerator::calcFBStep(const thormang3_walking_module_msgs::StepData
     {
       stp_data[stp_idx] = stp_data[stp_idx-1];
       stp_data[stp_idx].time_data.abs_step_time += step_time_sec_;
-      if(stp_data[stp_idx].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+      if(stp_data[stp_idx].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
         stp_data[stp_idx].position_data.right_foot_pose.x = stp_data[stp_idx].position_data.left_foot_pose.x + (double)direction*fb_step_length_m_;
       }
       else
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
         stp_data[stp_idx].position_data.left_foot_pose.x = stp_data[stp_idx].position_data.right_foot_pose.x + (double)direction*fb_step_length_m_;
       }
     }
 
     stp_data[num_of_step_-2] = stp_data[num_of_step_-3];
     stp_data[num_of_step_-2].time_data.abs_step_time += step_time_sec_;
-    if(stp_data[num_of_step_-2].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[num_of_step_-2].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.right_foot_pose.x = stp_data[num_of_step_-2].position_data.left_foot_pose.x;
     }
     else
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.left_foot_pose.x = stp_data[num_of_step_-2].position_data.right_foot_pose.x;
     }
 
     stp_data[num_of_step_-1] = stp_data[num_of_step_-2];
     stp_data[num_of_step_-1].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[num_of_step_-1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
-    stp_data[num_of_step_-1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[num_of_step_-1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+    stp_data[num_of_step_-1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[num_of_step_-1].position_data.body_z_swap = 0;
   }
   else
   {
-    stp_data[0].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
+    stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
     stp_data[0].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[0].position_data.body_z_swap = 0;
 
     for(int stp_idx = 1; stp_idx < num_of_step_-2; stp_idx++)
     {
       stp_data[stp_idx] = stp_data[stp_idx-1];
-      stp_data[stp_idx].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+      stp_data[stp_idx].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
       stp_data[stp_idx].time_data.abs_step_time += step_time_sec_;
       stp_data[stp_idx].time_data.dsp_ratio = dsp_ratio_;
       stp_data[stp_idx].position_data.body_z_swap = body_z_swap_m_;
       stp_data[stp_idx].position_data.foot_z_swap = foot_z_swap_m_;
 
-      if(stp_data[stp_idx].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+      if(stp_data[stp_idx].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
         stp_data[stp_idx].position_data.right_foot_pose.x = stp_data[stp_idx].position_data.left_foot_pose.x + (double)direction*fb_step_length_m_;
       }
       else
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
         stp_data[stp_idx].position_data.left_foot_pose.x = stp_data[stp_idx].position_data.right_foot_pose.x + (double)direction*fb_step_length_m_;
       }
     }
 
     stp_data[num_of_step_-2] = stp_data[num_of_step_-3];
     stp_data[num_of_step_-2].time_data.abs_step_time += step_time_sec_;
-    if(stp_data[num_of_step_-2].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[num_of_step_-2].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.right_foot_pose.x = stp_data[num_of_step_-2].position_data.left_foot_pose.x;
     }
     else
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.left_foot_pose.x = stp_data[num_of_step_-2].position_data.right_foot_pose.x;
     }
 
     stp_data[num_of_step_-1] = stp_data[num_of_step_-2];
     stp_data[num_of_step_-1].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[num_of_step_-1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
-    stp_data[num_of_step_-1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[num_of_step_-1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+    stp_data[num_of_step_-1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[num_of_step_-1].position_data.body_z_swap = 0;
   }
 
@@ -693,25 +693,25 @@ void FootStepGenerator::calcFBStep(const thormang3_walking_module_msgs::StepData
   }
 }
 
-void FootStepGenerator::calcRLStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction)
+void FootStepGenerator::calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
 {
-  thormang3_walking_module_msgs::StepData stp_data[num_of_step_];
+	alice_walking_module_msgs::StepData stp_data[num_of_step_];
   stp_data[0] = ref_step_data;
 
-  if(ref_step_data.time_data.walking_state == thormang3_walking_module_msgs::StepTimeData::IN_WALKING)
+  if(ref_step_data.time_data.walking_state == alice_walking_module_msgs::StepTimeData::IN_WALKING)
   {
     stp_data[0].time_data.abs_step_time += step_time_sec_;
     stp_data[0].time_data.dsp_ratio = dsp_ratio_;
     stp_data[0].position_data.body_z_swap = body_z_swap_m_;
     stp_data[0].position_data.foot_z_swap = foot_z_swap_m_;
-    if(stp_data[0].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[0].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[0].position_data.right_foot_pose.y = stp_data[0].position_data.right_foot_pose.y + (double)direction*rl_step_length_m_;
     }
     else
     {
-      stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[0].position_data.left_foot_pose.y = stp_data[0].position_data.left_foot_pose.y + (double)direction*rl_step_length_m_;
     }
 
@@ -719,47 +719,47 @@ void FootStepGenerator::calcRLStep(const thormang3_walking_module_msgs::StepData
     {
       stp_data[stp_idx] = stp_data[stp_idx-1];
       stp_data[stp_idx].time_data.abs_step_time += step_time_sec_;
-      if(stp_data[stp_idx].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+      if(stp_data[stp_idx].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
         stp_data[stp_idx].position_data.right_foot_pose.y = stp_data[stp_idx].position_data.right_foot_pose.y + (double)direction*rl_step_length_m_;
       }
       else
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
         stp_data[stp_idx].position_data.left_foot_pose.y = stp_data[stp_idx].position_data.left_foot_pose.y + (double)direction*rl_step_length_m_;
       }
     }
 
     stp_data[num_of_step_-2] = stp_data[num_of_step_-3];
     stp_data[num_of_step_-2].time_data.abs_step_time += step_time_sec_;
-    if(stp_data[num_of_step_-2].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[num_of_step_-2].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.right_foot_pose.y = stp_data[num_of_step_-2].position_data.left_foot_pose.y - default_y_feet_offset_m_;
     }
     else
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.left_foot_pose.y = stp_data[num_of_step_-2].position_data.right_foot_pose.y + default_y_feet_offset_m_;
     }
 
     stp_data[num_of_step_-1] = stp_data[num_of_step_-2];
     stp_data[num_of_step_-1].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[num_of_step_-1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
-    stp_data[num_of_step_-1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[num_of_step_-1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+    stp_data[num_of_step_-1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[num_of_step_-1].position_data.body_z_swap = 0;
   }
   else
   {
-    stp_data[0].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
+    stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
     stp_data[0].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[0].position_data.body_z_swap = 0;
 
 
     stp_data[1] = stp_data[0];
-    stp_data[1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+    stp_data[1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
     stp_data[1].time_data.abs_step_time += step_time_sec_;
     stp_data[1].time_data.dsp_ratio = dsp_ratio_;
     stp_data[1].position_data.body_z_swap = body_z_swap_m_;
@@ -767,12 +767,12 @@ void FootStepGenerator::calcRLStep(const thormang3_walking_module_msgs::StepData
 
     if(direction < 0)
     {
-      stp_data[1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[1].position_data.right_foot_pose.y = stp_data[1].position_data.right_foot_pose.y + (double)direction*rl_step_length_m_;
     }
     else
     {
-      stp_data[1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[1].position_data.left_foot_pose.y = stp_data[1].position_data.left_foot_pose.y + (double)direction*rl_step_length_m_;
     }
 
@@ -780,35 +780,35 @@ void FootStepGenerator::calcRLStep(const thormang3_walking_module_msgs::StepData
     {
       stp_data[stp_idx] = stp_data[stp_idx-1];
       stp_data[stp_idx].time_data.abs_step_time += step_time_sec_;
-      if(stp_data[stp_idx].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+      if(stp_data[stp_idx].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
         stp_data[stp_idx].position_data.right_foot_pose.y = stp_data[stp_idx].position_data.right_foot_pose.y + (double)direction*rl_step_length_m_;
       }
       else
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
         stp_data[stp_idx].position_data.left_foot_pose.y = stp_data[stp_idx].position_data.left_foot_pose.y + (double)direction*rl_step_length_m_;
       }
     }
 
     stp_data[num_of_step_-2] = stp_data[num_of_step_-3];
     stp_data[num_of_step_-2].time_data.abs_step_time += step_time_sec_;
-    if(stp_data[num_of_step_-2].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[num_of_step_-2].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.right_foot_pose.y = stp_data[num_of_step_-2].position_data.left_foot_pose.y - default_y_feet_offset_m_;
     }
     else
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.left_foot_pose.y = stp_data[num_of_step_-2].position_data.right_foot_pose.y + default_y_feet_offset_m_;
     }
 
     stp_data[num_of_step_-1] = stp_data[num_of_step_-2];
     stp_data[num_of_step_-1].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[num_of_step_-1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
-    stp_data[num_of_step_-1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[num_of_step_-1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+    stp_data[num_of_step_-1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[num_of_step_-1].position_data.body_z_swap = 0;
 
   }
@@ -819,21 +819,21 @@ void FootStepGenerator::calcRLStep(const thormang3_walking_module_msgs::StepData
   }
 }
 
-void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction)
+void FootStepGenerator::calcRoStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
 {
-  thormang3_walking_module_msgs::StepData stp_data[num_of_step_];
+	alice_walking_module_msgs::StepData stp_data[num_of_step_];
   stp_data[0] = ref_step_data;
-  if(ref_step_data.time_data.walking_state == thormang3_walking_module_msgs::StepTimeData::IN_WALKING)
+  if(ref_step_data.time_data.walking_state == alice_walking_module_msgs::StepTimeData::IN_WALKING)
   {
-    stp_data[0].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+    stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
     stp_data[0].time_data.abs_step_time += step_time_sec_;
     stp_data[0].time_data.dsp_ratio = dsp_ratio_;
     stp_data[0].position_data.body_z_swap = body_z_swap_m_;
     stp_data[0].position_data.foot_z_swap = foot_z_swap_m_;
 
-    if(stp_data[0].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[0].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[0].position_data.right_foot_pose.yaw = stp_data[0].position_data.right_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
       if(fabs(stp_data[0].position_data.right_foot_pose.yaw) > 2.0*M_PI)
@@ -844,7 +844,7 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
     }
     else
     {
-      stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[0].position_data.left_foot_pose.yaw = stp_data[0].position_data.left_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
       if(fabs(stp_data[0].position_data.left_foot_pose.yaw) > 2.0*M_PI)
@@ -859,9 +859,9 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
     {
       stp_data[stp_idx] = stp_data[stp_idx-1];
       stp_data[stp_idx].time_data.abs_step_time += step_time_sec_;
-      if(stp_data[stp_idx].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+      if(stp_data[stp_idx].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
         stp_data[stp_idx].position_data.right_foot_pose.yaw = stp_data[stp_idx].position_data.right_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
         if(fabs(stp_data[stp_idx].position_data.right_foot_pose.yaw) > 2.0*M_PI)
@@ -872,7 +872,7 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
       }
       else
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
         stp_data[stp_idx].position_data.left_foot_pose.yaw = stp_data[stp_idx].position_data.left_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
         if(fabs(stp_data[stp_idx].position_data.left_foot_pose.yaw) > 2.0*M_PI)
@@ -891,9 +891,9 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
 
     stp_data[num_of_step_-2] = stp_data[num_of_step_-3];
     stp_data[num_of_step_-2].time_data.abs_step_time += step_time_sec_;
-    if(stp_data[num_of_step_-2].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[num_of_step_-2].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.right_foot_pose.yaw = stp_data[num_of_step_-2].position_data.left_foot_pose.yaw;
       stp_data[num_of_step_-2].position_data.right_foot_pose.x   =  0.5*default_y_feet_offset_m_*sin(stp_data[num_of_step_-2].position_data.left_foot_pose.yaw);
       stp_data[num_of_step_-2].position_data.right_foot_pose.y   = -0.5*default_y_feet_offset_m_*cos(stp_data[num_of_step_-2].position_data.left_foot_pose.yaw);
@@ -901,7 +901,7 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
     }
     else
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.left_foot_pose.yaw = stp_data[num_of_step_-2].position_data.right_foot_pose.yaw;
       stp_data[num_of_step_-2].position_data.left_foot_pose.x   = -0.5*default_y_feet_offset_m_*sin(stp_data[num_of_step_-2].position_data.right_foot_pose.yaw);
       stp_data[num_of_step_-2].position_data.left_foot_pose.y   =  0.5*default_y_feet_offset_m_*cos(stp_data[num_of_step_-2].position_data.right_foot_pose.yaw);
@@ -909,21 +909,21 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
 
     stp_data[num_of_step_-1] = stp_data[num_of_step_-2];
     stp_data[num_of_step_-1].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[num_of_step_-1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
-    stp_data[num_of_step_-1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[num_of_step_-1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+    stp_data[num_of_step_-1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[num_of_step_-1].position_data.body_z_swap = 0;
   }
   else
   {
-    stp_data[0].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
+    stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
     stp_data[0].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[0].position_data.body_z_swap = 0;
     stp_data[0].position_data.foot_z_swap = 0;
 
 
     stp_data[1] = stp_data[0];
-    stp_data[1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+    stp_data[1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
     stp_data[1].time_data.abs_step_time += step_time_sec_;
     stp_data[1].time_data.dsp_ratio = dsp_ratio_;
     stp_data[1].position_data.body_z_swap = body_z_swap_m_;
@@ -931,7 +931,7 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
 
     if(direction < 0)
     {
-      stp_data[1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[1].position_data.right_foot_pose.yaw  = stp_data[1].position_data.right_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
       if(fabs(stp_data[1].position_data.right_foot_pose.yaw) > 2.0*M_PI)
@@ -942,7 +942,7 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
     }
     else
     {
-      stp_data[1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[1].position_data.left_foot_pose.yaw  = stp_data[1].position_data.left_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
       if(fabs(stp_data[1].position_data.left_foot_pose.yaw) > 2.0*M_PI)
@@ -957,9 +957,9 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
     {
       stp_data[stp_idx] = stp_data[stp_idx-1];
       stp_data[stp_idx].time_data.abs_step_time += step_time_sec_;
-      if(stp_data[stp_idx].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+      if(stp_data[stp_idx].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
         stp_data[stp_idx].position_data.right_foot_pose.yaw = stp_data[stp_idx].position_data.right_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
         if(fabs(stp_data[stp_idx].position_data.right_foot_pose.yaw) > 2.0*M_PI)
@@ -970,7 +970,7 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
       }
       else
       {
-        stp_data[stp_idx].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+        stp_data[stp_idx].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
         stp_data[stp_idx].position_data.left_foot_pose.yaw = stp_data[stp_idx].position_data.left_foot_pose.yaw + (double)direction*rotate_step_angle_rad_;
 
         if(fabs(stp_data[stp_idx].position_data.left_foot_pose.yaw) > 2.0*M_PI)
@@ -989,9 +989,9 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
 
     stp_data[num_of_step_-2] = stp_data[num_of_step_-3];
     stp_data[num_of_step_-2].time_data.abs_step_time += step_time_sec_;
-    if(stp_data[num_of_step_-2].position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+    if(stp_data[num_of_step_-2].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.right_foot_pose.yaw  = stp_data[num_of_step_-2].position_data.left_foot_pose.yaw;
       stp_data[num_of_step_-2].position_data.right_foot_pose.x =  0.5*default_y_feet_offset_m_*sin(stp_data[num_of_step_-2].position_data.left_foot_pose.yaw);
       stp_data[num_of_step_-2].position_data.right_foot_pose.y = -0.5*default_y_feet_offset_m_*cos(stp_data[num_of_step_-2].position_data.left_foot_pose.yaw);
@@ -999,7 +999,7 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
     }
     else
     {
-      stp_data[num_of_step_-2].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+      stp_data[num_of_step_-2].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[num_of_step_-2].position_data.left_foot_pose.yaw  = stp_data[num_of_step_-2].position_data.right_foot_pose.yaw;
       stp_data[num_of_step_-2].position_data.left_foot_pose.x =  -0.5*default_y_feet_offset_m_*sin(stp_data[num_of_step_-2].position_data.right_foot_pose.yaw);
       stp_data[num_of_step_-2].position_data.left_foot_pose.y =   0.5*default_y_feet_offset_m_*cos(stp_data[num_of_step_-2].position_data.right_foot_pose.yaw);
@@ -1007,8 +1007,8 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
 
     stp_data[num_of_step_-1] = stp_data[num_of_step_-2];
     stp_data[num_of_step_-1].time_data.abs_step_time += start_end_time_sec_;
-    stp_data[num_of_step_-1].time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
-    stp_data[num_of_step_-1].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+    stp_data[num_of_step_-1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+    stp_data[num_of_step_-1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[num_of_step_-1].position_data.body_z_swap = 0;
 
   }
@@ -1020,23 +1020,23 @@ void FootStepGenerator::calcRoStep(const thormang3_walking_module_msgs::StepData
 }
 
 
-void FootStepGenerator::calcStopStep(const thormang3_walking_module_msgs::StepData& ref_step_data, int direction)
+void FootStepGenerator::calcStopStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
 {
-  thormang3_walking_module_msgs::StepData stp_data;
+	alice_walking_module_msgs::StepData stp_data;
   stp_data = ref_step_data;
-  stp_data.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+  stp_data.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
   stp_data.time_data.abs_step_time += start_end_time_sec_;
   stp_data.position_data.body_z_swap = 0;
-  stp_data.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+  stp_data.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
 
   step_data_array_.push_back(stp_data);
 }
 
 
-void FootStepGenerator::calcRightKickStep(thormang3_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
-    const thormang3_walking_module_msgs::StepData& ref_step_data)
+/*void FootStepGenerator::calcRightKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+    const alice_walking_module_msgs::StepData& ref_step_data)
 {
-  thormang3_walking_module_msgs::StepData step_data_msg;
+	alice_walking_module_msgs::StepData step_data_msg;
   //meter
   double kick_height = 0.08;
   double kick_far       = 0.18;
@@ -1051,22 +1051,22 @@ void FootStepGenerator::calcRightKickStep(thormang3_walking_module_msgs::AddStep
   step_data_array_.clear();
 
   //Start 1 Step Data
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
   step_data_msg.time_data.abs_step_time += kick_time*1.8;
   step_data_msg.time_data.dsp_ratio = 1.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
   step_data_msg.position_data.foot_z_swap = 0;
   step_data_msg.position_data.body_z_swap = 0;
   step_data_array_.push_back(step_data_msg);
 
 
   //StepData 2 move back Left Foot
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
   step_data_msg.time_data.abs_step_time += kick_time*1.0;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
   step_data_msg.position_data.right_foot_pose.x = -0.8*kick_far;
   step_data_msg.position_data.right_foot_pose.z += kick_height;
   step_data_msg.position_data.right_foot_pose.pitch = kick_pitch;
@@ -1075,11 +1075,11 @@ void FootStepGenerator::calcRightKickStep(thormang3_walking_module_msgs::AddStep
 
 
   //StepData 3 kick
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
   step_data_msg.time_data.abs_step_time += kick_time*1.2;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
   step_data_msg.position_data.right_foot_pose.x = 1.5*kick_far;
   step_data_msg.position_data.right_foot_pose.pitch = -kick_pitch;
   step_data_msg.position_data.foot_z_swap = 0.0;
@@ -1087,11 +1087,11 @@ void FootStepGenerator::calcRightKickStep(thormang3_walking_module_msgs::AddStep
 
 
   //StepData 4 move back
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
   step_data_msg.time_data.abs_step_time += kick_time*1.2;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
   step_data_msg.position_data.right_foot_pose.x = 0;
   step_data_msg.position_data.right_foot_pose.z -= kick_height;
   step_data_msg.position_data.right_foot_pose.pitch = 0;
@@ -1100,11 +1100,11 @@ void FootStepGenerator::calcRightKickStep(thormang3_walking_module_msgs::AddStep
 
 
   //StepData 5 End
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
   step_data_msg.time_data.abs_step_time += kick_time*1.8;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
   step_data_array_.push_back(step_data_msg);
 
   for(unsigned int stp_idx = 0; stp_idx < step_data_array_.size(); stp_idx++)
@@ -1112,12 +1112,12 @@ void FootStepGenerator::calcRightKickStep(thormang3_walking_module_msgs::AddStep
     step_data_array->push_back(step_data_array_[stp_idx]);
   }
 
-}
+}*/
 
-void FootStepGenerator::calcLeftKickStep(thormang3_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
-    const thormang3_walking_module_msgs::StepData& ref_step_data)
+/*void FootStepGenerator::calcLeftKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+    const alice_walking_module_msgs::StepData& ref_step_data)
 {
-  thormang3_walking_module_msgs::StepData step_data_msg;
+	alice_walking_module_msgs::StepData step_data_msg;
   //meter
   double kick_height = 0.08;
   double kick_far       = 0.18;
@@ -1132,22 +1132,22 @@ void FootStepGenerator::calcLeftKickStep(thormang3_walking_module_msgs::AddStepD
   step_data_array_.clear();
 
   //Start 1 Step Data
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
   step_data_msg.time_data.abs_step_time += kick_time*1.8;
   step_data_msg.time_data.dsp_ratio = 1.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
   step_data_msg.position_data.foot_z_swap = 0;
   step_data_msg.position_data.body_z_swap = 0;
   step_data_array_.push_back(step_data_msg);
 
 
   //StepData 2 move back Left Foot
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
   step_data_msg.time_data.abs_step_time += kick_time*1.0;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
   step_data_msg.position_data.left_foot_pose.x = -0.8*kick_far;
   step_data_msg.position_data.left_foot_pose.z += kick_height;
   step_data_msg.position_data.left_foot_pose.pitch = kick_pitch;
@@ -1156,11 +1156,11 @@ void FootStepGenerator::calcLeftKickStep(thormang3_walking_module_msgs::AddStepD
 
 
   //StepData 3 kick
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
   step_data_msg.time_data.abs_step_time += kick_time*1.2;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
   step_data_msg.position_data.left_foot_pose.x = 1.5*kick_far;
   step_data_msg.position_data.left_foot_pose.pitch = -kick_pitch;
   step_data_msg.position_data.foot_z_swap = 0.0;
@@ -1168,11 +1168,11 @@ void FootStepGenerator::calcLeftKickStep(thormang3_walking_module_msgs::AddStepD
 
 
   //StepData 4 move back
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
   step_data_msg.time_data.abs_step_time += kick_time*1.2;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
   step_data_msg.position_data.left_foot_pose.x = 0;
   step_data_msg.position_data.left_foot_pose.z -= kick_height;
   step_data_msg.position_data.left_foot_pose.pitch = 0;
@@ -1181,11 +1181,11 @@ void FootStepGenerator::calcLeftKickStep(thormang3_walking_module_msgs::AddStepD
 
 
   //StepData 5 End
-  step_data_msg.time_data.walking_state = thormang3_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
   step_data_msg.time_data.abs_step_time += kick_time*1.8;
   step_data_msg.time_data.dsp_ratio = 0.0;
 
-  step_data_msg.position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::STANDING;
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
   step_data_array_.push_back(step_data_msg);
 
   for(unsigned int stp_idx = 0; stp_idx < step_data_array_.size(); stp_idx++)
