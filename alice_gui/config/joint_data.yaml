@@ -1,0 +1,33 @@
+########################################
+#  example  # for ROBOTIS framework    #
+#  joint num : joint name              #
+#  1 : l_hip_yaw                       #
+#  2 : r_knee_pitch                    #
+########################################
+joint_data:
+  24 : head_pitch
+  25 : head_roll
+  23 : head_yaw 
+  19 : l_ankle_pitch 
+  21 : l_ankle_roll
+  7  : l_elbow_pitch
+  11 : l_hip_pitch
+  13 : l_hip_roll
+  15 : l_hip_yaw
+  17 : l_knee_pitch
+  1  : l_shoulder_pitch
+  3  : l_shoulder_roll
+  20 : r_ankle_pitch
+  22 : r_ankle_roll
+  8  : r_elbow_pitch
+  12 : r_hip_pitch
+  14 : r_hip_roll
+  16 : r_hip_yaw
+  18 : r_knee_pitch
+  2  : r_shoulder_pitch
+  4  : r_shoulder_roll
+  10 : waist_roll
+  9  : waist_yaw
+  5  : l_shoulder_yaw
+  6  : r_shoulder_yaw
+

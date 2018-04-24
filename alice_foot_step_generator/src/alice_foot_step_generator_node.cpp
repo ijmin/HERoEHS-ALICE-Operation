@@ -8,7 +8,6 @@
 #include <cmath>
 #include "alice_foot_step_generator/alice_foot_step_generator_node.h"
 
-
 using namespace alice;
 
 #define RAD2DEG  (M_PI/180.0)
@@ -289,6 +288,7 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
   //the below local does not means real local coordinate.
   //it is just for calculating step data.
   //the local coordinate will be decide by the moving foot of ref step data
+
   Eigen::MatrixXd mat_lf_to_local = getTransformationXYZRPY(0, -0.5*default_y_feet_offset_m_, 0, 0, 0, 0);
   Eigen::MatrixXd mat_rf_to_local = getTransformationXYZRPY(0,  0.5*default_y_feet_offset_m_, 0, 0, 0, 0);
   Eigen::MatrixXd mat_global_to_local, mat_local_to_global;
@@ -379,97 +379,6 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
         }
         step_data_array_.push_back(stp_data[0]);
       }
-
-//      if(previous_step_type == FORWARD_WALKING || previous_step_type == BACKWARD_WALKING)
-//      {
-//        if(fabs(poseLtoRF.x - poseLtoLF.x) >= 0.001)
-//        {
-//          stp_data[0].time_data.abs_step_time += step_time_sec_;
-//
-//          if(ref_step_data.position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
-//          {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
-//            stp_data[0].position_data.right_foot_pose.x = stp_data[0].position_data.left_foot_pose.x;
-//          }
-//          else {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
-//            stp_data[0].position_data.left_foot_pose.x = stp_data[0].position_data.right_foot_pose.x;
-//          }
-//
-//          step_data_array_.push_back(stp_data[0]);
-//        }
-//      }
-//      else if(previous_step_type == LEFTWARD_WALKING || previous_step_type == RIGHTWARD_WALKING)
-//      {
-//        if(fabs(poseLtoRF.y - poseLtoLF.y) >= default_y_feet_offset_m_ - 0.001)
-//        {
-//          stp_data[0].time_data.abs_step_time += step_time_sec_;
-//
-//          if(ref_step_data.position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
-//          {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
-//            stp_data[0].position_data.right_foot_pose.y = stp_data[0].position_data.left_foot_pose.y - default_y_feet_offset_m_;
-//          }
-//          else
-//          {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
-//            stp_data[0].position_data.left_foot_pose.y = stp_data[0].position_data.right_foot_pose.y + default_y_feet_offset_m_;
-//          }
-//
-//          step_data_array_.push_back(stp_data[0]);
-//        }
-//      }
-//      else if(previous_step_type == LEFT_ROTATING_WALKING || previous_step_type == RIGHT_ROTATING_WALKING)
-//      {
-//        if(fabs(poseLtoRF.yaw - poseLtoLF.yaw) > 0.0000001)
-//        {
-//          stp_data[0].time_data.abs_step_time += step_time_sec_;
-//          if(ref_step_data.position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
-//          {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
-//            stp_data[0].position_data.right_foot_pose.x   = stp_data[0].position_data.left_foot_pose.x;
-//            stp_data[0].position_data.right_foot_pose.y   = stp_data[0].position_data.left_foot_pose.y - default_y_feet_offset_m_;
-//            stp_data[0].position_data.right_foot_pose.yaw = stp_data[0].position_data.left_foot_pose.yaw;
-//          }
-//          else
-//          {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
-//            stp_data[0].position_data.left_foot_pose.x   = stp_data[0].position_data.right_foot_pose.x;
-//            stp_data[0].position_data.left_foot_pose.y   = stp_data[0].position_data.right_foot_pose.y + default_y_feet_offset_m_;
-//            stp_data[0].position_data.left_foot_pose.yaw = stp_data[0].position_data.right_foot_pose.yaw;
-//          }
-//          step_data_array_.push_back(stp_data[0]);
-//        }
-//      }
-//      else if(previous_step_type == STOP_WALKING)
-//      {
-//        if((fabs(poseLtoRF.yaw - poseLtoLF.yaw) > 0.0000001)
-//            || (fabs(poseLtoRF.y - poseLtoLF.y) >= default_y_feet_offset_m_ - 0.001)
-//            || (fabs(poseLtoRF.x - poseLtoLF.x) >= 0.001))
-//        {
-//          stp_data[0].time_data.abs_step_time += step_time_sec_;
-//          if(ref_step_data.position_data.moving_foot == thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
-//          {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
-//            stp_data[0].position_data.right_foot_pose.x   = stp_data[0].position_data.left_foot_pose.x;
-//            stp_data[0].position_data.right_foot_pose.y   = stp_data[0].position_data.left_foot_pose.y - default_y_feet_offset_m_;
-//            stp_data[0].position_data.right_foot_pose.yaw = stp_data[0].position_data.left_foot_pose.yaw;
-//          }
-//          else
-//          {
-//            stp_data[0].position_data.moving_foot = thormang3_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
-//            stp_data[0].position_data.left_foot_pose.x   = stp_data[0].position_data.right_foot_pose.x;
-//            stp_data[0].position_data.left_foot_pose.y   = stp_data[0].position_data.right_foot_pose.y + default_y_feet_offset_m_;
-//            stp_data[0].position_data.left_foot_pose.yaw = stp_data[0].position_data.right_foot_pose.yaw;
-//          }
-//          step_data_array_.push_back(stp_data[0]);
-//        }
-//      }
-//      else
-//      {
-//        return false;
-//      }
-
 
       stp_data[1] = stp_data[0];
       if(desired_step_type == FORWARD_WALKING || desired_step_type == BACKWARD_WALKING || desired_step_type == STOP_WALKING)

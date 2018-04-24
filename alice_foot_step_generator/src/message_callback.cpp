@@ -42,7 +42,7 @@ void initialize(void)
 
   g_walking_module_status_msg_sub = nh.subscribe("/robotis/status", 10, walkingModuleStatusMSGCallback);
 
-  g_walking_command_sub           = nh.subscribe("/robotis/thormang3_foot_step_generator/walking_command", 0, walkingCommandCallback);
+  g_walking_command_sub           = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 0, walkingCommandCallback);
   g_footsteps_2d_sub              = nh.subscribe("/robotis/thormang3_foot_step_generator/footsteps_2d",    0, step2DArrayCallback);
 
   g_last_command_time = ros::Time::now().toSec();
