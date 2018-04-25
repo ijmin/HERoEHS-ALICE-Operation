@@ -8,24 +8,16 @@
 #include "alice_foot_step_planner/alice_foot_step_planner.h"
 
 using namespace alice;
-
-// ros communication part
-void initialize()
+// Foot step planner algorithm
+FootStepPlanner::FootStepPlanner()
 {
-	//data initialize
-	foot_set_command_msg.step_num = 2;
-	foot_set_command_msg.step_length = 0.05;
-	foot_set_command_msg.step_time = 2;
-	foot_set_command_msg.step_angle_rad = 0;
-	foot_set_command_msg.side_step_length = 0.05;
 
-	ros::NodeHandle nh;
-
-	walking_module_status_sub = nh.subscribe("/robotis/status", 10, walkingModuleStatusMsgCallback);
-	foot_step_command_pub     = nh.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_planner/walking_command", 1);
 }
+FootStepPlanner::~FootStepPlanner()
+{
 
-void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
+}
+void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
 {
 	if(msg->type == msg->STATUS_ERROR)
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
@@ -38,15 +30,19 @@ void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::Co
 	else
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
 }
-
-// Foot step planner algorithm
-FootStepPlanner::FootStepPlanner()
+void FootStepPlanner::initialize()
 {
+	//data initialize
+	foot_set_command_msg.step_num = 2;
+	foot_set_command_msg.step_length = 0.05;
+	foot_set_command_msg.step_time = 2;
+	foot_set_command_msg.step_angle_rad = 0;
+	foot_set_command_msg.side_step_length = 0.05;
 
-}
-FootStepPlanner::~FootStepPlanner()
-{
+	ros::NodeHandle nh;
 
+	walking_module_status_sub = nh.subscribe("/robotis/status", 10, &FootStepPlanner::walkingModuleStatusMsgCallback, this);
+	foot_step_command_pub     = nh.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_planner/walking_command", 1);
 }
 
 void FootStepPlanner::AlignRobotYaw(double yaw_degree)

@@ -18,25 +18,22 @@
 
 namespace alice
 {
-
-//publisher
-ros::Publisher     foot_step_command_pub;
-
-//subscriber
-ros::Subscriber     walking_module_status_sub;
-
-alice_foot_step_generator::FootStepCommand foot_set_command_msg;
-
-
-void initialize();
-void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
-
-
 class FootStepPlanner
 {
 public:
 	FootStepPlanner();
 	~FootStepPlanner();
+
+	// ros communication part
+	ros::Subscriber walking_module_status_sub;
+
+	ros::Publisher  foot_step_command_pub;
+
+	alice_foot_step_generator::FootStepCommand foot_set_command_msg;
+
+
+	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
+	void initialize();
 
 private:
 

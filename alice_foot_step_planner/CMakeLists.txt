@@ -10,6 +10,7 @@ find_package(catkin REQUIRED COMPONENTS
   cmake_modules
   std_msgs
   geometry_msgs
+  robotis_math
 #  message_generation
   robotis_controller_msgs
 )
