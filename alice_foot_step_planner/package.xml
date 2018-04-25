@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>alice_foot_step_generator</name>
+  <name>alice_foot_step_planner</name>
   <version>0.0.0</version>
-  <description>The alice_foot_step_generator package</description>
+  <description>The alice_foot_step_planner package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/alice_foot_step_generator</url> -->
+  <!-- <url type="website">http://wiki.ros.org/alice_foot_step_planner</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -63,10 +63,8 @@
   <run_depend>std_msgs</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>robotis_controller_msgs</run_depend>
-  <run_depend>alice_walking_module_msgs</run_depend>
   <run_depend>robotis_controller_msgs</run_depend>
 
-  <run_depend>message_runtime</run_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
