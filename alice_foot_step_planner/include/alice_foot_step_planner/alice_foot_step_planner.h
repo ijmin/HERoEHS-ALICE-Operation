@@ -13,7 +13,10 @@
 #include "robotis_controller_msgs/StatusMsg.h"
 #include "robotis_math/robotis_math.h"
 #include "alice_foot_step_generator/FootStepCommand.h"
+
+#include <math.h>
 #include <cmath>
+#include <stdio.h>
 
 
 namespace alice
@@ -37,8 +40,13 @@ public:
 
 private:
 
+	double step_length_max;
+	double step_length_min;
+
+
 	void AlignRobotYaw(double yaw_degree);
-	void CalculateStepData(double x, double pre_x, double y, double pre_y);
+	void CalculateStepData(double x, double pre_x, double y, double pre_y, double r_point_x, double r_point_y);
+	Eigen::Matrix4d TransfomationGoalPointOnRobot(double robot_x, double robot_y, double robot_yaw_degree, double g_point_x, double g_point_y);
 	bool CheckArrival(std::string status, int via_point_num, int all_point_num);
 };
 
