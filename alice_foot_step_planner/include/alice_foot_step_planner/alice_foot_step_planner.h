@@ -10,9 +10,13 @@
 
 #include <ros/ros.h>
 #include <eigen3/Eigen/Eigen>
+#include <yaml-cpp/yaml.h>
+#include <ros/package.h>
+
 #include "robotis_controller_msgs/StatusMsg.h"
 #include "robotis_math/robotis_math.h"
 #include "alice_foot_step_generator/FootStepCommand.h"
+#include "alice_operation_msgs/WalkingPathPlanner.h"
 
 #include <math.h>
 #include <cmath>
@@ -29,6 +33,7 @@ public:
 
 	// ros communication part
 	ros::Subscriber walking_module_status_sub;
+	ros::Subscriber walking_path_planner_test_sub;
 
 	ros::Publisher  foot_step_command_pub;
 
@@ -36,16 +41,21 @@ public:
 
 
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
+	void walkingPathPlannerStatusMsgCallback(const alice_operation_msgs::WalkingPathPlanner::ConstPtr& msg);
 	void initialize();
+	void data_initialize();
+	void parse_init_data_(const std::string &path);
 
 private:
 
 	double step_length_max;
 	double step_length_min;
+	double pre_position_x, pre_position_y;
 
 
-	void AlignRobotYaw(double yaw_degree);
-	void CalculateStepData(double x, double pre_x, double y, double pre_y, double r_point_x, double r_point_y);
+	void AlignRobotYaw(double yaw_degree, std::string command);
+	void CalculateStepData(double x, double pre_x, double y, double pre_y, std::string command);
+	void DecideStepNumLength(double distance);
 	Eigen::Matrix4d TransfomationGoalPointOnRobot(double robot_x, double robot_y, double robot_yaw_degree, double g_point_x, double g_point_y);
 	bool CheckArrival(std::string status, int via_point_num, int all_point_num);
 };

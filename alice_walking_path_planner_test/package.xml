@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <package>
-  <name>alice_foot_step_planner</name>
+  <name>alice_walking_path_planner_test</name>
   <version>0.0.0</version>
-  <description>The alice_foot_step_planner package</description>
+  <description>The alice_walking_path_planner_test package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->
   <!-- Example:  -->
@@ -19,7 +19,7 @@
   <!-- Url tags are optional, but multiple are allowed, one per tag -->
   <!-- Optional attribute type can be: website, bugtracker, or repository -->
   <!-- Example: -->
-  <!-- <url type="website">http://wiki.ros.org/alice_foot_step_planner</url> -->
+  <!-- <url type="website">http://wiki.ros.org/alice_walking_path_planner_test</url> -->
 
 
   <!-- Author tags are optional, multiple are allowed, one per tag -->
@@ -54,9 +54,8 @@
   <build_depend>cmake_modules</build_depend>
   <build_depend>std_msgs</build_depend>
   <build_depend>geometry_msgs</build_depend>
-  <build_depend>message_generation</build_depend>
+  <build_depend>alice_operation_msgs</build_depend>
   <build_depend>robotis_controller_msgs</build_depend>
-  <build_depend>yaml-cpp</build_depend>
   <build_depend>robotis_math</build_depend>
 
   <run_depend>roscpp</run_depend>
@@ -65,9 +64,7 @@
   <run_depend>std_msgs</run_depend>
   <run_depend>geometry_msgs</run_depend>
   <run_depend>robotis_controller_msgs</run_depend>
-  <run_depend>yaml-cpp</run_depend>
   <run_depend>robotis_math</run_depend>
-
 
 
   <!-- The export tag contains other, unspecified, tags -->

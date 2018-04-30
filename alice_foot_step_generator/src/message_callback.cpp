@@ -35,15 +35,15 @@ void initialize(void)
 {
   ros::NodeHandle nh;
 
-  g_get_ref_step_data_client      = nh.serviceClient<alice_walking_module_msgs::GetReferenceStepData>("/robotis/walking/get_reference_step_data");
-  g_add_step_data_array_client    = nh.serviceClient<alice_walking_module_msgs::AddStepDataArray>("/robotis/walking/add_step_data");
-  g_set_balance_param_client      = nh.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/robotis/walking/set_balance_param");
-  g_is_running_client             = nh.serviceClient<alice_walking_module_msgs::IsRunning>("/robotis/walking/is_running");
+  g_get_ref_step_data_client      = nh.serviceClient<alice_walking_module_msgs::GetReferenceStepData>("/heroehs/online_walking/get_reference_step_data");
+  g_add_step_data_array_client    = nh.serviceClient<alice_walking_module_msgs::AddStepDataArray>("/heroehs/online_walking/add_step_data");
+  g_set_balance_param_client      = nh.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/set_balance_param");
+  g_is_running_client             = nh.serviceClient<alice_walking_module_msgs::IsRunning>("/heroehs/online_walking/is_running");
 
   g_walking_module_status_msg_sub = nh.subscribe("/robotis/status", 10, walkingModuleStatusMSGCallback);
 
   g_walking_command_sub           = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 0, walkingCommandCallback);
-  g_footsteps_2d_sub              = nh.subscribe("/robotis/thormang3_foot_step_generator/footsteps_2d",    0, step2DArrayCallback);
+ // g_footsteps_2d_sub              = nh.subscribe("/robotis/thormang3_foot_step_generator/footsteps_2d",    0, step2DArrayCallback);
 
   g_last_command_time = ros::Time::now().toSec();
 }

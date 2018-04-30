@@ -1,6 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(alice_foot_step_planner)
-
+project(alice_walking_path_planner_test)
 ################################################################################
 # Packages
 ################################################################################
@@ -11,41 +10,33 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   robotis_math
-#  message_generation
+ # message_generation
   robotis_controller_msgs
+  alice_operation_msgs
 )
-set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${CATKIN_DEVEL_PREFIX}/lib/pkgconfig")
-find_package(PkgConfig)
-pkg_check_modules(yaml_cpp yaml-cpp REQUIRED)
-
 find_package(Eigen REQUIRED)
-
 ################################################################################
 # Declare ROS messages, services and actions
 ################################################################################
-
 #add_message_files(
 #   FILES
-#   FootStepCommand.msg
-#   Step2D.msg
-#   Step2DArray.msg
+#   WalkingPathPlanner.msg
 #)
 
 #generate_messages(
-#   DEPENDENCIES
-#   std_msgs
-#   geometry_msgs
+#  DEPENDENCIES
+#  std_msgs
+#  geometry_msgs
 #)
 
 ################################################################################
 # Declare ROS dynamic reconfigure parameters
 ################################################################################
-
 ################################################################################
 # Catkin specific configuration
 ################################################################################
 catkin_package(
-  CATKIN_DEPENDS std_msgs geometry_msgs robotis_controller_msgs
+  CATKIN_DEPENDS std_msgs geometry_msgs
 )
 
 ################################################################################
@@ -57,14 +48,13 @@ include_directories(
   ${Eigen_INCLUDE_DIRS}
 )
 
-add_executable(alice_foot_step_planner
-   src/alice_foot_step_planner.cpp
+add_executable(alice_walking_path_planner_test
    src/main.cpp
 )
 
-add_dependencies(alice_foot_step_planner ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+add_dependencies(alice_walking_path_planner_test ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
-target_link_libraries(alice_foot_step_planner
-   ${yaml_cpp_LIBRARIES}
+target_link_libraries(alice_walking_path_planner_test
+   yaml-cpp
    ${catkin_LIBRARIES}
 )
