@@ -54,10 +54,9 @@ private:
 
 
 	void AlignRobotYaw(double yaw_degree, std::string command);
-	void CalculateStepData(double x, double pre_x, double y, double pre_y, std::string command);
+	void CalculateStepData(double x, double y, std::string command);
 	void DecideStepNumLength(double distance);
-	Eigen::Matrix4d TransfomationGoalPointOnRobot(double robot_x, double robot_y, double robot_yaw_degree, double g_point_x, double g_point_y);
-	bool CheckArrival(std::string status, int via_point_num, int all_point_num);
+	//Eigen::Matrix4d TransfomationGoalPointOnRobot(double robot_x, double robot_y, double robot_yaw_degree, double g_point_x, double g_point_y);
 };
 
 }

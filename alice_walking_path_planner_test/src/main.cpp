@@ -58,9 +58,9 @@ int main( int argc , char **argv )
 		}
 
 		printf("%s", command_str.c_str());
-		msg.position_x = x_data;
-		msg.position_y = y_data;
-		msg.yaw_degree = yaw_degree;
+		msg.position.x = x_data;
+		msg.position.y = y_data;
+		msg.position.z = yaw_degree;
 		msg.command = command_str;
 
 		global_frame_xy_pub.publish(msg);

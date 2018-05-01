@@ -51,7 +51,7 @@ void FootStepPlanner::data_initialize()
 	parse_init_data_(init_pose_path);
 }
 
-Eigen::Matrix4d FootStepPlanner::TransfomationGoalPointOnRobot(double robot_x, double robot_y, double robot_yaw_degree, double g_point_x, double g_point_y)
+/*Eigen::Matrix4d FootStepPlanner::TransfomationGoalPointOnRobot(double robot_x, double robot_y, double robot_yaw_degree, double g_point_x, double g_point_y)
 {
 	Eigen::Matrix4d g_T_robot;
 	Eigen::Matrix4d g_T_point;
@@ -73,8 +73,7 @@ Eigen::Matrix4d FootStepPlanner::TransfomationGoalPointOnRobot(double robot_x, d
 	robot_T_g = robotis_framework::getInverseTransformation(g_T_robot);
 	robot_T_point = robot_T_g * g_T_point;
 	return robot_T_point;
-}
-
+}*/
 void FootStepPlanner::DecideStepNumLength(double distance)
 {
 	int step_num_temp_ = 0;
@@ -82,7 +81,7 @@ void FootStepPlanner::DecideStepNumLength(double distance)
 	//printf("step_distance :: %f  step_num_min :: %f  \n", desired_distance_, (desired_distance_/step_length_min)+1);
 	for(int num = 1; num < ((distance/step_length_min)+1)/2 ; num++)//
 	{
-		if(step_length_max > (distance/num)) // 로봇이 갈수 있는 (뻗을수있는 length 범위 안에 들어온다면,)
+		if(step_length_max > (distance/num)) // 로봇이 갈수 있는 (뻗을수있는 length 범위 안에 들어온다면,) 최대로 뻗을수 있는 보폭으로
 		{
 			step_length_temp_ = distance/num;
 			step_num_temp_ = num;
@@ -102,44 +101,23 @@ void FootStepPlanner::AlignRobotYaw(double yaw_degree, std::string command)
 	foot_set_command_msg.command = command;
 	foot_step_command_pub.publish(foot_set_command_msg);
 }
-void FootStepPlanner::CalculateStepData(double x, double pre_x, double y, double pre_y, std::string command)
+void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 {
 	data_initialize();// have to modify
 	double desired_distance_ = 0;
-	desired_distance_ = sqrt(pow((x-pre_x),2) + pow((y-pre_y),2));
-
-	if((pre_x - x) == 0 || (pre_y - y) == 0) // 게걸음 나중에.
-	{
-		if((pre_x - x) == 0 && (pre_y - y) == 0)
-			return;
-
-		DecideStepNumLength(desired_distance_);
-	}
-	else
-	{
-		DecideStepNumLength(desired_distance_);
-	}
+	desired_distance_ = sqrt(pow(x,2) + pow(y,2));
+	DecideStepNumLength(desired_distance_);
 
 	foot_set_command_msg.command = command;
 	foot_step_command_pub.publish(foot_set_command_msg);
-
-}
-bool FootStepPlanner::CheckArrival(std::string status, int via_point_num, int all_point_num)
-{
-
-	return true;
-
 }
 void FootStepPlanner::walkingPathPlannerStatusMsgCallback(const alice_operation_msgs::WalkingPathPlanner::ConstPtr& msg)
 {
 	if(!msg->command.compare("turn left") || !msg->command.compare("turn right"))
-		AlignRobotYaw(msg->yaw_degree, msg->command);
+		AlignRobotYaw(msg->position.z, msg->command);
 	else
 	{
-		CalculateStepData(msg->position_x, pre_position_x, msg->position_y, pre_position_y, msg->command);
-
-		pre_position_x = msg->position_x;
-		pre_position_y = msg->position_y;
+		CalculateStepData(msg->position.x, msg->position.y, msg->command);
 	}
 }
 void FootStepPlanner::parse_init_data_(const std::string &path)
