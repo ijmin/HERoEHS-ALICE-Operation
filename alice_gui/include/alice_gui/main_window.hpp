@@ -41,6 +41,14 @@ public:
 
 	public Q_SLOTS:
 	void updateLoggingView(); // no idea why this can't connect automatically
+	void realtimeDataSlot();
+	void graph_draw(QCustomPlot *ui_graph, const QString title, const QString unit, int min_value, int max_value, int tick_count);
+	void graph_draw_update(QCustomPlot *ui_graph, double valueX, double valueY, double valueZ);
+	void graph_draw_sensor(QCustomPlot *ui_graph, const QString title, const QString unit, int min_value, int max_value, int tick_count);
+	void graph_draw_sensor_update(QCustomPlot *ui_graph, double valueX, double valueY, double valueZ);
+	void graph_draw_clean(QCustomPlot *ui_graph);
+
+
 
 	// <------------------------------------------------------------------- dynamixel offset -->
 	void on_update_button_clicked();
@@ -79,12 +87,25 @@ public:
 	//parameter
 	void on_apply_data_clicked();
 
+	//<------------------------------------------------------------------- module on off -->
+	void on_base_module_real_button_clicked();
+	void on_initial_pose_real_button_clicked();
+
+	//<------------------------------------------------------------------- graph -->
+	void on_stop_button_clicked();
+	void on_start_button_clicked();
+	void on_joint_state_init_button_clicked();
+
 
 	private:
 	Ui::MainWindowDesign ui;
 	QNode qnode;
 	void joint_data_parse(const std::string &path);
 	std_msgs::String module_msg; // module on off command msg
+	// graph variables
+	QTimer *dataTimer;
+	QFont legendFont;
+	double key;
 
 	// <------------------------------------------------------------------- dynamixel offset -->
 
@@ -101,6 +122,13 @@ public:
 	alice_foot_step_generator::FootStepCommand foot_step_command_msg;
 
 	int pose_num;
+
+
+	//<------------------------------------------------------------------- module on off -->
+	//<------------------------------------------------------------------- graph -->
+	void check_sensor_menu();
+	void select_joint_state();
+
 };
 
 }  // namespace offset_tuner_operation

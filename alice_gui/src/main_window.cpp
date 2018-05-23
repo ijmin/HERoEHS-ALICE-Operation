@@ -52,6 +52,20 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 	ui.view_logging->setModel(qnode.loggingModel());
 	QObject::connect(&qnode, SIGNAL(loggingUpdated()), this, SLOT(updateLoggingView()));
 
+	/*********************
+	 ** Graph
+	 **********************/
+
+	legendFont = font();  // start out with MainWindow's font..
+	graph_draw(ui.state_plot, "Goal / Present Position ", "Rad", -1, 1 , 10);
+	graph_draw_sensor(ui.sensor_plot_1, "Left Sensor", "m", -3, 3, 10);
+	graph_draw_sensor(ui.sensor_plot_2, "Right Sensor", "m", -3, 3, 10);
+
+
+	dataTimer = new QTimer(this);
+	connect(dataTimer, SIGNAL(timeout()), this, SLOT(realtimeDataSlot()));
+	dataTimer->start(0.006); // Interval 0 means to refresh as fast as possible
+
 	/****************************
 	 ** Initialize  load joint data
 	 ****************************/
@@ -359,12 +373,36 @@ void MainWindow::on_apply_data_clicked() {
 	foot_step_command_msg.command = "stop";
 	qnode.foot_step_command_pub.publish(foot_step_command_msg);
 }
-
+/*****************************************************************************
+ ** module on off
+ *****************************************************************************/
+void MainWindow::on_base_module_real_button_clicked(){
+	qnode.enable_module_msg.data = "base_module";
+	qnode.enable_module_pub.publish(qnode.enable_module_msg);
+}
+/*void MainWindow::on_base_module_real_clicked()
+{
+	ROS_INFO("!!");
+	qnode.enable_module_msg.data = "base_module";
+	qnode.enable_module_pub.publish(qnode.enable_module_msg);
+}
+void MainWindow::on_initial_pose_real_button_clicked()
+{
+	ROS_INFO("!!");
+	qnode.init_pose_msg.data = "init_pose";
+	qnode.init_pose_pub.publish(qnode.init_pose_msg);
+}*/
+void MainWindow::on_initial_pose_real_button_clicked()
+{
+	qnode.init_pose_msg.data = "init_pose";
+	qnode.init_pose_pub.publish(qnode.init_pose_msg);
+}
 /*****************************************************************************
  ** common
  *****************************************************************************/
 void MainWindow::updateLoggingView() {
 	ui.view_logging->scrollToBottom();
+	ui.view_logging->model()->removeRows( 0, ui.view_logging->model()->rowCount()-2);// 제거 하는 함수
 }
 void MainWindow::closeEvent(QCloseEvent *event)
 {

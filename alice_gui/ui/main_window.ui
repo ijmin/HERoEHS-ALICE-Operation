@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1636</width>
-    <height>778</height>
+    <width>1892</width>
+    <height>1032</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -36,18 +36,18 @@
       <widget class="QListView" name="view_logging">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>80</y>
+         <x>10</x>
+         <y>120</y>
          <width>391</width>
-         <height>611</height>
+         <height>71</height>
         </rect>
        </property>
       </widget>
       <widget class="QPushButton" name="quit_button">
        <property name="geometry">
         <rect>
-         <x>1420</x>
-         <y>670</y>
+         <x>1658</x>
+         <y>910</y>
          <width>191</width>
          <height>27</height>
         </rect>
@@ -65,7 +65,7 @@
       <widget class="QLabel" name="label">
        <property name="geometry">
         <rect>
-         <x>472</x>
+         <x>629</x>
          <y>2</y>
          <width>661</width>
          <height>51</height>
@@ -78,14 +78,17 @@
       <widget class="QTabWidget" name="initial_pose_button_2">
        <property name="geometry">
         <rect>
-         <x>420</x>
-         <y>70</y>
-         <width>1191</width>
-         <height>591</height>
+         <x>10</x>
+         <y>206</y>
+         <width>741</width>
+         <height>731</height>
         </rect>
        </property>
+       <property name="tabShape">
+        <enum>QTabWidget::Rounded</enum>
+       </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -96,8 +99,8 @@
           <rect>
            <x>10</x>
            <y>20</y>
-           <width>1171</width>
-           <height>80</height>
+           <width>721</width>
+           <height>131</height>
           </rect>
          </property>
          <property name="frameShape">
@@ -111,18 +114,11 @@
            <rect>
             <x>10</x>
             <y>10</y>
-            <width>1151</width>
-            <height>61</height>
+            <width>701</width>
+            <height>108</height>
            </rect>
           </property>
           <layout class="QGridLayout" name="gridLayout">
-           <item row="0" column="5">
-            <widget class="QLabel" name="label_7">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[Goal + Offset] deg&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="2">
             <widget class="QLineEdit" name="link_name_line_edit">
              <property name="maximumSize">
@@ -130,44 +126,6 @@
                <width>161</width>
                <height>27</height>
               </size>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="8">
-            <widget class="QDoubleSpinBox" name="i_gain_spin_box">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>-16000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>16000.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="9">
-            <widget class="QDoubleSpinBox" name="d_gain_spin_box">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="decimals">
-              <number>2</number>
-             </property>
-             <property name="minimum">
-              <double>-16000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>16000.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>1.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -192,29 +150,6 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="5">
-            <widget class="QDoubleSpinBox" name="goal_offset_spin_box">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>-180.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>180.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="7">
-            <widget class="QLabel" name="label_9">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[P gain]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
            <item row="1" column="3">
             <widget class="QDoubleSpinBox" name="goal_spin_box">
              <property name="minimum">
@@ -231,57 +166,10 @@
              </property>
             </widget>
            </item>
-           <item row="0" column="8">
-            <widget class="QLabel" name="label_10">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[I gain]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="6">
-            <widget class="QLabel" name="label_8">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[Present] deg&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="9">
-            <widget class="QLabel" name="label_11">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[D gain]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="2">
             <widget class="QLabel" name="label_4">
              <property name="text">
               <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[Link Name]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="4">
-            <widget class="QLabel" name="label_6">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[Offset] deg&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="7">
-            <widget class="QDoubleSpinBox" name="p_gain_spin_box">
-             <property name="enabled">
-              <bool>false</bool>
-             </property>
-             <property name="minimum">
-              <double>-16000.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>16000.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>1.000000000000000</double>
-             </property>
-             <property name="value">
-              <double>0.000000000000000</double>
              </property>
             </widget>
            </item>
@@ -312,20 +200,135 @@
             </widget>
            </item>
            <item row="1" column="4">
+            <widget class="QDoubleSpinBox" name="goal_offset_spin_box">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimum">
+              <double>-180.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>180.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>0.100000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="4">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[Goal + Offset] deg&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QLabel" name="label_6">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[Offset] deg&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
             <widget class="QLineEdit" name="offset_line_edit">
              <property name="maximumSize">
               <size>
-               <width>108</width>
+               <width>96</width>
                <height>27</height>
               </size>
              </property>
             </widget>
            </item>
-           <item row="1" column="6">
+           <item row="2" column="3">
+            <widget class="QLabel" name="label_9">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[P gain]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="4">
+            <widget class="QLabel" name="label_10">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[I gain]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QLabel" name="label_11">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[D gain]&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="3">
+            <widget class="QDoubleSpinBox" name="p_gain_spin_box">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimum">
+              <double>-16000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>16000.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="4">
+            <widget class="QDoubleSpinBox" name="i_gain_spin_box">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="minimum">
+              <double>-16000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>16000.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>1.000000000000000</double>
+             </property>
+             <property name="value">
+              <double>0.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QDoubleSpinBox" name="d_gain_spin_box">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="minimum">
+              <double>-16000.000000000000000</double>
+             </property>
+             <property name="maximum">
+              <double>16000.000000000000000</double>
+             </property>
+             <property name="singleStep">
+              <double>1.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLabel" name="label_8">
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;[Present] deg&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
             <widget class="QLineEdit" name="present_line_edit">
              <property name="maximumSize">
               <size>
-               <width>108</width>
+               <width>161</width>
                <height>27</height>
               </size>
              </property>
@@ -337,8 +340,8 @@
         <widget class="QPushButton" name="all_torque_on_button">
          <property name="geometry">
           <rect>
-           <x>650</x>
-           <y>140</y>
+           <x>220</x>
+           <y>160</y>
            <width>241</width>
            <height>27</height>
           </rect>
@@ -353,8 +356,8 @@
         <widget class="QPushButton" name="all_torque_off_button">
          <property name="geometry">
           <rect>
-           <x>920</x>
-           <y>140</y>
+           <x>490</x>
+           <y>160</y>
            <width>241</width>
            <height>27</height>
           </rect>
@@ -369,10 +372,10 @@
         <widget class="QPushButton" name="save_button">
          <property name="geometry">
           <rect>
-           <x>1020</x>
-           <y>314</y>
+           <x>571</x>
+           <y>659</y>
            <width>161</width>
-           <height>27</height>
+           <height>26</height>
           </rect>
          </property>
          <property name="text">
@@ -382,8 +385,8 @@
         <widget class="QPushButton" name="update_button">
          <property name="geometry">
           <rect>
-           <x>110</x>
-           <y>110</y>
+           <x>92</x>
+           <y>160</y>
            <width>81</width>
            <height>27</height>
           </rect>
@@ -395,8 +398,8 @@
         <widget class="QPushButton" name="change_button">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>110</y>
+           <x>10</x>
+           <y>160</y>
            <width>81</width>
            <height>27</height>
           </rect>
@@ -408,10 +411,10 @@
         <widget class="QGroupBox" name="groupBox">
          <property name="geometry">
           <rect>
-           <x>790</x>
-           <y>263</y>
+           <x>331</x>
+           <y>609</y>
            <width>221</width>
-           <height>81</height>
+           <height>80</height>
           </rect>
          </property>
          <property name="title">
@@ -427,7 +430,7 @@
            </rect>
           </property>
           <property name="text">
-           <string>Initial Pose</string>
+           <string>Zero pose</string>
           </property>
          </widget>
          <widget class="QPushButton" name="pre_offset_pose_button">
@@ -447,14 +450,48 @@
         <widget class="QPushButton" name="base_module_button">
          <property name="geometry">
           <rect>
-           <x>20</x>
-           <y>310</y>
+           <x>10</x>
+           <y>254</y>
            <width>131</width>
-           <height>27</height>
+           <height>50</height>
           </rect>
          </property>
          <property name="text">
           <string>Base Module</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_3">
+        <attribute name="title">
+         <string>Module/Control</string>
+        </attribute>
+        <widget class="QPushButton" name="base_module_real_button">
+         <property name="enabled">
+          <bool>true</bool>
+         </property>
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>131</width>
+           <height>50</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Base Module</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="initial_pose_real_button">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>80</y>
+           <width>131</width>
+           <height>50</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>initial pose</string>
          </property>
         </widget>
        </widget>
@@ -465,8 +502,8 @@
         <widget class="QPushButton" name="balance_param_apply">
          <property name="geometry">
           <rect>
-           <x>560</x>
-           <y>330</y>
+           <x>550</x>
+           <y>600</y>
            <width>181</width>
            <height>41</height>
           </rect>
@@ -478,8 +515,8 @@
         <widget class="QPushButton" name="none">
          <property name="geometry">
           <rect>
-           <x>290</x>
-           <y>20</y>
+           <x>212</x>
+           <y>9</y>
            <width>181</width>
            <height>41</height>
           </rect>
@@ -491,8 +528,8 @@
         <widget class="QPushButton" name="joint_feedback_gain">
          <property name="geometry">
           <rect>
-           <x>560</x>
-           <y>380</y>
+           <x>550</x>
+           <y>650</y>
            <width>181</width>
            <height>41</height>
           </rect>
@@ -501,80 +538,11 @@
           <string>Joint_feedback_gain</string>
          </property>
         </widget>
-        <widget class="QLabel" name="label_130">
-         <property name="geometry">
-          <rect>
-           <x>450</x>
-           <y>220</y>
-           <width>121</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Ubuntu</family>
-           <pointsize>24</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#000000;&quot;&gt;step_angle_rad&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_140">
-         <property name="geometry">
-          <rect>
-           <x>750</x>
-           <y>130</y>
-           <width>121</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Ubuntu</family>
-           <pointsize>24</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;step_time&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-        </widget>
         <widget class="QPushButton" name="turn_right">
          <property name="geometry">
           <rect>
-           <x>290</x>
-           <y>120</y>
+           <x>203</x>
+           <y>88</y>
            <width>91</width>
            <height>61</height>
           </rect>
@@ -586,8 +554,8 @@ p, li { white-space: pre-wrap; }
         <widget class="QPushButton" name="forward">
          <property name="geometry">
           <rect>
-           <x>190</x>
-           <y>120</y>
+           <x>103</x>
+           <y>88</y>
            <width>91</width>
            <height>61</height>
           </rect>
@@ -596,101 +564,11 @@ p, li { white-space: pre-wrap; }
           <string>F</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="edit_step_length">
-         <property name="geometry">
-          <rect>
-           <x>590</x>
-           <y>160</y>
-           <width>141</width>
-           <height>22</height>
-          </rect>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_127">
-         <property name="geometry">
-          <rect>
-           <x>460</x>
-           <y>130</y>
-           <width>101</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Ubuntu</family>
-           <pointsize>24</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#000000;&quot;&gt;step_num&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-        </widget>
-        <widget class="QLabel" name="label_129">
-         <property name="geometry">
-          <rect>
-           <x>450</x>
-           <y>190</y>
-           <width>131</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Ubuntu</family>
-           <pointsize>24</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
-&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
-p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;side_step_length&lt;/span&gt;&lt;/p&gt;
-&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
-        </widget>
-        <widget class="QLineEdit" name="edit_side_step_length">
-         <property name="geometry">
-          <rect>
-           <x>590</x>
-           <y>190</y>
-           <width>141</width>
-           <height>22</height>
-          </rect>
-         </property>
-        </widget>
         <widget class="QPushButton" name="right">
          <property name="geometry">
           <rect>
-           <x>290</x>
-           <y>190</y>
+           <x>203</x>
+           <y>158</y>
            <width>91</width>
            <height>61</height>
           </rect>
@@ -702,8 +580,8 @@ p, li { white-space: pre-wrap; }
         <widget class="QPushButton" name="online_walking_module">
          <property name="geometry">
           <rect>
-           <x>80</x>
-           <y>20</y>
+           <x>2</x>
+           <y>9</y>
            <width>201</width>
            <height>41</height>
           </rect>
@@ -712,21 +590,11 @@ p, li { white-space: pre-wrap; }
           <string>Online_walking_module</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="edit_step_angle_rad">
-         <property name="geometry">
-          <rect>
-           <x>590</x>
-           <y>220</y>
-           <width>141</width>
-           <height>22</height>
-          </rect>
-         </property>
-        </widget>
         <widget class="QPushButton" name="backward">
          <property name="geometry">
           <rect>
-           <x>190</x>
-           <y>260</y>
+           <x>103</x>
+           <y>228</y>
            <width>91</width>
            <height>61</height>
           </rect>
@@ -738,8 +606,8 @@ p, li { white-space: pre-wrap; }
         <widget class="QPushButton" name="stop">
          <property name="geometry">
           <rect>
-           <x>190</x>
-           <y>190</y>
+           <x>103</x>
+           <y>158</y>
            <width>91</width>
            <height>61</height>
           </rect>
@@ -748,21 +616,11 @@ p, li { white-space: pre-wrap; }
           <string>S</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="edit_step_time">
-         <property name="geometry">
-          <rect>
-           <x>850</x>
-           <y>130</y>
-           <width>141</width>
-           <height>22</height>
-          </rect>
-         </property>
-        </widget>
         <widget class="QPushButton" name="apply_data">
          <property name="geometry">
           <rect>
-           <x>560</x>
-           <y>280</y>
+           <x>550</x>
+           <y>550</y>
            <width>181</width>
            <height>41</height>
           </rect>
@@ -774,8 +632,8 @@ p, li { white-space: pre-wrap; }
         <widget class="QPushButton" name="left">
          <property name="geometry">
           <rect>
-           <x>90</x>
-           <y>190</y>
+           <x>3</x>
+           <y>158</y>
            <width>91</width>
            <height>61</height>
           </rect>
@@ -787,8 +645,8 @@ p, li { white-space: pre-wrap; }
         <widget class="QPushButton" name="turn_left">
          <property name="geometry">
           <rect>
-           <x>90</x>
-           <y>120</y>
+           <x>3</x>
+           <y>88</y>
            <width>91</width>
            <height>61</height>
           </rect>
@@ -797,64 +655,468 @@ p, li { white-space: pre-wrap; }
           <string>TL</string>
          </property>
         </widget>
-        <widget class="QLineEdit" name="edit_step_num">
+        <widget class="QWidget" name="gridLayoutWidget_2">
          <property name="geometry">
           <rect>
-           <x>590</x>
-           <y>130</y>
-           <width>141</width>
-           <height>22</height>
+           <x>529</x>
+           <y>151</y>
+           <width>191</width>
+           <height>237</height>
           </rect>
          </property>
-        </widget>
-        <widget class="QLabel" name="label_128">
-         <property name="geometry">
-          <rect>
-           <x>460</x>
-           <y>160</y>
-           <width>101</width>
-           <height>21</height>
-          </rect>
-         </property>
-         <property name="font">
-          <font>
-           <family>Ubuntu</family>
-           <pointsize>24</pointsize>
-           <weight>50</weight>
-           <bold>false</bold>
-          </font>
-         </property>
-         <property name="frameShape">
-          <enum>QFrame::NoFrame</enum>
-         </property>
-         <property name="text">
-          <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+         <layout class="QGridLayout" name="gridLayout_2">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_129">
+            <property name="font">
+             <font>
+              <family>Ubuntu</family>
+              <pointsize>24</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;side_step_length&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="edit_step_angle_rad"/>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_130">
+            <property name="font">
+             <font>
+              <family>Ubuntu</family>
+              <pointsize>24</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#000000;&quot;&gt;step_angle_rad&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="edit_side_step_length"/>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="edit_step_num"/>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_128">
+            <property name="font">
+             <font>
+              <family>Ubuntu</family>
+              <pointsize>24</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
 &lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#000000;&quot;&gt;step_length&lt;/span&gt;&lt;/p&gt;
 &lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-         </property>
-         <property name="textFormat">
-          <enum>Qt::AutoText</enum>
-         </property>
-         <property name="margin">
-          <number>0</number>
-         </property>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_127">
+            <property name="font">
+             <font>
+              <family>Ubuntu</family>
+              <pointsize>24</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt; color:#000000;&quot;&gt;step_num&lt;/span&gt;&lt;/p&gt;
+&lt;p align=&quot;center&quot; style=&quot;-qt-paragraph-type:empty; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="edit_step_length"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_140">
+            <property name="font">
+             <font>
+              <family>Ubuntu</family>
+              <pointsize>24</pointsize>
+              <weight>50</weight>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="text">
+             <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;step_time&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+            <property name="textFormat">
+             <enum>Qt::AutoText</enum>
+            </property>
+            <property name="margin">
+             <number>0</number>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="edit_step_time"/>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
-         <x>20</x>
-         <y>60</y>
+         <x>11</x>
+         <y>90</y>
          <width>71</width>
          <height>17</height>
         </rect>
        </property>
        <property name="text">
         <string>ROS INFO</string>
+       </property>
+      </widget>
+      <widget class="QCustomPlot" name="state_plot" native="true">
+       <property name="geometry">
+        <rect>
+         <x>760</x>
+         <y>90</y>
+         <width>1081</width>
+         <height>351</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
+       </property>
+      </widget>
+      <widget class="QCustomPlot" name="sensor_plot_1" native="true">
+       <property name="geometry">
+        <rect>
+         <x>760</x>
+         <y>450</y>
+         <width>531</width>
+         <height>281</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QCustomPlot" name="sensor_plot_2" native="true">
+       <property name="geometry">
+        <rect>
+         <x>1310</x>
+         <y>450</y>
+         <width>531</width>
+         <height>281</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="geometry">
+        <rect>
+         <x>760</x>
+         <y>750</y>
+         <width>531</width>
+         <height>181</height>
+        </rect>
+       </property>
+       <property name="title">
+        <string>Quick Starter</string>
+       </property>
+       <widget class="QWidget" name="gridLayoutWidget_3">
+        <property name="geometry">
+         <rect>
+          <x>20</x>
+          <y>25</y>
+          <width>151</width>
+          <height>151</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_3">
+         <item row="2" column="0">
+          <widget class="QPushButton" name="pushButton_3">
+           <property name="text">
+            <string>Arm/Waist Module</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="pushButton_2">
+           <property name="text">
+            <string>Head Module</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="0">
+          <widget class="QPushButton" name="pushButton">
+           <property name="text">
+            <string>Base Module</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0">
+          <widget class="QPushButton" name="pushButton_4">
+           <property name="text">
+            <string>Walking Module</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="gridLayoutWidget_4">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>25</y>
+          <width>102</width>
+          <height>71</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_4">
+         <item row="0" column="0">
+          <widget class="QPushButton" name="pushButton_7">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>control1 on</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="pushButton_6">
+           <property name="text">
+            <string>control1 off</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+       <widget class="QWidget" name="gridLayoutWidget_5">
+        <property name="geometry">
+         <rect>
+          <x>190</x>
+          <y>104</y>
+          <width>102</width>
+          <height>71</height>
+         </rect>
+        </property>
+        <layout class="QGridLayout" name="gridLayout_5">
+         <item row="0" column="0">
+          <widget class="QPushButton" name="pushButton_8">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="text">
+            <string>control2 on</string>
+           </property>
+          </widget>
+         </item>
+         <item row="1" column="0">
+          <widget class="QPushButton" name="pushButton_9">
+           <property name="text">
+            <string>control2 off</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </widget>
+      </widget>
+      <widget class="QPushButton" name="start_button">
+       <property name="geometry">
+        <rect>
+         <x>1600</x>
+         <y>750</y>
+         <width>99</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>START</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="stop_button">
+       <property name="geometry">
+        <rect>
+         <x>1730</x>
+         <y>750</y>
+         <width>99</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>STOP</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="sensor1_combo_box">
+       <property name="geometry">
+        <rect>
+         <x>1310</x>
+         <y>820</y>
+         <width>131</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Torque</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Force</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QComboBox" name="sensor2_combo_box">
+       <property name="geometry">
+        <rect>
+         <x>1450</x>
+         <y>820</y>
+         <width>131</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <item>
+        <property name="text">
+         <string>Torque</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>Force</string>
+        </property>
+       </item>
+      </widget>
+      <widget class="QLabel" name="label_14">
+       <property name="geometry">
+        <rect>
+         <x>1310</x>
+         <y>800</y>
+         <width>67</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Graph 2</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_15">
+       <property name="geometry">
+        <rect>
+         <x>1450</x>
+         <y>800</y>
+         <width>67</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Graph 3</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_16">
+       <property name="geometry">
+        <rect>
+         <x>1310</x>
+         <y>740</y>
+         <width>67</width>
+         <height>17</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Graph 1</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="state_combo_box">
+       <property name="geometry">
+        <rect>
+         <x>1310</x>
+         <y>760</y>
+         <width>281</width>
+         <height>27</height>
+        </rect>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="joint_state_init_button">
+       <property name="geometry">
+        <rect>
+         <x>1310</x>
+         <y>870</y>
+         <width>99</width>
+         <height>27</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Initialize</string>
        </property>
       </widget>
      </widget>
@@ -878,7 +1140,7 @@ p, li { white-space: pre-wrap; }
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1636</width>
+     <width>1892</width>
      <height>25</height>
     </rect>
    </property>
@@ -922,6 +1184,14 @@ p, li { white-space: pre-wrap; }
    </property>
   </action>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>QCustomPlot</class>
+   <extends>QWidget</extends>
+   <header location="global">qcustomplot.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="../resources/images.qrc"/>
  </resources>

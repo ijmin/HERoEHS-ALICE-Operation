@@ -11,7 +11,6 @@ using namespace alice;
 // Foot step planner algorithm
 FootStepPlanner::FootStepPlanner()
 {
-
 	// load yaml
 	step_length_max = 0;
 	step_length_min = 0;

@@ -34,12 +34,13 @@
 
 #include "offset_tuner_msgs/PresentJointStateData.h"
 #include "offset_tuner_msgs/PresentJointStateArray.h"
+#include "alice_foot_step_generator/FootStepCommand.h"
+#include "alice_msgs/ForceTorque.h"
+
 
 #include "std_msgs/String.h"
 #include "std_msgs/Bool.h"
-
-#include "alice_foot_step_generator/FootStepCommand.h"
-
+#include "sensor_msgs/JointState.h"
 /*****************************************************************************
  ** Namespaces
  *****************************************************************************/
@@ -111,6 +112,32 @@ public:
 
 	ros::Publisher module_on_off; // 모듈 on off
 
+	/*****************************************************************************
+	 ** module on off
+	 *****************************************************************************/
+
+	ros::Publisher init_pose_pub;
+	std_msgs::String init_pose_msg;
+
+	/*****************************************************************************
+	 ** graph
+	 *****************************************************************************/
+	//subscriber
+	ros::Subscriber joint_goal_state_sub;
+	ros::Subscriber joint_present_state_sub;
+	ros::Subscriber alice_force_torque_data_sub;
+	double currentForceX_l_gui, currentForceY_l_gui, currentForceZ_l_gui;
+	double currentForceX_r_gui, currentForceY_r_gui, currentForceZ_r_gui;
+	double currentTorqueX_l_gui, currentTorqueY_l_gui, currentTorqueZ_l_gui;
+	double currentTorqueX_r_gui, currentTorqueY_r_gui, currentTorqueZ_r_gui;
+
+	std::map<int, std::string>      joint_index_to_name;
+	std::map<std::string, double>   joint_name_to_goal;
+	std::map<std::string, double>   joint_name_to_present;
+
+
+
+
 
 	Q_SIGNALS:
 	void loggingUpdated();
@@ -121,6 +148,9 @@ private:
 	char** init_argv;
 	ros::Publisher chatter_publisher;
 	QStringListModel logging_model;
+	void forceTorqueDataMsgCallback(const alice_msgs::ForceTorque::ConstPtr& msg);
+	void goalJointStateMsgCallback(const sensor_msgs::JointState::ConstPtr& msg);
+	void presentJointStateMsgCallback(const sensor_msgs::JointState::ConstPtr& msg);
 };
 
 }  // namespace offset_tuner_operation
