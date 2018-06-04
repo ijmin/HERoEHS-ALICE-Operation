@@ -36,7 +36,7 @@ FootStepGenerator::FootStepGenerator()
   foot_z_swap_m_ = 0.1;
   body_z_swap_m_ = 0.01;
 
-  default_y_feet_offset_m_ = 0.186;
+  default_y_feet_offset_m_ = 0.18;
 
   previous_step_type_ = STOP_WALKING;
 
