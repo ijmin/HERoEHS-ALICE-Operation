@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<package>
+  <name>alice_gui</name>
+  <version>0.1.0</version>
+  <description>
+
+     alice_gui
+
+  </description>
+  <maintainer email="robotemperor@gmail.com">robotemperor</maintainer>
+  <author>robotemperor</author>
+  <license>BSD</license>
+  <!-- <url type="bugtracker">https://github.com/stonier/qt_ros/issues</url> -->
+  <!-- <url type="repository">https://github.com/stonier/qt_ros</url> -->
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>qt_build</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>libqt4-dev</build_depend>
+  <build_depend>offset_tuner_msgs</build_depend>
+  <build_depend>alice_msgs</build_depend>
+  <build_depend>alice_walking_module_msgs</build_depend>
+  <build_depend>motion_editor_msgs</build_depend>
+  <run_depend>qt_build</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>libqt4-dev</run_depend>
+
+ 
+</package>
