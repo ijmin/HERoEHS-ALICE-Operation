@@ -140,6 +140,9 @@ void FootStepPlanner::parse_init_data_(const std::string &path)
 	foot_set_command_msg.step_time = doc["step_time"].as<double>();
 	foot_set_command_msg.step_angle_rad = doc["step_angle_rad"].as<double>();
 	foot_set_command_msg.side_step_length = doc["side_step_length"].as<double>();
+}
+void FootStepPlanner::walkingPathMsgCAllBack(const std_msgs::String::ConstPtr& msg)
+{
 
 }
 
