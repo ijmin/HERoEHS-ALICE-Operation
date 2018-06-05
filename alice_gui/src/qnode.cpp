@@ -91,7 +91,7 @@ bool QNode::init() {
 	foot_step_command_pub = n.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_generator/walking_command",10);
 	module_on_off = n.advertise<std_msgs::String>("/robotis/enable_ctrl_module", 10);
 
-	set_balance_param_client =  n.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/balance_param");
+	set_balance_param_client =  n.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/set_balance_param");
 	joint_feedback_gain_client = n.serviceClient<alice_walking_module_msgs::SetJointFeedBackGain>("/heroehs/online_walking/joint_feedback_gain");
 
 
