@@ -46,14 +46,15 @@ public:
   double fb_step_length_m_;
   double rl_step_length_m_;
   double rotate_step_angle_rad_;
-
   double step_time_sec_;
-  double start_end_time_sec_;
-  double dsp_ratio_;
 
+  double dsp_ratio_;
   double foot_z_swap_m_;
   double body_z_swap_m_;
 
+  double y_zmp_convergence_m_;
+
+  double start_end_time_sec_;
   double default_y_feet_offset_m_;
 
 private:

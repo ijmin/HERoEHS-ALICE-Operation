@@ -13,6 +13,7 @@
 #include <ros/package.h>
 #include <std_msgs/Bool.h>
 #include <std_msgs/String.h>
+#include <std_msgs/Float64.h>
 
 #include "alice_foot_step_generator/FootStepCommand.h"
 #include "alice_foot_step_generator/Step2DArray.h"
@@ -37,6 +38,11 @@ void walkingModuleStatusMSGCallback(const robotis_controller_msgs::StatusMsg::Co
 
 void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::ConstPtr& msg);
 void step2DArrayCallback(const alice_foot_step_generator::Step2DArray::ConstPtr& msg);
+
+void dspCallback(const std_msgs::Float64::ConstPtr& msg);
+void footZSwapCallback(const std_msgs::Float64::ConstPtr& msg);
+void bodyZSwapCallback(const std_msgs::Float64::ConstPtr& msg);
+void yZMPConvergenceCallback(const std_msgs::Float64::ConstPtr& msg);
 
 bool isRunning(void);
 

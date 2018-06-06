@@ -21,6 +21,11 @@ ros::Subscriber     g_walking_command_sub;
 ros::Subscriber     g_balance_command_sub;
 ros::Subscriber     g_footsteps_2d_sub;
 
+ros::Subscriber     g_dsp_sub;
+ros::Subscriber     g_foot_z_swap_sub;
+ros::Subscriber     g_body_z_swap_sub;
+ros::Subscriber     g_y_zmp_convergence_sub;
+
 alice::FootStepGenerator g_foot_stp_generator;
 
 alice_walking_module_msgs::AddStepDataArray     add_step_data_array_srv;
@@ -44,8 +49,49 @@ void initialize(void)
 
   g_walking_command_sub           = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 0, walkingCommandCallback);
  // g_footsteps_2d_sub              = nh.subscribe("/robotis/thormang3_foot_step_generator/footsteps_2d",    0, step2DArrayCallback);
+  g_dsp_sub                 = nh.subscribe("heroehs/alice_foot_step_generator/dsp", 5, dspCallback);
+  g_foot_z_swap_sub         = nh.subscribe("heroehs/alice_foot_step_generator/foot_z_swap", 5, footZSwapCallback);
+  g_body_z_swap_sub         = nh.subscribe("heroehs/alice_foot_step_generator/bady_z_swap", 5, bodyZSwapCallback);
+  g_y_zmp_convergence_sub   = nh.subscribe("heroehs/alice_foot_step_generator/y_zmp_convergence", 5, yZMPConvergenceCallback);
+
 
   g_last_command_time = ros::Time::now().toSec();
+}
+
+void dspCallback(const std_msgs::Float64::ConstPtr& msg)
+{
+  if(msg->data <= 0)
+    ROS_ERROR("Invalid DSP Ratio");
+
+  ROS_INFO_STREAM("SET DSP RATIO : " << msg->data);
+  g_foot_stp_generator.dsp_ratio_ = msg->data;
+}
+
+void footZSwapCallback(const std_msgs::Float64::ConstPtr& msg)
+{
+  if(msg->data <= 0)
+    ROS_ERROR("Invalid Foot Z Swap");
+
+  ROS_INFO_STREAM("SET Foot Z Swap : " << msg->data);
+  g_foot_stp_generator.foot_z_swap_m_ = msg->data;
+}
+
+void bodyZSwapCallback(const std_msgs::Float64::ConstPtr& msg)
+{
+  if(msg->data <= 0)
+    ROS_ERROR("Invalid Body Z Swap");
+
+  ROS_INFO_STREAM("SET Body Z Swap : " << msg->data);
+  g_foot_stp_generator.body_z_swap_m_ = msg->data;
+}
+
+void yZMPConvergenceCallback(const std_msgs::Float64::ConstPtr& msg)
+{
+  if(msg->data <= 0)
+    ROS_ERROR("Invalid Y ZMP Convergence");
+
+  ROS_INFO_STREAM("SET Y ZMP Convergence : " << msg->data);
+  g_foot_stp_generator.y_zmp_convergence_m_ = msg->data;
 }
 
 void walkingModuleStatusMSGCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)
