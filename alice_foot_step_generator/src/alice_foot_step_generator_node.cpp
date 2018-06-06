@@ -34,7 +34,7 @@ FootStepGenerator::FootStepGenerator()
   foot_z_swap_m_ = 0.1;
   body_z_swap_m_ = 0.01;
 
-  y_zmp_convergence_m_ = 0.02;
+  y_zmp_convergence_m_ = 0.0;
 
   start_end_time_sec_ = 1.6;
   default_y_feet_offset_m_ = 0.18;
