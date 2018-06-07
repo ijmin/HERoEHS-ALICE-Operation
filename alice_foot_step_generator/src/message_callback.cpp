@@ -273,7 +273,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
     if(isRunning() == true)
       return;
 
-    //g_foot_stp_generator.calcRightKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
+    g_foot_stp_generator.calcRightKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
     g_is_running_check_needed = true;
   }
   else if(msg->command == "left kick")
@@ -281,7 +281,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
     if(isRunning() == true)
       return;
 
-   // g_foot_stp_generator.calcLeftKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
+    g_foot_stp_generator.calcLeftKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
     g_is_running_check_needed = true;
   }
   else if(msg->command == "stop")
