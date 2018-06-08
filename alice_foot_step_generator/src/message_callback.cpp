@@ -60,8 +60,11 @@ void initialize(void)
 
 void dspCallback(const std_msgs::Float64::ConstPtr& msg)
 {
-  if(msg->data <= 0)
+  if(msg->data <= 0 || msg->data >= 1)
+  {
     ROS_ERROR("Invalid DSP Ratio");
+    return;
+  }
 
   ROS_INFO_STREAM("SET DSP RATIO : " << msg->data);
   g_foot_stp_generator.dsp_ratio_ = msg->data;
@@ -70,7 +73,10 @@ void dspCallback(const std_msgs::Float64::ConstPtr& msg)
 void footZSwapCallback(const std_msgs::Float64::ConstPtr& msg)
 {
   if(msg->data <= 0)
+  {
     ROS_ERROR("Invalid Foot Z Swap");
+    return;
+  }
 
   ROS_INFO_STREAM("SET Foot Z Swap : " << msg->data);
   g_foot_stp_generator.foot_z_swap_m_ = msg->data;
@@ -78,8 +84,11 @@ void footZSwapCallback(const std_msgs::Float64::ConstPtr& msg)
 
 void bodyZSwapCallback(const std_msgs::Float64::ConstPtr& msg)
 {
-  if(msg->data <= 0)
+  if(msg->data < 0)
+  {
     ROS_ERROR("Invalid Body Z Swap");
+    return;
+  }
 
   ROS_INFO_STREAM("SET Body Z Swap : " << msg->data);
   g_foot_stp_generator.body_z_swap_m_ = msg->data;
@@ -87,9 +96,6 @@ void bodyZSwapCallback(const std_msgs::Float64::ConstPtr& msg)
 
 void yZMPConvergenceCallback(const std_msgs::Float64::ConstPtr& msg)
 {
-  if(msg->data <= 0)
-    ROS_ERROR("Invalid Y ZMP Convergence");
-
   ROS_INFO_STREAM("SET Y ZMP Convergence : " << msg->data);
   g_foot_stp_generator.y_zmp_convergence_m_ = msg->data;
 }
