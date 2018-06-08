@@ -44,6 +44,7 @@
 #include "std_msgs/String.h"
 #include "std_msgs/Bool.h"
 #include "std_msgs/Float64MultiArray.h"
+#include "std_msgs/Float64.h"
 #include "sensor_msgs/JointState.h"
 /*****************************************************************************
  ** Namespaces
@@ -88,6 +89,18 @@ public:
 
 	//test
 	ros::Publisher ball_tracking_pub;
+
+	//foot step generator
+	ros::Publisher dsp_pub;
+	ros::Publisher foot_z_swap_pub;
+	ros::Publisher body_z_swap_pub;
+	ros::Publisher y_zmp_convergence_pub;
+
+	std_msgs::Float64 dsp_msgs;
+	std_msgs::Float64 foot_z_swap_msgs;
+	std_msgs::Float64 body_z_swap_msgs;
+	std_msgs::Float64 y_zmp_convergence_msgs;
+
 
 
 	//subscriber

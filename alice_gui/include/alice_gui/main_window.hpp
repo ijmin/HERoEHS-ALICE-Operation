@@ -119,6 +119,12 @@ public:
 	void on_joint_state_init_button_clicked();
 
 
+	//<------------------------------------------------------------------- foot step generator -->
+	void on_left_kick_clicked();
+	void on_right_kick_clicked();
+	void on_apply_foot_step_generator_clicked();
+
+
 	private:
 	Ui::MainWindowDesign ui;
 	QNode qnode;

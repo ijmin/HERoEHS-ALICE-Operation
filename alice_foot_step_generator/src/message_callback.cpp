@@ -49,10 +49,10 @@ void initialize(void)
 
   g_walking_command_sub           = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 0, walkingCommandCallback);
  // g_footsteps_2d_sub              = nh.subscribe("/robotis/thormang3_foot_step_generator/footsteps_2d",    0, step2DArrayCallback);
-  g_dsp_sub                 = nh.subscribe("heroehs/alice_foot_step_generator/dsp", 5, dspCallback);
-  g_foot_z_swap_sub         = nh.subscribe("heroehs/alice_foot_step_generator/foot_z_swap", 5, footZSwapCallback);
-  g_body_z_swap_sub         = nh.subscribe("heroehs/alice_foot_step_generator/bady_z_swap", 5, bodyZSwapCallback);
-  g_y_zmp_convergence_sub   = nh.subscribe("heroehs/alice_foot_step_generator/y_zmp_convergence", 5, yZMPConvergenceCallback);
+  g_dsp_sub                 = nh.subscribe("/heroehs/alice_foot_step_generator/dsp", 5, dspCallback);
+  g_foot_z_swap_sub         = nh.subscribe("/heroehs/alice_foot_step_generator/foot_z_swap", 5, footZSwapCallback);
+  g_body_z_swap_sub         = nh.subscribe("/heroehs/alice_foot_step_generator/body_z_swap", 5, bodyZSwapCallback);
+  g_y_zmp_convergence_sub   = nh.subscribe("/heroehs/alice_foot_step_generator/y_zmp_convergence", 5, yZMPConvergenceCallback);
 
 
   g_last_command_time = ros::Time::now().toSec();

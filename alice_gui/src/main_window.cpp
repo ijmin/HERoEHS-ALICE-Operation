@@ -337,6 +337,18 @@ void MainWindow::on_stop_clicked() {
 	foot_step_command_msg.command = "stop";
 	qnode.foot_step_command_pub.publish(foot_step_command_msg);
 }
+void MainWindow::on_left_kick_clicked()
+{
+	foot_step_command_msg.command = "left kick";
+		qnode.foot_step_command_pub.publish(foot_step_command_msg);
+
+}
+void MainWindow::on_right_kick_clicked()
+{
+	foot_step_command_msg.command = "right kick";
+		qnode.foot_step_command_pub.publish(foot_step_command_msg);
+
+}
 void MainWindow::on_apply_data_clicked() {
 
 	QString parameter_str;
@@ -376,6 +388,41 @@ void MainWindow::on_apply_data_clicked() {
 	// send message
 	foot_step_command_msg.command = "stop";
 	qnode.foot_step_command_pub.publish(foot_step_command_msg);
+}
+// foot step generater
+void MainWindow::on_apply_foot_step_generator_clicked()
+{
+	QString parameter_str;
+		double  parameter_double = 0;
+
+
+		parameter_str = ui.edit_dsp->text();
+		parameter_double = parameter_str.toDouble();
+
+		// message variables store
+		qnode.dsp_msgs.data = parameter_double;
+		qnode.dsp_pub.publish(qnode.dsp_msgs);
+
+		parameter_str = ui.edit_foot_z_swap->text();
+		parameter_double = parameter_str.toDouble();
+
+		// message variables store
+		qnode.foot_z_swap_msgs.data = parameter_double;
+		qnode.foot_z_swap_pub.publish(qnode.foot_z_swap_msgs);
+
+		parameter_str = ui.edit_body_z_swap->text();
+		parameter_double = parameter_str.toDouble();
+
+		// message variables store
+		qnode.body_z_swap_msgs.data = 	parameter_double;
+		qnode.body_z_swap_pub.publish(qnode.body_z_swap_msgs);
+
+		parameter_str = ui.edit_y_zmp_conv->text();
+		parameter_double = parameter_str.toDouble();
+
+		// message variables store
+		qnode.y_zmp_convergence_msgs.data = parameter_double;
+		qnode.y_zmp_convergence_pub.publish(qnode.y_zmp_convergence_msgs);
 }
 /*****************************************************************************
  ** module on off
@@ -625,6 +672,9 @@ void MainWindow::on_joint_feedback_gain_clicked()
 	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain = doc["r_leg_an_p_p_gain"].as<double>();
 	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain = doc["r_leg_an_p_d_gain"].as<double>();
 
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain = doc["r_leg_kn_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain = doc["r_leg_kn_p_d_gain"].as<double>();
+
 	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain = doc["r_leg_an_r_p_gain"].as<double>();
 	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain = doc["r_leg_an_r_d_gain"].as<double>();
 
@@ -636,6 +686,9 @@ void MainWindow::on_joint_feedback_gain_clicked()
 
 	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = doc["l_leg_hip_p_p_gain"].as<double>();
 	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = doc["l_leg_hip_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain = doc["l_leg_kn_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain = doc["l_leg_kn_p_d_gain"].as<double>();
 
 	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain = doc["l_leg_an_p_p_gain"].as<double>();
 	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain = doc["l_leg_an_p_d_gain"].as<double>();

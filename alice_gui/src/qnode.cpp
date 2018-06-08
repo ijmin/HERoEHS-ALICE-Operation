@@ -131,6 +131,13 @@ bool QNode::init() {
 	//base module //
 	init_pose_pub = n.advertise<std_msgs::String>("/init_pose",10);
 
+
+	//foot step generator
+	dsp_pub = n.advertise<std_msgs::Float64>("/heroehs/alice_foot_step_generator/dsp",10);
+	foot_z_swap_pub = n.advertise<std_msgs::Float64>("/heroehs/alice_foot_step_generator/foot_z_swap",10);
+	body_z_swap_pub = n.advertise<std_msgs::Float64>("/heroehs/alice_foot_step_generator/body_z_swap",10);
+	y_zmp_convergence_pub = n.advertise<std_msgs::Float64>("/heroehs/alice_foot_step_generator/y_zmp_convergence",10);
+
 	return true;
 }
 void QNode::run() {
