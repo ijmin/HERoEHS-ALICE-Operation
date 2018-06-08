@@ -298,6 +298,11 @@ void MainWindow::on_online_walking_module_clicked() {
 	module_msg.data = "online_walking_module";
 	qnode.module_on_off.publish(module_msg);
 }
+void MainWindow::on_op3_walking_module_clicked()
+{
+	module_msg.data = "walking_module";
+	qnode.module_on_off.publish(module_msg);
+}
 void MainWindow::on_none_clicked() {
 	module_msg.data = "none";
 	qnode.module_on_off.publish(module_msg);
