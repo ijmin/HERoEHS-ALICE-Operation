@@ -60,6 +60,12 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 	graph_draw(ui.state_plot, "Goal / Present", "Rad", -1, 1 , 10);
 	graph_draw_sensor(ui.sensor_plot_1, "Left Sensor", "m", -3, 3, 10);
 	graph_draw_sensor(ui.sensor_plot_2, "Right Sensor", "m", -3, 3, 10);
+	graph_draw_none_line(ui.zmp_graph, "         ZMP FZ", "m", -0.3, 0.3, -0.3, 0.3, 10);
+
+	foot_left = new QCPItemRect(ui.zmp_graph);
+	foot_right = new QCPItemRect(ui.zmp_graph);
+	draw_ractangle(ui.zmp_graph, foot_left, "left");
+	draw_ractangle(ui.zmp_graph, foot_right, "right");
 
 
 	dataTimer = new QTimer(this);

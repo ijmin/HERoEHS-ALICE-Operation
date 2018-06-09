@@ -44,6 +44,7 @@
 #include "std_msgs/String.h"
 #include "std_msgs/Bool.h"
 #include "std_msgs/Float64MultiArray.h"
+#include "geometry_msgs/Vector3.h"
 #include "std_msgs/Float64.h"
 #include "sensor_msgs/JointState.h"
 /*****************************************************************************
@@ -164,6 +165,9 @@ public:
 	ros::Subscriber alice_force_torque_data_sub;
 	ros::Subscriber zmp_fz_sub;
 
+	ros::Subscriber l_leg_point_xyz_sub;
+	ros::Subscriber r_leg_point_xyz_sub;
+
 
 
 
@@ -174,6 +178,8 @@ public:
 
 	double current_zmp_fz_x, current_zmp_fz_y;
 	double reference_zmp_fz_x, reference_zmp_fz_y;
+
+	double lf_point_x, lf_point_y, lf_point_z, rf_point_x, rf_point_y, rf_point_z;
 
 	std::map<int, std::string>      joint_index_to_name;
 	std::map<std::string, double>   joint_name_to_goal;
@@ -196,6 +202,8 @@ private:
 	void goalJointStateMsgCallback(const sensor_msgs::JointState::ConstPtr& msg);
 	void presentJointStateMsgCallback(const sensor_msgs::JointState::ConstPtr& msg);
 	void zmpFzMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
+	void lLegPointXYZMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg);
+	void rLegPointXYZMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg);
 };
 
 }  // namespace offset_tuner_operation

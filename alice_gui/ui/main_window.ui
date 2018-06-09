@@ -88,7 +88,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>3</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1760,6 +1760,21 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="text">
           <string>Right Kick</string>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_8">
+        <attribute name="title">
+         <string>ZMP View</string>
+        </attribute>
+        <widget class="QCustomPlot" name="zmp_graph" native="true">
+         <property name="geometry">
+          <rect>
+           <x>10</x>
+           <y>10</y>
+           <width>711</width>
+           <height>681</height>
+          </rect>
          </property>
         </widget>
        </widget>

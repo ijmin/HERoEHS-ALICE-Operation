@@ -29,8 +29,8 @@ namespace alice {
  *****************************************************************************/
 
 QNode::QNode(int argc, char** argv ) :
-																					init_argc(argc),
-																					init_argv(argv)
+																							init_argc(argc),
+																							init_argv(argv)
 {
 	currentForceX_l_gui = 0;
 	currentForceY_l_gui = 0;
@@ -47,6 +47,18 @@ QNode::QNode(int argc, char** argv ) :
 	currentTorqueZ_r_gui = 0;
 
 	ft_init_done_check = false;
+
+	lf_point_x = 0;
+	lf_point_y = 0;
+	lf_point_z = 0;
+	rf_point_x = 0;
+	rf_point_y = 0;
+	rf_point_z = 0;
+
+	current_zmp_fz_x   = 0;
+	current_zmp_fz_y   = 0;
+	reference_zmp_fz_x = 0;
+	reference_zmp_fz_y = 0;
 }
 
 QNode::~QNode() {
@@ -79,6 +91,7 @@ bool QNode::init() {
 
 	// Subscriber
 	moving_state_sub = n.subscribe("/heroehs/moving_state", 10, &QNode::MovingStateMsgsCallBack, this);
+
 
 	// Service Client
 	joint_torque_on_off_cl = n.serviceClient<offset_tuner_msgs::JointTorqueOnOff>("/heroehs/joint_torque_on_off");
@@ -121,6 +134,9 @@ bool QNode::init() {
 	/*****************************************************************************
 	 ** graph
 	 *****************************************************************************/
+
+	l_leg_point_xyz_sub = n.subscribe("/l_leg_point_xyz", 10, &QNode::lLegPointXYZMsgCallback, this);
+	r_leg_point_xyz_sub = n.subscribe("/r_leg_point_xyz", 10, &QNode::rLegPointXYZMsgCallback, this);
 
 	zmp_fz_sub = n.subscribe("/zmp_fz", 10, &QNode::zmpFzMsgCallback, this);
 
@@ -244,8 +260,18 @@ void QNode::zmpFzMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg)
 {
 	current_zmp_fz_x   = (double) msg->data[0];
 	current_zmp_fz_y   = (double) msg->data[1];
-	reference_zmp_fz_x = (double) msg->data[2];
-	reference_zmp_fz_y = (double) msg->data[3];
+}
+void QNode::lLegPointXYZMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg)
+{
+	lf_point_x = (double) msg->x;
+	lf_point_y = (double) msg->y;
+	lf_point_z = (double) msg->z;
+}
+void QNode::rLegPointXYZMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg)
+{
+	rf_point_x = (double) msg->x;
+	rf_point_y = (double) msg->y;
+	rf_point_z = (double) msg->z;
 }
 
 
