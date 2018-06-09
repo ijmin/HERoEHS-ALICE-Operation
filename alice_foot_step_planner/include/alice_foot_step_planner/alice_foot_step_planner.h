@@ -17,7 +17,9 @@
 #include "robotis_math/robotis_math.h"
 #include "alice_foot_step_generator/FootStepCommand.h"
 #include "alice_operation_msgs/WalkingPathPlanner.h"
+#include "alice_msgs/MoveCommand.h"
 #include <std_msgs/String.h>
+#include <std_msgs/Bool.h>
 
 #include <math.h>
 #include <cmath>
@@ -38,14 +40,19 @@ public:
 
 	//
 	ros::Subscriber walking_path_sub_;
+	ros::Subscriber move_command_sub_;
 
 	ros::Publisher  foot_step_command_pub;
+	ros::Publisher  on_process_pub;
 
 	alice_foot_step_generator::FootStepCommand foot_set_command_msg;
+	std_msgs::Bool on_process_msg;
 
 
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
 	void walkingPathPlannerStatusMsgCallback(const alice_operation_msgs::WalkingPathPlanner::ConstPtr& msg);
+	void moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg);
+
 	void initialize();
 	void data_initialize();
 	void parse_init_data_(const std::string &path);

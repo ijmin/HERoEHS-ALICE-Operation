@@ -138,7 +138,7 @@ bool QNode::init() {
 	l_leg_point_xyz_sub = n.subscribe("/l_leg_point_xyz", 10, &QNode::lLegPointXYZMsgCallback, this);
 	r_leg_point_xyz_sub = n.subscribe("/r_leg_point_xyz", 10, &QNode::rLegPointXYZMsgCallback, this);
 
-	zmp_fz_sub = n.subscribe("/zmp_fz", 10, &QNode::zmpFzMsgCallback, this);
+	zmp_fz_sub = n.subscribe("/zmp", 10, &QNode::zmpFzMsgCallback, this);
 
 	alice_force_torque_data_sub = n.subscribe("/alice/force_torque_data", 10, &QNode::forceTorqueDataMsgCallback, this);/////////////
 	joint_goal_state_sub        = n.subscribe("/robotis/goal_joint_states", 10, &QNode::goalJointStateMsgCallback, this);
