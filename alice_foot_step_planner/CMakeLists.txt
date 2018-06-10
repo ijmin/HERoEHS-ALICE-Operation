@@ -11,9 +11,12 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   geometry_msgs
   robotis_math
+  robotis_framework_common
 #  message_generation
+
   robotis_controller_msgs
   alice_operation_msgs
+  alice_online_walking_module
 )
 set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH}:${CATKIN_DEVEL_PREFIX}/lib/pkgconfig")
 find_package(PkgConfig)

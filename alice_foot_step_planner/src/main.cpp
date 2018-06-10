@@ -6,6 +6,7 @@
  */
 
 #include "alice_foot_step_planner/alice_foot_step_planner.h"
+#include "alice_online_walking_module/online_walking_module.h"
 
 using namespace alice;
 
@@ -21,6 +22,7 @@ int main( int argc , char **argv )
 	while(ros::ok())
 	{
 		ros::spinOnce();
+		foot_step_planner->on_process_msg.data = alice::OnlineWalkingModule::getInstance()->isRunning();
 		foot_step_planner->on_process_pub.publish( foot_step_planner->on_process_msg);
 		usleep(100);
 	}

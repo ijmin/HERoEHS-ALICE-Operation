@@ -56,9 +56,11 @@
   <build_depend>geometry_msgs</build_depend>
   <build_depend>message_generation</build_depend>
   <build_depend>robotis_controller_msgs</build_depend>
+  <build_depend>robotis_framework_common</build_depend>
   <build_depend>yaml-cpp</build_depend>
   <build_depend>robotis_math</build_depend>
   <build_depend>alice_operation_msgs</build_depend>
+  <build_depend> alice_online_walking_module</build_depend>
 
   <run_depend>roscpp</run_depend>
   <run_depend>roslib</run_depend>
@@ -69,6 +71,7 @@
   <run_depend>robotis_controller_msgs</run_depend>
   <run_depend>yaml-cpp</run_depend>
   <run_depend>robotis_math</run_depend>
+  <run_depend>alice_online_walking_module</run_depend>
 
 
 

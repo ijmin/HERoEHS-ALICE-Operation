@@ -7,6 +7,7 @@
 
 #include "alice_foot_step_planner/alice_foot_step_planner.h"
 
+
 using namespace alice;
 // Foot step planner algorithm
 FootStepPlanner::FootStepPlanner()
@@ -34,11 +35,6 @@ void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_ms
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
 	else
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
-
-	if(!msg->status_msg.compare("Walking_Finished"))
-	{
-		on_process_msg.data = 0;
-	}
 }
 void FootStepPlanner::initialize()
 {
@@ -140,60 +136,57 @@ void FootStepPlanner::walkingPathPlannerStatusMsgCallback(const alice_operation_
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg)
 {
-	if(on_process_msg.data == 0)
-	{
-		on_process_msg.data = 1;
-		if(msg->mode == 0)
-		{
-			if(msg->command == 2)
-			{
-				if(msg->transform.z > 0)
-				{
-					AlignRobotYaw(msg->transform.z, "turn left");
-				}
-				if(msg->transform.z < 0)
-				{
-					AlignRobotYaw(msg->transform.z, "turn right");
-				}
-			}
-			else
-			{
-				if(msg->command == 0)
-				{
-					if(msg->transform.x > 0)
-						CalculateStepData(msg->transform.x, 0, "forward");
-					else if(msg->transform.x < 0)
-						CalculateStepData(msg->transform.x, 0, "backward");
-					else
-					{
-						CalculateStepData(0, 0, "stop");
-					}
 
-				}
-				if(msg->command == 1)
-				{
-					if(msg->transform.y > 0)
-						CalculateStepData(0, msg->transform.y, "left");
-					else if(msg->transform.y < 0)
-						CalculateStepData(0, msg->transform.y, "right");
-					else
-					{
-						CalculateStepData(0, 0, "stop");
-					}
-				}
-			}
-		}
-		else if (msg->mode == 1)
+	if(msg->mode == 0)
+	{
+		if(msg->command == 2)
 		{
-			foot_set_command_msg.command = "right kick";
-			foot_step_command_pub.publish(foot_set_command_msg);
+			if(msg->transform.z > 0)
+			{
+				AlignRobotYaw(msg->transform.z, "turn left");
+			}
+			if(msg->transform.z < 0)
+			{
+				AlignRobotYaw(msg->transform.z, "turn right");
+			}
 		}
 		else
 		{
-			CalculateStepData(0, 0, "stop");
-		}
+			if(msg->command == 0)
+			{
+				if(msg->transform.x > 0)
+					CalculateStepData(msg->transform.x, 0, "forward");
+				else if(msg->transform.x < 0)
+					CalculateStepData(msg->transform.x, 0, "backward");
+				else
+				{
+					CalculateStepData(0, 0, "stop");
+				}
 
+			}
+			if(msg->command == 1)
+			{
+				if(msg->transform.y > 0)
+					CalculateStepData(0, msg->transform.y, "left");
+				else if(msg->transform.y < 0)
+					CalculateStepData(0, msg->transform.y, "right");
+				else
+				{
+					CalculateStepData(0, 0, "stop");
+				}
+			}
+		}
 	}
+	else if (msg->mode == 1)
+	{
+		foot_set_command_msg.command = "right kick";
+		foot_step_command_pub.publish(foot_set_command_msg);
+	}
+	else
+	{
+		CalculateStepData(0, 0, "stop");
+	}
+
 }
 void FootStepPlanner::parse_init_data_(const std::string &path)
 {
