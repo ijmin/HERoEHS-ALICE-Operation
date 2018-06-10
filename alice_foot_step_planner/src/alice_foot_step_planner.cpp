@@ -35,11 +35,6 @@ void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_ms
 	else
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
 
-
-	if(!msg->status_msg.compare("Walking_Started"))
-	{
-		on_process_msg.data = 1;
-	}
 	if(!msg->status_msg.compare("Walking_Finished"))
 	{
 		on_process_msg.data = 0;
@@ -54,7 +49,7 @@ void FootStepPlanner::initialize()
 	on_process_pub            = nh.advertise<std_msgs::Bool>("/heroehs/alice/on_process", 1);
 
 	//sub
-	move_command_sub_         = nh.subscribe("/heorehs/alice/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
+	move_command_sub_         = nh.subscribe("/heroehs/alice/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
 	walking_module_status_sub = nh.subscribe("/heroehs/status", 10, &FootStepPlanner::walkingModuleStatusMsgCallback, this);
 	walking_path_planner_test_sub = nh.subscribe("/heroehs/alice_walking_path_planner_test", 10, &FootStepPlanner::walkingPathPlannerStatusMsgCallback, this);
 }
@@ -137,6 +132,7 @@ void FootStepPlanner::walkingPathPlannerStatusMsgCallback(const alice_operation_
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg)
 {
+	on_process_msg.data = 1;
 	if(msg->mode == 0)
 	{
 		if(msg->command == 2)
@@ -180,6 +176,8 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 	}
 	else
 		CalculateStepData(0, 0, "stop");
+
+	printf("!!!!!!!!!!!!!!!!!!!!");
 
 
 }
