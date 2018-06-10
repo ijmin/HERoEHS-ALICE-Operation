@@ -35,10 +35,6 @@ void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_ms
 	else
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
 
-	if(!msg->status_msg.compare("Walking_Finished"))
-	{
-		on_process_msg.data = 0;
-	}
 }
 void FootStepPlanner::initialize()
 {
@@ -46,7 +42,7 @@ void FootStepPlanner::initialize()
 
 	//pub
 	foot_step_command_pub     = nh.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_generator/walking_command", 1);
-	on_process_pub            = nh.advertise<std_msgs::Bool>("/heroehs/alice/on_process", 1);
+	//on_process_pub            = nh.advertise<std_msgs::Bool>("/heroehs/alice/on_process", 1);
 
 	//sub
 	move_command_sub_         = nh.subscribe("/heroehs/alice/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
@@ -132,7 +128,6 @@ void FootStepPlanner::walkingPathPlannerStatusMsgCallback(const alice_operation_
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg)
 {
-	on_process_msg.data = 1;
 	if(msg->mode == 0)
 	{
 		if(msg->command == 2)
@@ -157,8 +152,6 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 				else
 				{
 					CalculateStepData(0, 0, "stop");
-					on_process_msg.data = 0;
-
 				}
 
 			}
@@ -171,8 +164,6 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 				else
 				{
 					CalculateStepData(0, 0, "stop");
-					on_process_msg.data = 0;
-
 				}
 			}
 		}
@@ -185,7 +176,6 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 	else
 	{
 		CalculateStepData(0, 0, "stop");
-		on_process_msg.data = 0;
 	}
 }
 void FootStepPlanner::parse_init_data_(const std::string &path)
