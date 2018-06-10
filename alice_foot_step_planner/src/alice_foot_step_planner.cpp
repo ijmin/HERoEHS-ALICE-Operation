@@ -155,7 +155,11 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 				else if(msg->transform.x < 0)
 					CalculateStepData(msg->transform.x, 0, "backward");
 				else
+				{
 					CalculateStepData(0, 0, "stop");
+					on_process_msg.data = 0;
+
+				}
 
 			}
 			if(msg->command == 1)
@@ -165,7 +169,11 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 				else if(msg->transform.y < 0)
 					CalculateStepData(0, msg->transform.y, "right");
 				else
+				{
 					CalculateStepData(0, 0, "stop");
+					on_process_msg.data = 0;
+
+				}
 			}
 		}
 	}
@@ -175,11 +183,10 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 		foot_step_command_pub.publish(foot_set_command_msg);
 	}
 	else
+	{
 		CalculateStepData(0, 0, "stop");
-
-	printf("!!!!!!!!!!!!!!!!!!!!");
-
-
+		on_process_msg.data = 0;
+	}
 }
 void FootStepPlanner::parse_init_data_(const std::string &path)
 {
