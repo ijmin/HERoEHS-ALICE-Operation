@@ -22,8 +22,8 @@ int main( int argc , char **argv )
 	while(ros::ok())
 	{
 		ros::spinOnce();
-		foot_step_planner->on_process_msg.data = alice::OnlineWalkingModule::getInstance()->isRunning();
-		foot_step_planner->on_process_pub.publish( foot_step_planner->on_process_msg);
+		//foot_step_planner->on_process_msg.data = alice::OnlineWalkingModule::getInstance()->isRunning();
+		//foot_step_planner->on_process_pub.publish( foot_step_planner->on_process_msg);
 		usleep(100);
 	}
 	//ros::spin();
