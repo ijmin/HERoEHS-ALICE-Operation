@@ -84,7 +84,9 @@ void FootStepPlanner::DecideStepNumLength(double distance)
 	int step_num_temp_ = 0;
 	double step_length_temp_ = 0;
 	//printf("step_distance :: %f  step_num_min :: %f  \n", desired_distance_, (desired_distance_/step_length_min)+1);
-	for(int num = 1; num < ((distance/step_length_min)+1)/2 ; num++)//
+
+
+	/*for(int num = 1; num < (distance/step_length_min)/2 ; num++)//
 	{
 		if(step_length_max > (distance/num)) // 로봇이 갈수 있는 (뻗을수있는 length 범위 안에 들어온다면,) 최대로 뻗을수 있는 보폭으로
 		{
@@ -96,7 +98,13 @@ void FootStepPlanner::DecideStepNumLength(double distance)
 			//printf("step_length_temp :: %f  step_num_temp :: %d  \n", step_length_temp_, num);
 			break;
 		}
-	}
+	}*/
+
+	//step_length_temp_ = (distance/10)/2;
+	step_num_temp_ = (int)(distance/0.1)/2;
+	foot_set_command_msg.step_num = step_num_temp_;
+	foot_set_command_msg.step_length = 0.1;
+	foot_set_command_msg.side_step_length = step_length_temp_;
 }
 void FootStepPlanner::AlignRobotYaw(double yaw_degree, std::string command)
 {
