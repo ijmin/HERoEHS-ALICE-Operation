@@ -34,7 +34,6 @@ void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_ms
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
 	else
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
-
 }
 void FootStepPlanner::initialize()
 {
@@ -42,7 +41,7 @@ void FootStepPlanner::initialize()
 
 	//pub
 	foot_step_command_pub     = nh.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_generator/walking_command", 1);
-	//on_process_pub            = nh.advertise<std_msgs::Bool>("/heroehs/alice/on_process", 1);
+
 
 	//sub
 	move_command_sub_         = nh.subscribe("/heroehs/alice/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
