@@ -44,7 +44,6 @@ void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_ms
 	{
 		on_process_msg.data = 0;
 	}
-	on_process_pub.publish(on_process_msg);
 }
 void FootStepPlanner::initialize()
 {
