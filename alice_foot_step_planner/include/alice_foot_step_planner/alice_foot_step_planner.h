@@ -43,7 +43,7 @@ public:
 	ros::Subscriber move_command_sub_;
 
 	ros::Publisher  foot_step_command_pub;
-	//ros::Publisher  on_process_pub;
+	ros::Publisher  on_process_pub;
 
 	alice_foot_step_generator::FootStepCommand foot_set_command_msg;
 	std_msgs::Bool on_process_msg;

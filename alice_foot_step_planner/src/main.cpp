@@ -18,13 +18,13 @@ int main( int argc , char **argv )
 
 	foot_step_planner->initialize();
 
-	/*while(ros::ok())
+	while(ros::ok())
 	{
 		ros::spinOnce();
 		foot_step_planner->on_process_pub.publish( foot_step_planner->on_process_msg);
 		usleep(100);
-	}*/
-	ros::spin();
+	}
+	//ros::spin();
 
 
 	return 0;
