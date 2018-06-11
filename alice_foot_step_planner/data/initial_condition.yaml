@@ -2,9 +2,9 @@ step_length_max : 0.1
 step_length_min : 0.02
 
 #initial foot step data
-step_num : 2
-step_length : 0.05
-step_time : 10
+step_num : 1
+step_length : 0.1
+step_time : 5
 step_angle_rad : 0
 side_step_length : 0.05
 

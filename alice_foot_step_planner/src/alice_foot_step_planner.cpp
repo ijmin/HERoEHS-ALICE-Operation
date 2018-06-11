@@ -18,12 +18,14 @@ FootStepPlanner::FootStepPlanner()
 	pre_position_x = 0;
 	pre_position_y = 0;
 	on_process_msg.data = 0;
-	walking_mode = 0; // 0 : darwin walking / 1 : preview walking
+	walking_mode = 1; // 0 : darwin walking / 1 : preview walking
 	darwin_step_length_x = 0;
 	darwin_step_length_y = 0;
 
 	std::string default_param_path = ros::package::getPath("alice_op3_walking_module") + "/config/param.yaml";
 	loadWalkingParam(default_param_path);
+	parse_online_balance_param();
+	parse_online_joint_feedback_param();
 }
 FootStepPlanner::~FootStepPlanner()
 {
@@ -42,6 +44,17 @@ void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_ms
 	else
 		ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
 }
+void FootStepPlanner::environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg)
+{
+	for(int i = 0; i < msg->length; i++)
+	{
+		if(!msg->data[i].name.compare("ball"))
+		{
+			current_x = msg->data[i].roi.x_offset + msg->data[i].roi.width/2;
+			current_y = msg->data[i].roi.y_offset + msg->data[i].roi.height/2;
+		}
+	}
+}
 void FootStepPlanner::initialize()
 {
 	ros::NodeHandle nh;
@@ -56,7 +69,13 @@ void FootStepPlanner::initialize()
 	//sub
 	move_command_sub_         = nh.subscribe("/heroehs/alice/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
 	walking_module_status_sub = nh.subscribe("/heroehs/status", 10, &FootStepPlanner::walkingModuleStatusMsgCallback, this);
+	environment_detector_sub = nh.subscribe("/heroehs/environment_detector", 5, &FootStepPlanner::environmentDetectorMsgCallback, this);
 	//walking_path_planner_test_sub = nh.subscribe("/heroehs/alice_walking_path_planner_test", 10, &FootStepPlanner::walkingPathPlannerStatusMsgCallback, this);
+
+	//service
+	set_balance_param_client =  nh.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/set_balance_param");
+	joint_feedback_gain_client = nh.serviceClient<alice_walking_module_msgs::SetJointFeedBackGain>("/heroehs/online_walking/joint_feedback_gain");
+
 }
 void FootStepPlanner::data_initialize()
 {
@@ -66,17 +85,45 @@ void FootStepPlanner::data_initialize()
 	parse_init_data_(init_pose_path);
 }
 
-void FootStepPlanner::DecideStepNumLength(double distance , int mode)
+void FootStepPlanner::DecideStepNumLength(double distance , std::string command, int mode)
 {
 	if(mode == 1)// preview control
 	{
 		int step_num_temp_ = 0;
 		double step_length_temp_ = 0;
+		if(!command.compare("forward") || !command.compare("backward") )
+		{
+			if(distance >= 0.1)
+			{
+				step_num_temp_ = (int) (distance/0.1);
+				foot_set_command_msg.step_num = step_num_temp_;
+				foot_set_command_msg.step_length = 0.1;
 
-		step_num_temp_ = (int) (distance/0.1)/2;
-		foot_set_command_msg.step_num = step_num_temp_;
-		foot_set_command_msg.step_length = 0.1;
-		foot_set_command_msg.side_step_length = step_length_temp_;
+			}
+			else
+			{
+				step_num_temp_ = 1;
+				foot_set_command_msg.step_num = step_num_temp_;
+				foot_set_command_msg.step_length = distance;
+
+			}
+		}
+		else
+		{
+			if(distance >= 0.05)
+			{
+				step_num_temp_ = (int) (distance/0.05);
+				foot_set_command_msg.step_num = step_num_temp_;
+				foot_set_command_msg.side_step_length = 0.05;
+			}
+			else
+			{
+				step_num_temp_ = 1;
+				foot_set_command_msg.step_num = 1;
+				foot_set_command_msg.side_step_length = distance;
+			}
+		}
+
 
 	}
 	else // darwin walking
@@ -84,12 +131,12 @@ void FootStepPlanner::DecideStepNumLength(double distance , int mode)
 
 	}
 }
-void FootStepPlanner::AlignRobotYaw(double yaw_degree, std::string command, int mode)
+void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int mode)
 {
 	if(mode == 1) // preview control
 	{
 		data_initialize();// have to modify
-		double yaw_rad = yaw_degree*DEGREE2RADIAN;
+		foot_set_command_msg.step_num = 1;
 		foot_set_command_msg.step_angle_rad = yaw_rad;
 		foot_set_command_msg.command = command;
 		foot_step_command_pub.publish(foot_set_command_msg);
@@ -106,7 +153,8 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command,
 		data_initialize();// have to modify
 		double desired_distance_ = 0;
 		desired_distance_ = sqrt(pow(x,2) + pow(y,2));
-		DecideStepNumLength(desired_distance_, 0);
+		if(command.compare("stop"))
+			DecideStepNumLength(desired_distance_, command, mode);
 
 		foot_set_command_msg.command = command;
 		foot_step_command_pub.publish(foot_set_command_msg);
@@ -121,15 +169,17 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 
 	if(msg->mode == 0)
 	{
+		change_walking_kick_mode("walking", "");
+
 		if(msg->command == 2)
 		{
 			if(msg->transform.z > 0)
 			{
-				AlignRobotYaw(msg->transform.z, "turn left", 0);
+				AlignRobotYaw(msg->transform.z, "turn left", walking_mode);
 			}
 			if(msg->transform.z < 0)
 			{
-				AlignRobotYaw(msg->transform.z, "turn right", 0);
+				AlignRobotYaw(msg->transform.z, "turn right", walking_mode);
 			}
 		}
 		else
@@ -137,36 +187,46 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 			if(msg->command == 0)
 			{
 				if(msg->transform.x > 0)
-					CalculateStepData(msg->transform.x, 0, "forward", 0);
+					CalculateStepData(msg->transform.x, 0, "forward", walking_mode);
 				else if(msg->transform.x < 0)
-					CalculateStepData(msg->transform.x, 0, "backward", 0);
+					CalculateStepData(msg->transform.x, 0, "backward", walking_mode);
 				else
 				{
-					CalculateStepData(0, 0, "stop", 0);
+					CalculateStepData(0, 0, "stop", walking_mode);
 				}
 
 			}
 			if(msg->command == 1)
 			{
 				if(msg->transform.y > 0)
-					CalculateStepData(0, msg->transform.y, "left", 0);
+					CalculateStepData(0, msg->transform.y, "left", walking_mode);
 				else if(msg->transform.y < 0)
-					CalculateStepData(0, msg->transform.y, "right", 0);
+					CalculateStepData(0, msg->transform.y, "right", walking_mode);
 				else
 				{
-					CalculateStepData(0, 0, "stop", 0);
+					CalculateStepData(0, 0, "stop", walking_mode);
 				}
 			}
 		}
 	}
-	else if (msg->mode == 1)
+	else if (msg->mode == 1) //kick
 	{
-		//foot_set_command_msg.command = "right kick";
-		//foot_step_command_pub.publish(foot_set_command_msg);
+		if(current_x < 236)
+		{
+			change_walking_kick_mode("kick", "left");
+			foot_set_command_msg.command = "left kick";
+			foot_step_command_pub.publish(foot_set_command_msg);
+		}
+		else
+		{
+			change_walking_kick_mode("kick", "right");
+			foot_set_command_msg.command = "right kick";
+			foot_step_command_pub.publish(foot_set_command_msg);
+		}
 	}
 	else
 	{
-		CalculateStepData(0, 0, "stop", 0);
+		CalculateStepData(0, 0, "stop", walking_mode);
 	}
 
 }
@@ -191,6 +251,165 @@ void FootStepPlanner::parse_init_data_(const std::string &path)
 	foot_set_command_msg.step_time = doc["step_time"].as<double>();
 	foot_set_command_msg.step_angle_rad = doc["step_angle_rad"].as<double>();
 	foot_set_command_msg.side_step_length = doc["side_step_length"].as<double>();
+}
+std::string default_param_path = ros::package::getPath("alice_op3_walking_module") + "/config/param.yaml";
+void FootStepPlanner::parse_online_balance_param()
+{
+	YAML::Node doc; // YAML file class 선언!
+	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	try
+	{
+		// load yaml
+		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+
+	}catch(const std::exception& e) // 에러 점검
+	{
+		ROS_ERROR("Fail to load yaml file!");
+		return;
+	}
+
+	set_balance_param_msg.request.updating_duration = doc["updating_duration"].as<double>();
+	set_balance_param_msg.request.balance_param.cob_x_offset_m = doc["cob_x_offset_m"].as<double>();
+	set_balance_param_msg.request.balance_param.cob_y_offset_m = doc["cob_y_offset_m"].as<double>();
+
+	//gain load //
+	set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain = doc["foot_roll_gyro_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain = doc["foot_roll_gyro_d_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain = doc["foot_pitch_gyro_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain = doc["foot_pitch_gyro_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain = doc["foot_roll_angle_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain = doc["foot_roll_angle_d_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain = doc["foot_pitch_angle_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain = doc["foot_pitch_angle_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_x_force_p_gain = doc["foot_x_force_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_x_force_d_gain = doc["foot_x_force_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_y_force_p_gain = doc["foot_y_force_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_y_force_d_gain = doc["foot_y_force_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_z_force_p_gain = doc["foot_z_force_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_z_force_d_gain = doc["foot_z_force_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain = doc["foot_roll_torque_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain = doc["foot_roll_torque_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain = doc["foot_pitch_torque_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = doc["foot_pitch_torque_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = doc["roll_gyro_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
+
+	set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = doc["roll_angle_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = doc["foot_x_force_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
+
+	set_balance_param_client.call(set_balance_param_msg);
+
+}
+void FootStepPlanner::parse_online_joint_feedback_param()
+{
+	YAML::Node doc; // YAML file class 선언!
+	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	try
+	{
+		// load yaml
+		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+
+	}catch(const std::exception& e) // 에러 점검
+	{
+		ROS_ERROR("Fail to load yaml file!");
+		return;
+	}
+	joint_feedback_gain_msg.request.updating_duration = doc["updating_duration"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = doc["r_leg_hip_y_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = doc["r_leg_hip_y_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain = doc["r_leg_hip_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain = doc["r_leg_hip_r_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain = doc["r_leg_hip_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain = doc["r_leg_hip_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain = doc["r_leg_an_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain = doc["r_leg_an_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain = doc["r_leg_kn_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain = doc["r_leg_kn_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain = doc["r_leg_an_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain = doc["r_leg_an_r_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain = doc["l_leg_hip_y_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain = doc["l_leg_hip_y_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain = doc["l_leg_hip_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain = doc["l_leg_hip_r_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = doc["l_leg_hip_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = doc["l_leg_hip_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain = doc["l_leg_kn_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain = doc["l_leg_kn_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain = doc["l_leg_an_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain = doc["l_leg_an_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain = doc["l_leg_an_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain = doc["l_leg_an_r_d_gain"].as<double>();
+
+	set_balance_param_client.call(set_balance_param_msg);
+	joint_feedback_gain_client.call(joint_feedback_gain_msg);
+
+}
+void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kick_mode)
+{
+	if(!mode.compare("walking"))
+	{
+		parse_online_balance_param();
+		parse_online_joint_feedback_param();
+	}
+	else
+	{
+		if(!mode.compare("right"))
+			set_balance_param_msg.request.balance_param.cob_y_offset_m = 0.03;
+		else
+			set_balance_param_msg.request.balance_param.cob_y_offset_m = -0.03;
+
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain  = 0;
+		joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain  = 0;
+		joint_feedback_gain_client.call(joint_feedback_gain_msg);
+
+	}
+
 }
 void FootStepPlanner::loadWalkingParam(const std::string &path)
 {
