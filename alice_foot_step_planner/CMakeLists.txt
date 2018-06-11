@@ -13,7 +13,7 @@ find_package(catkin REQUIRED COMPONENTS
   robotis_math
   robotis_framework_common
 #  message_generation
-
+  op3_walking_module_msgs
   robotis_controller_msgs
   alice_operation_msgs
   alice_online_walking_module
