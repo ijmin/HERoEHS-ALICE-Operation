@@ -326,7 +326,7 @@ void FootStepPlanner::parse_online_balance_param(std::string path)
 	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
 
 	set_balance_param_client.call(set_balance_param_msg);
 
@@ -483,7 +483,6 @@ void FootStepPlanner::loadWalkingParam(const std::string &path)
 bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_msgs::SetJointFeedBackGain::Request &req,
 		alice_walking_module_msgs::SetJointFeedBackGain::Response &res)
 {
-	printf("Joint Feed Back SAVE!!");
 
 	YAML::Emitter out;
 	//std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
@@ -520,13 +519,13 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
 	fout << out.c_str(); // dump it back into the file
 
 
+	printf("Joint Feed Back SAVE!!\n");
 	return true;
 }
 
 bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
 		alice_walking_module_msgs::SetBalanceParam::Response &res)
 {
-	printf("Balance Param SAVE!!");
 	YAML::Emitter out;
 	//std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 
@@ -564,6 +563,8 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 	out << YAML::EndMap;
 	std::ofstream fout(balance_param_file.c_str());
 	fout << out.c_str(); // dump it back into the file
+
+	printf("Balance Param SAVE!!\n");
 
 	return true;
 }

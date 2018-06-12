@@ -763,7 +763,7 @@ void MainWindow::parse_balance_param_data(std::string path)
 	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
 
 }
 void MainWindow::parse_joint_feed_back_param_data(std::string path)
