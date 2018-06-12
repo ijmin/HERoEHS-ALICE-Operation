@@ -351,13 +351,13 @@ void MainWindow::on_stop_clicked() {
 void MainWindow::on_left_kick_clicked()
 {
 	foot_step_command_msg.command = "left kick";
-		qnode.foot_step_command_pub.publish(foot_step_command_msg);
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
 
 }
 void MainWindow::on_right_kick_clicked()
 {
 	foot_step_command_msg.command = "right kick";
-		qnode.foot_step_command_pub.publish(foot_step_command_msg);
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
 
 }
 void MainWindow::on_apply_data_clicked() {
@@ -404,36 +404,36 @@ void MainWindow::on_apply_data_clicked() {
 void MainWindow::on_apply_foot_step_generator_clicked()
 {
 	QString parameter_str;
-		double  parameter_double = 0;
+	double  parameter_double = 0;
 
 
-		parameter_str = ui.edit_dsp->text();
-		parameter_double = parameter_str.toDouble();
+	parameter_str = ui.edit_dsp->text();
+	parameter_double = parameter_str.toDouble();
 
-		// message variables store
-		qnode.dsp_msgs.data = parameter_double;
-		qnode.dsp_pub.publish(qnode.dsp_msgs);
+	// message variables store
+	qnode.dsp_msgs.data = parameter_double;
+	qnode.dsp_pub.publish(qnode.dsp_msgs);
 
-		parameter_str = ui.edit_foot_z_swap->text();
-		parameter_double = parameter_str.toDouble();
+	parameter_str = ui.edit_foot_z_swap->text();
+	parameter_double = parameter_str.toDouble();
 
-		// message variables store
-		qnode.foot_z_swap_msgs.data = parameter_double;
-		qnode.foot_z_swap_pub.publish(qnode.foot_z_swap_msgs);
+	// message variables store
+	qnode.foot_z_swap_msgs.data = parameter_double;
+	qnode.foot_z_swap_pub.publish(qnode.foot_z_swap_msgs);
 
-		parameter_str = ui.edit_body_z_swap->text();
-		parameter_double = parameter_str.toDouble();
+	parameter_str = ui.edit_body_z_swap->text();
+	parameter_double = parameter_str.toDouble();
 
-		// message variables store
-		qnode.body_z_swap_msgs.data = 	parameter_double;
-		qnode.body_z_swap_pub.publish(qnode.body_z_swap_msgs);
+	// message variables store
+	qnode.body_z_swap_msgs.data = 	parameter_double;
+	qnode.body_z_swap_pub.publish(qnode.body_z_swap_msgs);
 
-		parameter_str = ui.edit_y_zmp_conv->text();
-		parameter_double = parameter_str.toDouble();
+	parameter_str = ui.edit_y_zmp_conv->text();
+	parameter_double = parameter_str.toDouble();
 
-		// message variables store
-		qnode.y_zmp_convergence_msgs.data = parameter_double;
-		qnode.y_zmp_convergence_pub.publish(qnode.y_zmp_convergence_msgs);
+	// message variables store
+	qnode.y_zmp_convergence_msgs.data = parameter_double;
+	qnode.y_zmp_convergence_pub.publish(qnode.y_zmp_convergence_msgs);
 }
 /*****************************************************************************
  ** module on off
@@ -655,238 +655,34 @@ void MainWindow::parse_gain_data()
 	foot_zmpFz_p_gain = doc["foot_copFz_p_gain"].as<double>();
 	foot_zmpFz_d_gain = doc["foot_copFz_d_gain"].as<double>();
 }
-void MainWindow::on_joint_feedback_gain_clicked()
+void MainWindow::on_joint_feedback_gain_1_clicked()
 {
-	YAML::Node doc; // YAML file class 선언!
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	try
-	{
-		// load yaml
-		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
-
-	}catch(const std::exception& e) // 에러 점검
-	{
-		ROS_ERROR("Fail to load yaml file!");
-		return;
-	}
-	joint_feedback_gain_msg.request.updating_duration = doc["updating_duration"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = doc["r_leg_hip_y_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = doc["r_leg_hip_y_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain = doc["r_leg_hip_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain = doc["r_leg_hip_r_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain = doc["r_leg_hip_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain = doc["r_leg_hip_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain = doc["r_leg_an_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain = doc["r_leg_an_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain = doc["r_leg_kn_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain = doc["r_leg_kn_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain = doc["r_leg_an_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain = doc["r_leg_an_r_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain = doc["l_leg_hip_y_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain = doc["l_leg_hip_y_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain = doc["l_leg_hip_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain = doc["l_leg_hip_r_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = doc["l_leg_hip_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = doc["l_leg_hip_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain = doc["l_leg_kn_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain = doc["l_leg_kn_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain = doc["l_leg_an_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain = doc["l_leg_an_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain = doc["l_leg_an_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain = doc["l_leg_an_r_d_gain"].as<double>();
-
-
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_joint_feed_back_param_data(path_);
 	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
+	qnode.joint_feedback_gain_client_save.call(joint_feedback_gain_msg);
 }
-void MainWindow::on_joint_feedback_gain_save_clicked()
+void MainWindow::on_joint_feedback_gain_2_clicked()
 {
-	YAML::Node doc; // YAML file class 선언!
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	try
-	{
-		// load yaml
-		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
-
-	}catch(const std::exception& e) // 에러 점검
-	{
-		ROS_ERROR("Fail to load yaml file!");
-		return;
-	}
-	joint_feedback_gain_msg.request.updating_duration = doc["updating_duration"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = doc["r_leg_hip_y_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = doc["r_leg_hip_y_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain = doc["r_leg_hip_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain = doc["r_leg_hip_r_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain = doc["r_leg_hip_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain = doc["r_leg_hip_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain = doc["r_leg_an_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain = doc["r_leg_an_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain = doc["r_leg_kn_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain = doc["r_leg_kn_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain = doc["r_leg_an_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain = doc["r_leg_an_r_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain = doc["l_leg_hip_y_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain = doc["l_leg_hip_y_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain = doc["l_leg_hip_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain = doc["l_leg_hip_r_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = doc["l_leg_hip_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = doc["l_leg_hip_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain = doc["l_leg_kn_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain = doc["l_leg_kn_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain = doc["l_leg_an_p_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain = doc["l_leg_an_p_d_gain"].as<double>();
-
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain = doc["l_leg_an_r_p_gain"].as<double>();
-	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain = doc["l_leg_an_r_d_gain"].as<double>();
-
-
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_joint_feed_back_param_data(path_);
+	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
 	qnode.joint_feedback_gain_client_save.call(joint_feedback_gain_msg);
 }
 
-void MainWindow::on_balance_param_apply_clicked()
+void MainWindow::on_balance_param_1_clicked()
 {
-	YAML::Node doc; // YAML file class 선언!
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	try
-	{
-		// load yaml
-		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
-
-	}catch(const std::exception& e) // 에러 점검
-	{
-		ROS_ERROR("Fail to load yaml file!");
-		return;
-	}
-
-	set_balance_param_msg.request.updating_duration = doc["updating_duration"].as<double>();
-
-
-	set_balance_param_msg.request.balance_param.cob_x_offset_m = doc["cob_x_offset_m"].as<double>();
-	set_balance_param_msg.request.balance_param.cob_y_offset_m = doc["cob_y_offset_m"].as<double>();
-
-	//gain load //
-	set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain = doc["foot_roll_gyro_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain = doc["foot_roll_gyro_d_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain = doc["foot_pitch_gyro_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain = doc["foot_pitch_gyro_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain = doc["foot_roll_angle_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain = doc["foot_roll_angle_d_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain = doc["foot_pitch_angle_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain = doc["foot_pitch_angle_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_x_force_p_gain = doc["foot_x_force_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_x_force_d_gain = doc["foot_x_force_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_y_force_p_gain = doc["foot_y_force_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_y_force_d_gain = doc["foot_y_force_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_z_force_p_gain = doc["foot_z_force_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_z_force_d_gain = doc["foot_z_force_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain = doc["foot_roll_torque_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain = doc["foot_roll_torque_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain = doc["foot_pitch_torque_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = doc["foot_pitch_torque_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = doc["roll_gyro_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
-
-	set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = doc["roll_angle_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = doc["foot_x_force_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
-
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param1.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_balance_param_data(path_);
 	qnode.set_balance_param_client.call(set_balance_param_msg);
+	qnode.set_balance_param_client_save.call(set_balance_param_msg);
 }
 
-void MainWindow::on_balance_param_save_clicked()
+void MainWindow::on_balance_param_2_clicked()
 {
-	YAML::Node doc; // YAML file class 선언!
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	try
-	{
-		// load yaml
-		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
-
-	}catch(const std::exception& e) // 에러 점검
-	{
-		ROS_ERROR("Fail to load yaml file!");
-		return;
-	}
-
-	set_balance_param_msg.request.updating_duration = doc["updating_duration"].as<double>();
-
-
-	set_balance_param_msg.request.balance_param.cob_x_offset_m = doc["cob_x_offset_m"].as<double>();
-	set_balance_param_msg.request.balance_param.cob_y_offset_m = doc["cob_y_offset_m"].as<double>();
-
-	//gain load //
-	set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain = doc["foot_roll_gyro_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain = doc["foot_roll_gyro_d_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain = doc["foot_pitch_gyro_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain = doc["foot_pitch_gyro_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain = doc["foot_roll_angle_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain = doc["foot_roll_angle_d_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain = doc["foot_pitch_angle_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain = doc["foot_pitch_angle_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_x_force_p_gain = doc["foot_x_force_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_x_force_d_gain = doc["foot_x_force_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_y_force_p_gain = doc["foot_y_force_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_y_force_d_gain = doc["foot_y_force_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_z_force_p_gain = doc["foot_z_force_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_z_force_d_gain = doc["foot_z_force_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain = doc["foot_roll_torque_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain = doc["foot_roll_torque_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain = doc["foot_pitch_torque_p_gain"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = doc["foot_pitch_torque_d_gain"].as<double>();
-
-	set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = doc["roll_gyro_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
-
-	set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = doc["roll_angle_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
-
-	set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = doc["foot_x_force_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
-
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param2.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_balance_param_data(path_);
+	qnode.set_balance_param_client.call(set_balance_param_msg);
 	qnode.set_balance_param_client_save.call(set_balance_param_msg);
 }
 void MainWindow::parse_gain_tracking_data()
@@ -910,6 +706,120 @@ void MainWindow::parse_gain_tracking_data()
 	tracking_param_msg.data.push_back(doc["y_p_gain"].as<double>());
 	tracking_param_msg.data.push_back(doc["y_d_gain"].as<double>());
 }
+void MainWindow::parse_balance_param_data(std::string path)
+{
+	YAML::Node doc; // YAML file class 선언!
+	//std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	try
+	{
+		// load yaml
+		doc = YAML::LoadFile(path.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+
+	}catch(const std::exception& e) // 에러 점검
+	{
+		ROS_ERROR("Fail to load yaml file!");
+		return;
+	}
+
+	set_balance_param_msg.request.updating_duration = doc["updating_duration"].as<double>();
+
+
+	set_balance_param_msg.request.balance_param.cob_x_offset_m = doc["cob_x_offset_m"].as<double>();
+	set_balance_param_msg.request.balance_param.cob_y_offset_m = doc["cob_y_offset_m"].as<double>();
+
+	//gain load //
+	set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain = doc["foot_roll_gyro_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain = doc["foot_roll_gyro_d_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain = doc["foot_pitch_gyro_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain = doc["foot_pitch_gyro_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain = doc["foot_roll_angle_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain = doc["foot_roll_angle_d_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain = doc["foot_pitch_angle_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain = doc["foot_pitch_angle_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_x_force_p_gain = doc["foot_x_force_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_x_force_d_gain = doc["foot_x_force_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_y_force_p_gain = doc["foot_y_force_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_y_force_d_gain = doc["foot_y_force_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_z_force_p_gain = doc["foot_z_force_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_z_force_d_gain = doc["foot_z_force_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain = doc["foot_roll_torque_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain = doc["foot_roll_torque_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain = doc["foot_pitch_torque_p_gain"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = doc["foot_pitch_torque_d_gain"].as<double>();
+
+	set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = doc["roll_gyro_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
+
+	set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = doc["roll_angle_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
+
+	set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = doc["foot_x_force_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
+
+}
+void MainWindow::parse_joint_feed_back_param_data(std::string path)
+{
+	YAML::Node doc; // YAML file class 선언!
+	//std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	try
+	{
+		// load yaml
+		doc = YAML::LoadFile(path.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+
+	}catch(const std::exception& e) // 에러 점검
+	{
+		ROS_ERROR("Fail to load yaml file!");
+		return;
+	}
+	joint_feedback_gain_msg.request.updating_duration = doc["updating_duration"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = doc["r_leg_hip_y_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = doc["r_leg_hip_y_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain = doc["r_leg_hip_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain = doc["r_leg_hip_r_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain = doc["r_leg_hip_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain = doc["r_leg_hip_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain = doc["r_leg_an_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain = doc["r_leg_an_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain = doc["r_leg_kn_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain = doc["r_leg_kn_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain = doc["r_leg_an_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain = doc["r_leg_an_r_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain = doc["l_leg_hip_y_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain = doc["l_leg_hip_y_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain = doc["l_leg_hip_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain = doc["l_leg_hip_r_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = doc["l_leg_hip_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = doc["l_leg_hip_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain = doc["l_leg_kn_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain = doc["l_leg_kn_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain = doc["l_leg_an_p_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain = doc["l_leg_an_p_d_gain"].as<double>();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain = doc["l_leg_an_r_p_gain"].as<double>();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain = doc["l_leg_an_r_d_gain"].as<double>();
+
+}
+
 
 }  // namespace offset_tuner_operation
 

@@ -42,6 +42,9 @@ public:
 	FootStepPlanner();
 	~FootStepPlanner();
 
+	std::string balance_param_file;
+	std::string joint_feedback_file;
+
 	// ros communication part
 	ros::Subscriber walking_module_status_sub;
 	ros::Subscriber walking_path_planner_test_sub;
@@ -64,6 +67,9 @@ public:
 
 	ros::ServiceServer set_balance_param_nuke_server;
 	ros::ServiceServer joint_feedback_gain_nuke_server;
+
+
+
 
 
 	//msg
@@ -89,8 +95,8 @@ public:
 	void initialize();
 	void data_initialize();
 	void parse_init_data_(const std::string &path);
-	void parse_online_balance_param();
-	void parse_online_joint_feedback_param();
+	void parse_online_balance_param(std::string path);
+	void parse_online_joint_feedback_param(std::string path);
 	void change_walking_kick_mode(std::string mode, std::string kick_mode);
 
 

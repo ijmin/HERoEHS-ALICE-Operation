@@ -22,10 +22,11 @@ FootStepPlanner::FootStepPlanner()
 	darwin_step_length_x = 0;
 	darwin_step_length_y = 0;
 
+
+
+
 	std::string default_param_path = ros::package::getPath("alice_op3_walking_module") + "/config/param.yaml";
 	loadWalkingParam(default_param_path);
-	parse_online_balance_param();
-	parse_online_joint_feedback_param();
 }
 FootStepPlanner::~FootStepPlanner()
 {
@@ -59,6 +60,15 @@ void FootStepPlanner::initialize()
 {
 	ros::NodeHandle nh;
 
+	/* Load ROS Parameter */
+	balance_param_file = nh.param<std::string>("balance_param_path", "");
+	joint_feedback_file  = nh.param<std::string>("joint_feedback_path", "");
+
+	if(balance_param_file == "" || joint_feedback_file == "")
+	{
+		ROS_ERROR("NO file path in the ROS parameters.");
+	}
+
 	//pub
 	foot_step_command_pub     = nh.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_generator/walking_command", 1);
 	on_process_pub            = nh.advertise<std_msgs::Bool>("/heroehs/alice/on_process", 1);
@@ -79,6 +89,8 @@ void FootStepPlanner::initialize()
 	set_balance_param_nuke_server   = nh.advertiseService("/heroehs/online_walking/set_balance_param_save", &FootStepPlanner::setBalanceParamServiceCallback, this);
 	joint_feedback_gain_nuke_server = nh.advertiseService("/heroehs/online_walking/joint_feedback_gain_save", &FootStepPlanner::setJointFeedBackGainServiceCallback, this);
 
+	parse_online_balance_param(balance_param_file);
+	parse_online_joint_feedback_param(joint_feedback_file);
 }
 void FootStepPlanner::data_initialize()
 {
@@ -263,14 +275,14 @@ void FootStepPlanner::parse_init_data_(const std::string &path)
 	foot_set_command_msg.step_angle_rad = doc["step_angle_rad"].as<double>();
 	foot_set_command_msg.side_step_length = doc["side_step_length"].as<double>();
 }
-void FootStepPlanner::parse_online_balance_param()
+void FootStepPlanner::parse_online_balance_param(std::string path)
 {
 	YAML::Node doc; // YAML file class 선언!
-	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	//std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	try
 	{
 		// load yaml
-		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+		doc = YAML::LoadFile(path.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
 
 	}catch(const std::exception& e) // 에러 점검
 	{
@@ -305,10 +317,10 @@ void FootStepPlanner::parse_online_balance_param()
 	set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = doc["foot_pitch_torque_d_gain"].as<double>();
 
 	set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = doc["roll_gyro_cut_off_frequency"].as<double>();
-   set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
 
 	set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = doc["roll_angle_cut_off_frequency"].as<double>();
-   set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
 
 	set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = doc["foot_x_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
@@ -319,14 +331,14 @@ void FootStepPlanner::parse_online_balance_param()
 	set_balance_param_client.call(set_balance_param_msg);
 
 }
-void FootStepPlanner::parse_online_joint_feedback_param()
+void FootStepPlanner::parse_online_joint_feedback_param(std::string path)
 {
 	YAML::Node doc; // YAML file class 선언!
-	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	//std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	try
 	{
 		// load yaml
-		doc = YAML::LoadFile(path_.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+		doc = YAML::LoadFile(path.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
 
 	}catch(const std::exception& e) // 에러 점검
 	{
@@ -378,8 +390,8 @@ void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kic
 {
 	if(!mode.compare("walking"))
 	{
-		parse_online_balance_param();
-		parse_online_joint_feedback_param();
+		parse_online_balance_param(balance_param_file);
+		parse_online_joint_feedback_param(joint_feedback_file);
 	}
 	else
 	{
@@ -415,7 +427,6 @@ void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kic
 
 		set_balance_param_client.call(set_balance_param_msg);
 		joint_feedback_gain_client.call(joint_feedback_gain_msg);
-
 	}
 
 }
@@ -475,7 +486,7 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
 	printf("Joint Feed Back SAVE!!");
 
 	YAML::Emitter out;
-	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	//std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 
 	out << YAML::BeginMap;
 	out << YAML::Key << "r_leg_hip_y_p_gain" << YAML::Value << req.feedback_gain.r_leg_hip_y_p_gain;
@@ -505,7 +516,7 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
 	out << YAML::Key <<	"updating_duration"<< YAML::Value << 1.0;
 
 	out << YAML::EndMap;
-	std::ofstream fout(path_.c_str());
+	std::ofstream fout(joint_feedback_file.c_str());
 	fout << out.c_str(); // dump it back into the file
 
 
@@ -517,7 +528,7 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 {
 	printf("Balance Param SAVE!!");
 	YAML::Emitter out;
-	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	//std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 
 	out << YAML::BeginMap;
 	out << YAML::Key << "cob_x_offset_m" << YAML::Value << req.balance_param.cob_x_offset_m;
@@ -551,7 +562,7 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 	out << YAML::Key <<	"foot_pitch_torque_cut_off_frequency"<< YAML::Value << req.balance_param.foot_pitch_torque_cut_off_frequency;
 	out << YAML::Key <<	"updating_duration"<< YAML::Value << 1.0;
 	out << YAML::EndMap;
-	std::ofstream fout(path_.c_str());
+	std::ofstream fout(balance_param_file.c_str());
 	fout << out.c_str(); // dump it back into the file
 
 	return true;

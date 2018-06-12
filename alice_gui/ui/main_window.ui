@@ -159,7 +159,7 @@
               <double>180.000000000000000</double>
              </property>
              <property name="singleStep">
-              <double>0.500000000000000</double>
+              <double>0.100000000000000</double>
              </property>
              <property name="value">
               <double>0.000000000000000</double>
@@ -1194,17 +1194,17 @@ p, li { white-space: pre-wrap; }
         <attribute name="title">
          <string>Walking Test</string>
         </attribute>
-        <widget class="QPushButton" name="balance_param_apply">
+        <widget class="QPushButton" name="balance_param_1">
          <property name="geometry">
           <rect>
-           <x>550</x>
-           <y>600</y>
+           <x>551</x>
+           <y>350</y>
            <width>181</width>
            <height>41</height>
           </rect>
          </property>
          <property name="text">
-          <string>Balance_param_apply</string>
+          <string>Balance_param_1</string>
          </property>
         </widget>
         <widget class="QPushButton" name="none">
@@ -1220,17 +1220,17 @@ p, li { white-space: pre-wrap; }
           <string>None</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="joint_feedback_gain">
+        <widget class="QPushButton" name="joint_feedback_gain_1">
          <property name="geometry">
           <rect>
-           <x>550</x>
-           <y>650</y>
+           <x>551</x>
+           <y>400</y>
            <width>181</width>
            <height>41</height>
           </rect>
          </property>
          <property name="text">
-          <string>Joint_feedback_gain</string>
+          <string>Joint_feedback_1</string>
          </property>
         </widget>
         <widget class="QPushButton" name="turn_right">
@@ -1314,8 +1314,8 @@ p, li { white-space: pre-wrap; }
         <widget class="QPushButton" name="apply_data">
          <property name="geometry">
           <rect>
-           <x>550</x>
-           <y>550</y>
+           <x>533</x>
+           <y>256</y>
            <width>181</width>
            <height>41</height>
           </rect>
@@ -1354,7 +1354,7 @@ p, li { white-space: pre-wrap; }
          <property name="geometry">
           <rect>
            <x>529</x>
-           <y>151</y>
+           <y>11</y>
            <width>191</width>
            <height>237</height>
           </rect>
@@ -1762,30 +1762,30 @@ p, li { white-space: pre-wrap; }
           <string>Right Kick</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="balance_param_save">
+        <widget class="QPushButton" name="balance_param_2">
          <property name="geometry">
           <rect>
-           <x>360</x>
-           <y>600</y>
+           <x>550</x>
+           <y>530</y>
            <width>181</width>
            <height>41</height>
           </rect>
          </property>
          <property name="text">
-          <string>Balance_param_save</string>
+          <string>Balance_param_2</string>
          </property>
         </widget>
-        <widget class="QPushButton" name="joint_feedback_gain_save">
+        <widget class="QPushButton" name="joint_feedback_gain_2">
          <property name="geometry">
           <rect>
-           <x>360</x>
-           <y>650</y>
+           <x>550</x>
+           <y>580</y>
            <width>181</width>
            <height>41</height>
           </rect>
          </property>
          <property name="text">
-          <string>Joint_feedback_save</string>
+          <string>Joint_feedback_2</string>
          </property>
         </widget>
        </widget>

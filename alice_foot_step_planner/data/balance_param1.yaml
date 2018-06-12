@@ -25,6 +25,6 @@ pitch_angle_cut_off_frequency: 40
 foot_x_force_cut_off_frequency: 40
 foot_y_force_cut_off_frequency: 40
 foot_z_force_cut_off_frequency: 40
-foot_roll_torque_cut_off_frequency: 70
-foot_pitch_torque_cut_off_frequency: 0
+foot_roll_torque_cut_off_frequency: 40
+foot_pitch_torque_cut_off_frequency: 40
 updating_duration: 1

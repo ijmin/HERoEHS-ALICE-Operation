@@ -90,11 +90,11 @@ public:
 	void on_stop_clicked();
 	//parameter
 	void on_apply_data_clicked();
-	void on_joint_feedback_gain_clicked();
-	void on_balance_param_apply_clicked();
+	void on_joint_feedback_gain_1_clicked();
+	void on_balance_param_1_clicked();
 
-	void on_joint_feedback_gain_save_clicked();
-	void on_balance_param_save_clicked();
+	void on_joint_feedback_gain_2_clicked();
+	void on_balance_param_2_clicked();
 
 	//<------------------------------------------------------------------- module on off -->
 	//<------------------------------------------------------------------- base_module-->
@@ -204,6 +204,10 @@ public:
 	void select_joint_state();
 	QCPItemRect* foot_left;
 	QCPItemRect* foot_right;
+
+	//<------------------------------------------------------------------- param -->
+	void parse_balance_param_data(std::string path);
+	void parse_joint_feed_back_param_data(std::string path);
 
 };
 
