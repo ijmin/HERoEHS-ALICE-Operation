@@ -236,13 +236,13 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 	{
 		if(current_x < 336)
 		{
-			change_walking_kick_mode("kick", "left");
+			change_walking_kick_mode("kick", "left kick");
 			foot_set_command_msg.command = "left kick";
 			foot_step_command_pub.publish(foot_set_command_msg);
 		}
 		else
 		{
-			change_walking_kick_mode("kick", "right");
+			change_walking_kick_mode("kick", "right kick");
 			foot_set_command_msg.command = "right kick";
 			foot_step_command_pub.publish(foot_set_command_msg);
 		}
