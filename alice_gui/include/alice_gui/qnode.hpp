@@ -131,6 +131,8 @@ public:
 	ros::ServiceClient set_balance_param_client;
 	ros::ServiceClient joint_feedback_gain_client;
 
+	ros::ServiceClient set_balance_param_client_save;
+	ros::ServiceClient joint_feedback_gain_client_save;
 
 	/*****************************************************************************
 	 ** module on off

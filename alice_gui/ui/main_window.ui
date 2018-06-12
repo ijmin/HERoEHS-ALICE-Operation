@@ -88,7 +88,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>3</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1760,6 +1760,32 @@ p, li { white-space: pre-wrap; }
          </property>
          <property name="text">
           <string>Right Kick</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="balance_param_save">
+         <property name="geometry">
+          <rect>
+           <x>360</x>
+           <y>600</y>
+           <width>181</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Balance_param_save</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="joint_feedback_gain_save">
+         <property name="geometry">
+          <rect>
+           <x>360</x>
+           <y>650</y>
+           <width>181</width>
+           <height>41</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Joint_feedback_save</string>
          </property>
         </widget>
        </widget>

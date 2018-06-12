@@ -32,8 +32,7 @@ l_leg_kn_p_d_gain  : 0.0
 l_leg_an_p_p_gain  : 0.2
 l_leg_an_p_d_gain  : 0.0
 
-l_leg_an_r_p_gain  : 0.2
+l_leg_an_r_p_gain  : 0.7
 l_leg_an_r_d_gain  : 0.0
 
 updating_duration : 1
-

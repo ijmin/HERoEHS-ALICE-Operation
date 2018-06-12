@@ -93,6 +93,9 @@ public:
 	void on_joint_feedback_gain_clicked();
 	void on_balance_param_apply_clicked();
 
+	void on_joint_feedback_gain_save_clicked();
+	void on_balance_param_save_clicked();
+
 	//<------------------------------------------------------------------- module on off -->
 	//<------------------------------------------------------------------- base_module-->
 	void on_base_module_real_button_clicked();

@@ -76,6 +76,9 @@ void FootStepPlanner::initialize()
 	set_balance_param_client =  nh.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/set_balance_param");
 	joint_feedback_gain_client = nh.serviceClient<alice_walking_module_msgs::SetJointFeedBackGain>("/heroehs/online_walking/joint_feedback_gain");
 
+	set_balance_param_nuke_server   = nh.advertiseService("/heroehs/online_walking/set_balance_param_save", &FootStepPlanner::setBalanceParamServiceCallback, this);
+	joint_feedback_gain_nuke_server = nh.advertiseService("/heroehs/online_walking/joint_feedback_gain_save", &FootStepPlanner::setJointFeedBackGainServiceCallback, this);
+
 }
 void FootStepPlanner::data_initialize()
 {
@@ -89,42 +92,40 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 {
 	if(mode == 1)// preview control
 	{
-		int step_num_temp_ = 0;
-		double step_length_temp_ = 0;
+
 		if(!command.compare("forward") || !command.compare("backward") )
 		{
 			if(distance >= 0.1)
 			{
-				step_num_temp_ = (int) (distance/0.1);
-				foot_set_command_msg.step_num = step_num_temp_;
+
+				foot_set_command_msg.step_num = (int) (distance/0.1);
 				foot_set_command_msg.step_length = 0.1;
+				foot_set_command_msg.step_time = 5;
 
 			}
 			else
 			{
-				step_num_temp_ = 1;
-				foot_set_command_msg.step_num = step_num_temp_;
+				foot_set_command_msg.step_num = 1;
 				foot_set_command_msg.step_length = distance;
+				foot_set_command_msg.step_time = 5;
 
 			}
 		}
-		else
+		else  // left right
 		{
 			if(distance >= 0.05)
 			{
-				step_num_temp_ = (int) (distance/0.05);
-				foot_set_command_msg.step_num = step_num_temp_;
+				foot_set_command_msg.step_num =  (int) (distance/0.05);
 				foot_set_command_msg.side_step_length = 0.05;
+				foot_set_command_msg.step_time =5;
 			}
 			else
 			{
-				step_num_temp_ = 1;
 				foot_set_command_msg.step_num = 1;
 				foot_set_command_msg.side_step_length = distance;
+				foot_set_command_msg.step_time =5;
 			}
 		}
-
-
 	}
 	else // darwin walking
 	{
@@ -135,9 +136,19 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int mod
 {
 	if(mode == 1) // preview control
 	{
-		data_initialize();// have to modify
-		foot_set_command_msg.step_num = 1;
-		foot_set_command_msg.step_angle_rad = yaw_rad;
+		if(yaw_rad >= 0.15)
+		{
+			foot_set_command_msg.step_num = (int) (yaw_rad/0.15);
+			foot_set_command_msg.step_angle_rad = 0.15;
+			foot_set_command_msg.step_time = 5;
+
+		}
+		else
+		{
+			foot_set_command_msg.step_num = 1;
+			foot_set_command_msg.step_angle_rad = 0.15;
+			foot_set_command_msg.step_time = 5;
+		}
 		foot_set_command_msg.command = command;
 		foot_step_command_pub.publish(foot_set_command_msg);
 	}
@@ -179,7 +190,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 			}
 			if(msg->transform.z < 0)
 			{
-				AlignRobotYaw(msg->transform.z, "turn right", walking_mode);
+				AlignRobotYaw(fabs(msg->transform.z), "turn right", walking_mode);
 			}
 		}
 		else
@@ -189,7 +200,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 				if(msg->transform.x > 0)
 					CalculateStepData(msg->transform.x, 0, "forward", walking_mode);
 				else if(msg->transform.x < 0)
-					CalculateStepData(msg->transform.x, 0, "backward", walking_mode);
+					CalculateStepData(fabs(msg->transform.x), 0, "backward", walking_mode);
 				else
 				{
 					CalculateStepData(0, 0, "stop", walking_mode);
@@ -201,7 +212,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 				if(msg->transform.y > 0)
 					CalculateStepData(0, msg->transform.y, "left", walking_mode);
 				else if(msg->transform.y < 0)
-					CalculateStepData(0, msg->transform.y, "right", walking_mode);
+					CalculateStepData(0, fabs(msg->transform.y), "right", walking_mode);
 				else
 				{
 					CalculateStepData(0, 0, "stop", walking_mode);
@@ -211,7 +222,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 	}
 	else if (msg->mode == 1) //kick
 	{
-		if(current_x < 236)
+		if(current_x < 336)
 		{
 			change_walking_kick_mode("kick", "left");
 			foot_set_command_msg.command = "left kick";
@@ -252,7 +263,6 @@ void FootStepPlanner::parse_init_data_(const std::string &path)
 	foot_set_command_msg.step_angle_rad = doc["step_angle_rad"].as<double>();
 	foot_set_command_msg.side_step_length = doc["side_step_length"].as<double>();
 }
-std::string default_param_path = ros::package::getPath("alice_op3_walking_module") + "/config/param.yaml";
 void FootStepPlanner::parse_online_balance_param()
 {
 	YAML::Node doc; // YAML file class 선언!
@@ -285,29 +295,26 @@ void FootStepPlanner::parse_online_balance_param()
 
 	set_balance_param_msg.request.balance_param.foot_x_force_p_gain = doc["foot_x_force_p_gain"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_x_force_d_gain = doc["foot_x_force_d_gain"].as<double>();
-
 	set_balance_param_msg.request.balance_param.foot_y_force_p_gain = doc["foot_y_force_p_gain"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_y_force_d_gain = doc["foot_y_force_d_gain"].as<double>();
-
 	set_balance_param_msg.request.balance_param.foot_z_force_p_gain = doc["foot_z_force_p_gain"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_z_force_d_gain = doc["foot_z_force_d_gain"].as<double>();
-
 	set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain = doc["foot_roll_torque_p_gain"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain = doc["foot_roll_torque_d_gain"].as<double>();
-
 	set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain = doc["foot_pitch_torque_p_gain"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = doc["foot_pitch_torque_d_gain"].as<double>();
 
 	set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = doc["roll_gyro_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
+   set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
 
 	set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = doc["roll_angle_cut_off_frequency"].as<double>();
-	set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
+   set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
 
 	set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = doc["foot_x_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
 	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
 
 	set_balance_param_client.call(set_balance_param_msg);
 
@@ -364,7 +371,6 @@ void FootStepPlanner::parse_online_joint_feedback_param()
 	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain = doc["l_leg_an_r_p_gain"].as<double>();
 	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain = doc["l_leg_an_r_d_gain"].as<double>();
 
-	set_balance_param_client.call(set_balance_param_msg);
 	joint_feedback_gain_client.call(joint_feedback_gain_msg);
 
 }
@@ -406,6 +412,8 @@ void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kic
 		joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain  = 0;
 		joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain  = 0;
 		joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain  = 0;
+
+		set_balance_param_client.call(set_balance_param_msg);
 		joint_feedback_gain_client.call(joint_feedback_gain_msg);
 
 	}
@@ -458,6 +466,95 @@ void FootStepPlanner::loadWalkingParam(const std::string &path)
 	walking_param_msgs.p_gain = doc["p_gain"].as<int>();
 	walking_param_msgs.i_gain = doc["i_gain"].as<int>();
 	walking_param_msgs.d_gain = doc["d_gain"].as<int>();
+}
+
+
+bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_msgs::SetJointFeedBackGain::Request &req,
+		alice_walking_module_msgs::SetJointFeedBackGain::Response &res)
+{
+	printf("Joint Feed Back SAVE!!");
+
+	YAML::Emitter out;
+	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/joint_feedback_gain.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+
+	out << YAML::BeginMap;
+	out << YAML::Key << "r_leg_hip_y_p_gain" << YAML::Value << req.feedback_gain.r_leg_hip_y_p_gain;
+	out << YAML::Key << "r_leg_hip_y_d_gain" << YAML::Value << req.feedback_gain.r_leg_hip_y_d_gain;
+	out << YAML::Key << "r_leg_hip_r_p_gain" << YAML::Value << req.feedback_gain.r_leg_hip_r_p_gain;
+	out << YAML::Key <<	"r_leg_hip_r_d_gain" << YAML::Value << req.feedback_gain.r_leg_hip_r_d_gain;
+	out << YAML::Key <<	"r_leg_hip_p_p_gain" << YAML::Value << req.feedback_gain.r_leg_hip_p_p_gain;
+	out << YAML::Key <<	"r_leg_hip_p_d_gain" << YAML::Value << req.feedback_gain.r_leg_hip_p_d_gain;
+	out << YAML::Key <<	"r_leg_kn_p_p_gain" << YAML::Value << req.feedback_gain.r_leg_kn_p_p_gain ;
+	out << YAML::Key <<	"r_leg_kn_p_d_gain" << YAML::Value << req.feedback_gain.r_leg_kn_p_d_gain ;
+	out << YAML::Key <<	"r_leg_an_p_p_gain" << YAML::Value << req.feedback_gain.r_leg_an_p_p_gain ;
+	out << YAML::Key <<	"r_leg_an_p_d_gain" << YAML::Value << req.feedback_gain.r_leg_an_p_d_gain ;
+	out << YAML::Key <<	"r_leg_an_r_p_gain" << YAML::Value << req.feedback_gain.r_leg_an_r_p_gain ;
+	out << YAML::Key <<	"r_leg_an_r_d_gain" << YAML::Value << req.feedback_gain.r_leg_an_r_d_gain ;
+	out << YAML::Key <<	"l_leg_hip_y_p_gain" << YAML::Value << req.feedback_gain.l_leg_hip_y_p_gain;
+	out << YAML::Key <<	"l_leg_hip_y_d_gain" << YAML::Value << req.feedback_gain.l_leg_hip_y_d_gain;
+	out << YAML::Key <<	"l_leg_hip_r_p_gain" << YAML::Value << req.feedback_gain.l_leg_hip_r_p_gain;
+	out << YAML::Key <<	"l_leg_hip_r_d_gain" << YAML::Value << req.feedback_gain.l_leg_hip_r_d_gain;
+	out << YAML::Key <<	"l_leg_hip_p_p_gain" << YAML::Value << req.feedback_gain.l_leg_hip_p_p_gain;
+	out << YAML::Key <<	"l_leg_hip_p_d_gain" << YAML::Value << req.feedback_gain.l_leg_hip_p_d_gain;
+	out << YAML::Key <<	"l_leg_kn_p_p_gain" << YAML::Value << req.feedback_gain.l_leg_kn_p_p_gain ;
+	out << YAML::Key <<	"l_leg_kn_p_d_gain" << YAML::Value << req.feedback_gain.l_leg_kn_p_d_gain ;
+	out << YAML::Key <<	"l_leg_an_p_p_gain" << YAML::Value << req.feedback_gain.l_leg_an_p_p_gain ;
+	out << YAML::Key <<	"l_leg_an_p_d_gain" << YAML::Value << req.feedback_gain.l_leg_an_p_d_gain ;
+	out << YAML::Key <<	"l_leg_an_r_p_gain" << YAML::Value << req.feedback_gain.l_leg_an_r_p_gain ;
+	out << YAML::Key <<	"l_leg_an_r_d_gain" << YAML::Value << req.feedback_gain.l_leg_an_r_d_gain ;
+	out << YAML::Key <<	"updating_duration"<< YAML::Value << 1.0;
+
+	out << YAML::EndMap;
+	std::ofstream fout(path_.c_str());
+	fout << out.c_str(); // dump it back into the file
+
+
+	return true;
+}
+
+bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
+		alice_walking_module_msgs::SetBalanceParam::Response &res)
+{
+	printf("Balance Param SAVE!!");
+	YAML::Emitter out;
+	std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+
+	out << YAML::BeginMap;
+	out << YAML::Key << "cob_x_offset_m" << YAML::Value << req.balance_param.cob_x_offset_m;
+	out << YAML::Key << "cob_y_offset_m" << YAML::Value << req.balance_param.cob_y_offset_m;
+	out << YAML::Key << "foot_roll_gyro_p_gain"  << YAML::Value << req.balance_param.foot_roll_gyro_p_gain;
+	out << YAML::Key <<	"foot_roll_gyro_d_gain"  << YAML::Value << req.balance_param.foot_roll_gyro_d_gain;
+	out << YAML::Key <<	"foot_pitch_gyro_p_gain" << YAML::Value << req.balance_param.foot_pitch_gyro_p_gain;
+	out << YAML::Key <<	"foot_pitch_gyro_d_gain" << YAML::Value << req.balance_param.foot_pitch_gyro_d_gain;
+	out << YAML::Key <<	"foot_roll_angle_p_gain" << YAML::Value << req.balance_param.foot_roll_angle_p_gain;
+	out << YAML::Key <<	"foot_roll_angle_d_gain" << YAML::Value << req.balance_param.foot_roll_angle_d_gain;
+	out << YAML::Key <<	"foot_pitch_angle_p_gain"<< YAML::Value << req.balance_param.foot_pitch_angle_p_gain;
+	out << YAML::Key <<	"foot_pitch_angle_d_gain"<< YAML::Value << req.balance_param.foot_pitch_angle_d_gain;
+	out << YAML::Key <<	"foot_x_force_p_gain" << YAML::Value << req.balance_param.foot_x_force_p_gain;
+	out << YAML::Key <<	"foot_x_force_d_gain" << YAML::Value << req.balance_param.foot_x_force_d_gain;
+	out << YAML::Key <<	"foot_y_force_p_gain" << YAML::Value << req.balance_param.foot_y_force_p_gain;
+	out << YAML::Key <<	"foot_y_force_d_gain" << YAML::Value << req.balance_param.foot_y_force_d_gain;
+	out << YAML::Key <<	"foot_z_force_p_gain" << YAML::Value << req.balance_param.foot_z_force_p_gain;
+	out << YAML::Key <<	"foot_z_force_d_gain" << YAML::Value << req.balance_param.foot_z_force_d_gain;
+	out << YAML::Key <<	"foot_roll_torque_p_gain" << YAML::Value << req.balance_param.foot_roll_torque_p_gain;
+	out << YAML::Key <<	"foot_roll_torque_d_gain" << YAML::Value << req.balance_param.foot_roll_torque_d_gain;
+	out << YAML::Key <<	"foot_pitch_torque_p_gain"<< YAML::Value << req.balance_param.foot_pitch_torque_p_gain;
+	out << YAML::Key <<	"foot_pitch_torque_d_gain"<< YAML::Value << req.balance_param.foot_pitch_torque_d_gain;
+	out << YAML::Key <<	"roll_gyro_cut_off_frequency"<< YAML::Value << req.balance_param.roll_gyro_cut_off_frequency;
+	out << YAML::Key <<	"pitch_gyro_cut_off_frequency"<< YAML::Value << req.balance_param.pitch_gyro_cut_off_frequency;
+	out << YAML::Key <<	"roll_angle_cut_off_frequency"<< YAML::Value << req.balance_param.roll_angle_cut_off_frequency;
+	out << YAML::Key <<	"pitch_angle_cut_off_frequency"<< YAML::Value << req.balance_param.pitch_angle_cut_off_frequency;
+	out << YAML::Key <<	"foot_x_force_cut_off_frequency"<< YAML::Value << req.balance_param.foot_x_force_cut_off_frequency;
+	out << YAML::Key <<	"foot_y_force_cut_off_frequency"<< YAML::Value << req.balance_param.foot_y_force_cut_off_frequency;
+	out << YAML::Key <<	"foot_z_force_cut_off_frequency"<< YAML::Value << req.balance_param.foot_z_force_cut_off_frequency;
+	out << YAML::Key <<	"foot_roll_torque_cut_off_frequency"<< YAML::Value << req.balance_param.foot_roll_torque_cut_off_frequency;
+	out << YAML::Key <<	"foot_pitch_torque_cut_off_frequency"<< YAML::Value << req.balance_param.foot_pitch_torque_cut_off_frequency;
+	out << YAML::Key <<	"updating_duration"<< YAML::Value << 1.0;
+	out << YAML::EndMap;
+	std::ofstream fout(path_.c_str());
+	fout << out.c_str(); // dump it back into the file
+
+	return true;
 }
 
 

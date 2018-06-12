@@ -29,8 +29,8 @@ namespace alice {
  *****************************************************************************/
 
 QNode::QNode(int argc, char** argv ) :
-																							init_argc(argc),
-																							init_argv(argv)
+																									init_argc(argc),
+																									init_argv(argv)
 {
 	currentForceX_l_gui = 0;
 	currentForceY_l_gui = 0;
@@ -106,6 +106,9 @@ bool QNode::init() {
 
 	set_balance_param_client =  n.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/set_balance_param");
 	joint_feedback_gain_client = n.serviceClient<alice_walking_module_msgs::SetJointFeedBackGain>("/heroehs/online_walking/joint_feedback_gain");
+
+	set_balance_param_client_save =  n.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/set_balance_param_save");
+	joint_feedback_gain_client_save = n.serviceClient<alice_walking_module_msgs::SetJointFeedBackGain>("/heroehs/online_walking/joint_feedback_gain_save");
 
 
 	/*****************************************************************************

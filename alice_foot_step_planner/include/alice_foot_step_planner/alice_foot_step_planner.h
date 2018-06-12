@@ -12,6 +12,8 @@
 #include <eigen3/Eigen/Eigen>
 #include <yaml-cpp/yaml.h>
 #include <ros/package.h>
+#include <fstream>
+
 
 #include "robotis_controller_msgs/StatusMsg.h"
 #include "robotis_math/robotis_math.h"
@@ -60,6 +62,10 @@ public:
 	ros::ServiceClient joint_feedback_gain_client;
 
 
+	ros::ServiceServer set_balance_param_nuke_server;
+	ros::ServiceServer joint_feedback_gain_nuke_server;
+
+
 	//msg
 	alice_foot_step_generator::FootStepCommand foot_set_command_msg;
 	op3_walking_module_msgs::WalkingParam walking_param_msgs;
@@ -72,6 +78,12 @@ public:
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
 	void moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg);
 	void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
+
+	bool setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
+			alice_walking_module_msgs::SetBalanceParam::Response &res);
+
+	bool setJointFeedBackGainServiceCallback(alice_walking_module_msgs::SetJointFeedBackGain::Request  &req,
+			alice_walking_module_msgs::SetJointFeedBackGain::Response &res);
 
 
 	void initialize();
