@@ -1200,6 +1200,7 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.left_foot_pose.x   = -0.5*default_y_feet_offset_m_*sin(rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.y   =  0.5*default_y_feet_offset_m_*cos(rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.yaw =  rotate_step_angle_rad_;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
 
 
@@ -1224,6 +1225,7 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.right_foot_pose.z += kick_height_m_;
 	  step_data_msg.position_data.right_foot_pose.pitch = 0.0;
 	  step_data_msg.position_data.right_foot_pose.yaw = rotate_step_angle_rad_;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_msg.position_data.foot_z_swap = 0;
 	  step_data_array_.push_back(step_data_msg);
 
@@ -1236,6 +1238,7 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
 	  step_data_msg.position_data.right_foot_pose.x   =  0.5*default_y_feet_offset_m_*sin(rotate_step_angle_rad_) - 0.1*cos(rotate_step_angle_rad_);
 	  step_data_msg.position_data.right_foot_pose.y   = -0.5*default_y_feet_offset_m_*cos(rotate_step_angle_rad_) - 0.1*sin(rotate_step_angle_rad_);
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_msg.position_data.foot_z_swap = 0.0;
 	  step_data_array_.push_back(step_data_msg);
 
@@ -1249,6 +1252,7 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.right_foot_pose.x   =  0.5*default_y_feet_offset_m_*sin(rotate_step_angle_rad_) + kick_far_m_*cos(rotate_step_angle_rad_);
 	  step_data_msg.position_data.right_foot_pose.y   = -0.5*default_y_feet_offset_m_*cos(rotate_step_angle_rad_) + kick_far_m_*sin(rotate_step_angle_rad_);
 	  step_data_msg.position_data.right_foot_pose.pitch = -kick_pitch_rad_;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
 
 	  //StepData 6 kick - 4th : move right foot to x0
@@ -1260,6 +1264,7 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.right_foot_pose.x   =  0.5*default_y_feet_offset_m_*sin(rotate_step_angle_rad_);
 	  step_data_msg.position_data.right_foot_pose.y   = -0.5*default_y_feet_offset_m_*cos(rotate_step_angle_rad_);
 	  step_data_msg.position_data.right_foot_pose.pitch = 0;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_msg.position_data.foot_z_swap = 0.0;
 	  step_data_array_.push_back(step_data_msg);
 
@@ -1271,6 +1276,7 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
 	  step_data_msg.position_data.right_foot_pose.z -= kick_height_m_;
 	  step_data_msg.position_data.right_foot_pose.pitch = 0;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
 
 	  //StepData 8 End
@@ -1325,6 +1331,7 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.right_foot_pose.x   =   0.5*default_y_feet_offset_m_*sin(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.right_foot_pose.y   =  -0.5*default_y_feet_offset_m_*cos(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.right_foot_pose.yaw = -rotate_step_angle_rad_;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
 
 
@@ -1338,6 +1345,7 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.y_zmp_shift = 0;
 	  step_data_msg.position_data.foot_z_swap = 0;
 	  step_data_msg.position_data.body_z_swap = 0;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
 
 
@@ -1350,6 +1358,8 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.left_foot_pose.z += kick_height_m_;
 	  step_data_msg.position_data.left_foot_pose.pitch = 0.0;
 	  step_data_msg.position_data.left_foot_pose.yaw = -rotate_step_angle_rad_;
+
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_msg.position_data.foot_z_swap = 0;
 	  step_data_array_.push_back(step_data_msg);
 
@@ -1362,6 +1372,8 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
 	  step_data_msg.position_data.left_foot_pose.x   = -0.5*default_y_feet_offset_m_*sin(-rotate_step_angle_rad_) - 0.1*cos(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.y   =  0.5*default_y_feet_offset_m_*cos(-rotate_step_angle_rad_) - 0.1*sin(-rotate_step_angle_rad_);
+
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_msg.position_data.foot_z_swap = 0.0;
 	  step_data_array_.push_back(step_data_msg);
 
@@ -1375,6 +1387,7 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.left_foot_pose.x   = -0.5*default_y_feet_offset_m_*sin(-rotate_step_angle_rad_) + kick_far_m_*cos(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.y   =  0.5*default_y_feet_offset_m_*cos(-rotate_step_angle_rad_) + kick_far_m_*sin(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.pitch = -kick_pitch_rad_;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_msg.position_data.foot_z_swap = 0.0;
 	  step_data_array_.push_back(step_data_msg);
 
@@ -1387,6 +1400,7 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.left_foot_pose.x   = -0.5*default_y_feet_offset_m_*sin(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.y   =  0.5*default_y_feet_offset_m_*cos(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.pitch = 0;
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_msg.position_data.foot_z_swap = 0.0;
 	  step_data_array_.push_back(step_data_msg);
 
@@ -1400,6 +1414,8 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.left_foot_pose.y   =  0.5*default_y_feet_offset_m_*cos(-rotate_step_angle_rad_);
 	  step_data_msg.position_data.left_foot_pose.z -= kick_height_m_;
 	  step_data_msg.position_data.left_foot_pose.pitch = 0;
+
+	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
 
 	  //StepData 8 End
