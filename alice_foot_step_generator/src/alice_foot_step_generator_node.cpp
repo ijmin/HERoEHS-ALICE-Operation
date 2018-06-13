@@ -562,7 +562,7 @@ void FootStepGenerator::calcFBStep(const alice_walking_module_msgs::StepData& re
   else
   {
     stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
-    stp_data[0].time_data.abs_step_time += start_end_time_sec_;
+    stp_data[0].time_data.abs_step_time += 0.1;//start_end_time_sec_;
     stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[0].position_data.body_z_swap = 0;
 
@@ -673,7 +673,7 @@ void FootStepGenerator::calcRLStep(const alice_walking_module_msgs::StepData& re
   else
   {
     stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
-    stp_data[0].time_data.abs_step_time += start_end_time_sec_;
+    stp_data[0].time_data.abs_step_time += 0.1;//start_end_time_sec_;
     stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[0].position_data.body_z_swap = 0;
 
@@ -836,7 +836,7 @@ void FootStepGenerator::calcRoStep(const alice_walking_module_msgs::StepData& re
   else
   {
     stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
-    stp_data[0].time_data.abs_step_time += start_end_time_sec_;
+    stp_data[0].time_data.abs_step_time += 0.1;//start_end_time_sec_;
     stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[0].position_data.body_z_swap = 0;
     stp_data[0].position_data.foot_z_swap = 0;
