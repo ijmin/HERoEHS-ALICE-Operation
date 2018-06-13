@@ -234,7 +234,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
 	}
 	else if (msg->mode == 1) //kick
 	{
-		if(current_x < 336)
+		if(msg->command == 0)
 		{
 			change_walking_kick_mode("kick", "left kick");
 			foot_set_command_msg.command = "left kick";
