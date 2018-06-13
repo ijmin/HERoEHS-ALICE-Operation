@@ -1172,6 +1172,8 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  kick_far_m_     = 0.23;
 	  kick_pitch_rad_ = 15.0*M_PI/180.0;
 
+    double balance_param_to_apply = 0.03;
+
 	  step_data_msg = ref_step_data;
 
 	  step_data_array->clear();
@@ -1214,6 +1216,17 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.foot_z_swap = 0;
 	  step_data_msg.position_data.body_z_swap = 0;
 	  step_data_array_.push_back(step_data_msg);
+
+    //StepData 2 move zmp to left foot
+    step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+    step_data_msg.time_data.abs_step_time += 1.0;//kick_time_sec_*0.3;
+    step_data_msg.time_data.dsp_ratio = 0;
+
+    step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+    step_data_msg.position_data.y_zmp_shift = balance_param_to_apply;
+    step_data_msg.position_data.foot_z_swap = 0;
+    step_data_msg.position_data.body_z_swap = 0;
+    step_data_array_.push_back(step_data_msg);
 
 
 	  //StepData 3 kick - 1st : raise foot
@@ -1279,6 +1292,17 @@ void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
 
+    //StepData 2 move zmp to left foot
+    step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+    step_data_msg.time_data.abs_step_time += 1.0;//kick_time_sec_*0.3;
+    step_data_msg.time_data.dsp_ratio = 0;
+
+    step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+    step_data_msg.position_data.y_zmp_shift = 0;
+    step_data_msg.position_data.foot_z_swap = 0;
+    step_data_msg.position_data.body_z_swap = 0;
+    step_data_array_.push_back(step_data_msg);
+
 	  //StepData 8 End
 	  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
 	  step_data_msg.time_data.abs_step_time += 1.6;// kick_time_sec_*1.8;
@@ -1302,6 +1326,8 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  kick_height_m_  = 0.08;
 	  kick_far_m_     = 0.23;
 	  kick_pitch_rad_ = 15.0*M_PI/180.0;
+
+	  double balance_param_to_apply = -0.03;
 
 	  step_data_msg = ref_step_data;
 
@@ -1345,8 +1371,16 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 	  step_data_msg.position_data.y_zmp_shift = 0;
 	  step_data_msg.position_data.foot_z_swap = 0;
 	  step_data_msg.position_data.body_z_swap = 0;
-	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
-	  step_data_array_.push_back(step_data_msg);
+
+    //StepData 2 move zmp to left foot
+    step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+    step_data_msg.time_data.abs_step_time += 1.0;//kick_time_sec_*0.3;
+    step_data_msg.time_data.dsp_ratio = 0;
+
+    step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+    step_data_msg.position_data.y_zmp_shift = balance_param_to_apply;
+    step_data_msg.position_data.foot_z_swap = 0;
+    step_data_msg.position_data.body_z_swap = 0;
 
 
 	  //StepData 3 kick - 1st : raise foot
@@ -1417,6 +1451,19 @@ void FootStepGenerator::calcTurnRightAndLeftKickStep(alice_walking_module_msgs::
 
 	  step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
 	  step_data_array_.push_back(step_data_msg);
+
+    //StepData 2 move zmp to left foot
+    step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+    step_data_msg.time_data.abs_step_time += 1.0;//kick_time_sec_*0.3;
+    step_data_msg.time_data.dsp_ratio = 0;
+
+    step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+    step_data_msg.position_data.y_zmp_shift = 0;
+    step_data_msg.position_data.foot_z_swap = 0;
+    step_data_msg.position_data.body_z_swap = 0;
+    step_data_msg.position_data.body_pose.yaw = 0.5*(step_data_msg.position_data.left_foot_pose.yaw + step_data_msg.position_data.right_foot_pose.yaw);
+    step_data_array_.push_back(step_data_msg);
+
 
 	  //StepData 8 End
 	  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
