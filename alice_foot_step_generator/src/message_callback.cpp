@@ -290,6 +290,22 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
     g_foot_stp_generator.calcLeftKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
     g_is_running_check_needed = true;
   }
+  else if(msg->command == "turn left right kick")
+  {
+    if(isRunning() == true)
+      return;
+
+	g_foot_stp_generator.calcTurnLeftAndRightKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
+	g_is_running_check_needed = true;
+  }
+  else if(msg->command == "turn right left kick")
+  {
+    if(isRunning() == true)
+      return;
+
+	g_foot_stp_generator.calcTurnRightAndLeftKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
+	g_is_running_check_needed = true;
+  }
   else if(msg->command == "stop")
   {
     if(g_is_running_check_needed == true)

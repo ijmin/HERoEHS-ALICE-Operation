@@ -47,6 +47,12 @@ public:
   void calcLeftKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data);
 
+  void calcTurnLeftAndRightKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+      const alice_walking_module_msgs::StepData& ref_step_data);
+  void calcTurnRightAndLeftKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+      const alice_walking_module_msgs::StepData& ref_step_data);
+
+
   int    num_of_step_;
   double fb_step_length_m_;
   double rl_step_length_m_;
