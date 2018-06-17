@@ -396,9 +396,9 @@ void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kic
 	else
 	{
 		if(!kick_mode.compare("right kick"))
-			set_balance_param_msg.request.balance_param.cob_y_offset_m = 0.03;
+			set_balance_param_msg.request.balance_param.cob_y_offset_m = 0.05;
 		else
-			set_balance_param_msg.request.balance_param.cob_y_offset_m = -0.03;
+			set_balance_param_msg.request.balance_param.cob_y_offset_m = -0.05;
 
 		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = 0;
 		joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = 0;
