@@ -59,6 +59,9 @@ QNode::QNode(int argc, char** argv ) :
 	current_zmp_fz_y   = 0;
 	reference_zmp_fz_x = 0;
 	reference_zmp_fz_y = 0;
+	current_robot_x = 0;
+	current_robot_y = 0;
+	current_robot_theta = 0;
 }
 
 QNode::~QNode() {
@@ -146,6 +149,8 @@ bool QNode::init() {
 	alice_force_torque_data_sub = n.subscribe("/alice/force_torque_data", 10, &QNode::forceTorqueDataMsgCallback, this);/////////////
 	joint_goal_state_sub        = n.subscribe("/robotis/goal_joint_states", 10, &QNode::goalJointStateMsgCallback, this);
 	joint_present_state_sub     = n.subscribe("/robotis/present_joint_states", 10, &QNode::presentJointStateMsgCallback, this);
+
+	robot_state_sub = n.subscribe("/heroehs/alice/robot_state", 10, &QNode::robotStateMsgCallback, this);
 
 	//base module //
 	init_pose_pub = n.advertise<std_msgs::String>("/init_pose",10);
@@ -275,6 +280,13 @@ void QNode::rLegPointXYZMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg)
 	rf_point_x = (double) msg->x;
 	rf_point_y = (double) msg->y;
 	rf_point_z = (double) msg->z;
+}
+void QNode::robotStateMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg)
+{
+	current_robot_x = msg->x;
+	current_robot_y = msg->y;
+	current_robot_theta = msg->z;
+
 }
 
 

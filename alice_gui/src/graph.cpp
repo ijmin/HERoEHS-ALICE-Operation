@@ -36,6 +36,7 @@ void MainWindow::realtimeDataSlot()
 	if (key-lastPointKey > 0.006) //
 	{
 		graph_draw_update_none_line(ui.zmp_graph, qnode.current_zmp_fz_x, qnode.current_zmp_fz_y,0,0);
+		graph_draw_update_none_line(ui.ground_graph, qnode.current_robot_y, qnode.current_robot_x, qnode.current_robot_y + sin(qnode.current_robot_theta), qnode.current_robot_x + cos(qnode.current_robot_theta));
 
 		check_sensor_menu();
 		select_joint_state();
@@ -180,7 +181,7 @@ void MainWindow::graph_draw_none_line(QCustomPlot *ui_graph, const QString title
 
 	ui_graph->axisRect()->setupFullAxesBox();
 	ui_graph->xAxis->setRange(min_value_x, max_value_x);
-	ui_graph->xAxis->setRangeReversed(true);
+	ui_graph->xAxis->setRangeReversed(false);
 	ui_graph->yAxis->setRange(min_value_y, max_value_y);
 }
 void MainWindow::graph_draw_update_none_line(QCustomPlot *ui_graph, double cur_value1, double cur_value2, double ref_value1, double ref_value2)

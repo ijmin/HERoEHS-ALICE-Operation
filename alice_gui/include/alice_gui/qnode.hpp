@@ -170,6 +170,10 @@ public:
 	ros::Subscriber l_leg_point_xyz_sub;
 	ros::Subscriber r_leg_point_xyz_sub;
 
+	ros::Subscriber robot_state_sub;
+
+	double current_robot_x, current_robot_y, current_robot_theta;
+
 
 
 
@@ -206,6 +210,7 @@ private:
 	void zmpFzMsgCallback(const std_msgs::Float64MultiArray::ConstPtr& msg);
 	void lLegPointXYZMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg);
 	void rLegPointXYZMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg);
+	void robotStateMsgCallback(const geometry_msgs::Vector3::ConstPtr& msg);
 };
 
 }  // namespace offset_tuner_operation

@@ -37,29 +37,10 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>120</y>
+         <y>20</y>
          <width>391</width>
-         <height>71</height>
+         <height>41</height>
         </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="quit_button">
-       <property name="geometry">
-        <rect>
-         <x>1658</x>
-         <y>910</y>
-         <width>191</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="text">
-        <string>Quit</string>
        </property>
       </widget>
       <widget class="QLabel" name="label">
@@ -79,16 +60,16 @@
        <property name="geometry">
         <rect>
          <x>10</x>
-         <y>206</y>
-         <width>741</width>
-         <height>731</height>
+         <y>66</y>
+         <width>1831</width>
+         <height>871</height>
         </rect>
        </property>
        <property name="tabShape">
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>4</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1803,13 +1784,357 @@ p, li { white-space: pre-wrap; }
           </rect>
          </property>
         </widget>
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="geometry">
+          <rect>
+           <x>732</x>
+           <y>651</y>
+           <width>531</width>
+           <height>191</height>
+          </rect>
+         </property>
+         <property name="title">
+          <string>Quick Starter</string>
+         </property>
+         <widget class="QWidget" name="gridLayoutWidget_3">
+          <property name="geometry">
+           <rect>
+            <x>20</x>
+            <y>25</y>
+            <width>155</width>
+            <height>161</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_3">
+           <item row="3" column="0">
+            <widget class="QPushButton" name="pushButton_3">
+             <property name="text">
+              <string>Arm Module</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QPushButton" name="pushButton_2">
+             <property name="text">
+              <string>Upper body Module</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButton">
+             <property name="text">
+              <string>Base Module</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QPushButton" name="pushButton_4">
+             <property name="text">
+              <string>Walking Module</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pushButton_5">
+             <property name="text">
+              <string>Leg Module</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="gridLayoutWidget_4">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>25</y>
+            <width>102</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_4">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="zmp_on">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>ZMP on</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="zmp_off">
+             <property name="text">
+              <string>ZMP off</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="gridLayoutWidget_5">
+          <property name="geometry">
+           <rect>
+            <x>190</x>
+            <y>104</y>
+            <width>102</width>
+            <height>71</height>
+           </rect>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_5">
+           <item row="0" column="0">
+            <widget class="QPushButton" name="pushButton_8">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="text">
+              <string>control2 on</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPushButton" name="pushButton_9">
+             <property name="text">
+              <string>control2 off</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+        <widget class="QCustomPlot" name="sensor_plot_1" native="true">
+         <property name="geometry">
+          <rect>
+           <x>730</x>
+           <y>370</y>
+           <width>531</width>
+           <height>281</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QCustomPlot" name="sensor_plot_2" native="true">
+         <property name="geometry">
+          <rect>
+           <x>1280</x>
+           <y>370</y>
+           <width>531</width>
+           <height>281</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QCustomPlot" name="state_plot" native="true">
+         <property name="geometry">
+          <rect>
+           <x>730</x>
+           <y>10</y>
+           <width>1081</width>
+           <height>351</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true"/>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="joint_state_init_button">
+         <property name="geometry">
+          <rect>
+           <x>1300</x>
+           <y>802</y>
+           <width>99</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Initialize</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_14">
+         <property name="geometry">
+          <rect>
+           <x>1300</x>
+           <y>745</y>
+           <width>67</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Graph 2</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="sensor1_combo_box">
+         <property name="geometry">
+          <rect>
+           <x>1300</x>
+           <y>765</y>
+           <width>131</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Torque</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Force</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QPushButton" name="quit_button">
+         <property name="geometry">
+          <rect>
+           <x>1600</x>
+           <y>800</y>
+           <width>191</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Quit</string>
+         </property>
+        </widget>
+        <widget class="QLabel" name="label_16">
+         <property name="geometry">
+          <rect>
+           <x>1300</x>
+           <y>657</y>
+           <width>67</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Graph 1</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="start_button">
+         <property name="geometry">
+          <rect>
+           <x>1590</x>
+           <y>667</y>
+           <width>99</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>START</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="state_combo_box">
+         <property name="geometry">
+          <rect>
+           <x>1300</x>
+           <y>709</y>
+           <width>281</width>
+           <height>27</height>
+          </rect>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="stop_button">
+         <property name="geometry">
+          <rect>
+           <x>1720</x>
+           <y>667</y>
+           <width>99</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>STOP</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="sensor2_combo_box">
+         <property name="geometry">
+          <rect>
+           <x>1440</x>
+           <y>765</y>
+           <width>131</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Torque</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Force</string>
+          </property>
+         </item>
+        </widget>
+        <widget class="QLabel" name="label_15">
+         <property name="geometry">
+          <rect>
+           <x>1440</x>
+           <y>745</y>
+           <width>67</width>
+           <height>17</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Graph 3</string>
+         </property>
+        </widget>
+        <widget class="QComboBox" name="mode_select_combo_box">
+         <property name="geometry">
+          <rect>
+           <x>1300</x>
+           <y>677</y>
+           <width>121</width>
+           <height>27</height>
+          </rect>
+         </property>
+         <item>
+          <property name="text">
+           <string>Joint State</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ZMP_Y</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>ZMP_X</string>
+          </property>
+         </item>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tab_9">
+        <attribute name="title">
+         <string>Ground</string>
+        </attribute>
+        <widget class="QCustomPlot" name="ground_graph" native="true">
+         <property name="geometry">
+          <rect>
+           <x>280</x>
+           <y>9</y>
+           <width>1001</width>
+           <height>811</height>
+          </rect>
+         </property>
+        </widget>
        </widget>
       </widget>
       <widget class="QLabel" name="label_2">
        <property name="geometry">
         <rect>
-         <x>11</x>
-         <y>90</y>
+         <x>10</x>
+         <y>0</y>
          <width>71</width>
          <height>17</height>
         </rect>
@@ -1817,316 +2142,6 @@ p, li { white-space: pre-wrap; }
        <property name="text">
         <string>ROS INFO</string>
        </property>
-      </widget>
-      <widget class="QCustomPlot" name="state_plot" native="true">
-       <property name="geometry">
-        <rect>
-         <x>760</x>
-         <y>90</y>
-         <width>1081</width>
-         <height>351</height>
-        </rect>
-       </property>
-       <property name="styleSheet">
-        <string notr="true"/>
-       </property>
-      </widget>
-      <widget class="QCustomPlot" name="sensor_plot_1" native="true">
-       <property name="geometry">
-        <rect>
-         <x>760</x>
-         <y>450</y>
-         <width>531</width>
-         <height>281</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QCustomPlot" name="sensor_plot_2" native="true">
-       <property name="geometry">
-        <rect>
-         <x>1310</x>
-         <y>450</y>
-         <width>531</width>
-         <height>281</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QGroupBox" name="groupBox_2">
-       <property name="geometry">
-        <rect>
-         <x>760</x>
-         <y>740</y>
-         <width>531</width>
-         <height>201</height>
-        </rect>
-       </property>
-       <property name="title">
-        <string>Quick Starter</string>
-       </property>
-       <widget class="QWidget" name="gridLayoutWidget_3">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>25</y>
-          <width>155</width>
-          <height>161</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_3">
-         <item row="3" column="0">
-          <widget class="QPushButton" name="pushButton_3">
-           <property name="text">
-            <string>Arm Module</string>
-           </property>
-          </widget>
-         </item>
-         <item row="2" column="0">
-          <widget class="QPushButton" name="pushButton_2">
-           <property name="text">
-            <string>Upper body Module</string>
-           </property>
-          </widget>
-         </item>
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton">
-           <property name="text">
-            <string>Base Module</string>
-           </property>
-          </widget>
-         </item>
-         <item row="4" column="0">
-          <widget class="QPushButton" name="pushButton_4">
-           <property name="text">
-            <string>Walking Module</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="pushButton_5">
-           <property name="text">
-            <string>Leg Module</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="gridLayoutWidget_4">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>25</y>
-          <width>102</width>
-          <height>71</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_4">
-         <item row="0" column="0">
-          <widget class="QPushButton" name="zmp_on">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>ZMP on</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="zmp_off">
-           <property name="text">
-            <string>ZMP off</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-       <widget class="QWidget" name="gridLayoutWidget_5">
-        <property name="geometry">
-         <rect>
-          <x>190</x>
-          <y>104</y>
-          <width>102</width>
-          <height>71</height>
-         </rect>
-        </property>
-        <layout class="QGridLayout" name="gridLayout_5">
-         <item row="0" column="0">
-          <widget class="QPushButton" name="pushButton_8">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="text">
-            <string>control2 on</string>
-           </property>
-          </widget>
-         </item>
-         <item row="1" column="0">
-          <widget class="QPushButton" name="pushButton_9">
-           <property name="text">
-            <string>control2 off</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </widget>
-      <widget class="QPushButton" name="start_button">
-       <property name="geometry">
-        <rect>
-         <x>1600</x>
-         <y>750</y>
-         <width>99</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>START</string>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="stop_button">
-       <property name="geometry">
-        <rect>
-         <x>1730</x>
-         <y>750</y>
-         <width>99</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>STOP</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="sensor1_combo_box">
-       <property name="geometry">
-        <rect>
-         <x>1310</x>
-         <y>852</y>
-         <width>131</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Torque</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Force</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QComboBox" name="sensor2_combo_box">
-       <property name="geometry">
-        <rect>
-         <x>1450</x>
-         <y>852</y>
-         <width>131</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Torque</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>Force</string>
-        </property>
-       </item>
-      </widget>
-      <widget class="QLabel" name="label_14">
-       <property name="geometry">
-        <rect>
-         <x>1310</x>
-         <y>832</y>
-         <width>67</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Graph 2</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_15">
-       <property name="geometry">
-        <rect>
-         <x>1450</x>
-         <y>832</y>
-         <width>67</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Graph 3</string>
-       </property>
-      </widget>
-      <widget class="QLabel" name="label_16">
-       <property name="geometry">
-        <rect>
-         <x>1310</x>
-         <y>740</y>
-         <width>67</width>
-         <height>17</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Graph 1</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="state_combo_box">
-       <property name="geometry">
-        <rect>
-         <x>1310</x>
-         <y>792</y>
-         <width>281</width>
-         <height>27</height>
-        </rect>
-       </property>
-      </widget>
-      <widget class="QPushButton" name="joint_state_init_button">
-       <property name="geometry">
-        <rect>
-         <x>1310</x>
-         <y>902</y>
-         <width>99</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <property name="text">
-        <string>Initialize</string>
-       </property>
-      </widget>
-      <widget class="QComboBox" name="mode_select_combo_box">
-       <property name="geometry">
-        <rect>
-         <x>1310</x>
-         <y>760</y>
-         <width>121</width>
-         <height>27</height>
-        </rect>
-       </property>
-       <item>
-        <property name="text">
-         <string>Joint State</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ZMP_Y</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
-         <string>ZMP_X</string>
-        </property>
-       </item>
       </widget>
      </widget>
     </item>

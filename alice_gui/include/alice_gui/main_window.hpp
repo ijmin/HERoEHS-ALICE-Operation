@@ -204,6 +204,7 @@ public:
 	void select_joint_state();
 	QCPItemRect* foot_left;
 	QCPItemRect* foot_right;
+	QCPItemRect* ground_map;
 
 	//<------------------------------------------------------------------- param -->
 	void parse_balance_param_data(std::string path);
