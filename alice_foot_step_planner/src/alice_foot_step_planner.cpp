@@ -107,27 +107,26 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 
 		if(!command.compare("forward") || !command.compare("backward") )
 		{
-			if(distance >= 0.1)
+			if(distance >= 2.0)
 			{
 
-				foot_set_command_msg.step_num = (int) (distance/0.1);
+				foot_set_command_msg.step_num = ((int)(distance*6)) + 1;
 				foot_set_command_msg.step_length = 0.1;
 				foot_set_command_msg.step_time = 5;
 
 			}
 			else
 			{
-				foot_set_command_msg.step_num = 1;
-				foot_set_command_msg.step_length = distance;
+				foot_set_command_msg.step_num = ((int)(distance*5)) + 1;
+				foot_set_command_msg.step_length = 0.1;
 				foot_set_command_msg.step_time = 5;
-
 			}
 		}
 		else  // left right
 		{
 			if(distance >= 0.05)
 			{
-				foot_set_command_msg.step_num =  (int) (distance/0.05);
+				foot_set_command_msg.step_num =  (int) (distance*20);
 				foot_set_command_msg.side_step_length = 0.05;
 				foot_set_command_msg.step_time =5;
 			}
@@ -158,7 +157,7 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int mod
 		else
 		{
 			foot_set_command_msg.step_num = 1;
-			foot_set_command_msg.step_angle_rad = 0.15;
+			foot_set_command_msg.step_angle_rad = yaw_rad;
 			foot_set_command_msg.step_time = 5;
 		}
 		foot_set_command_msg.command = command;
