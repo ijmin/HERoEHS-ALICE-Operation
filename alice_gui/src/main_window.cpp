@@ -137,6 +137,30 @@ void MainWindow::on_update_button_clicked()
 		qnode.log(qnode.Error, "Check communication <SEND FAIL>");
 	}
 }
+void MainWindow::on_setting_default_pushButton_clicked()
+{
+	ui.edit_step_num->setText("4");
+	ui.edit_step_length->setText("0.2");
+	ui.edit_side_step_length->setText("0.05");
+	ui.edit_step_angle_rad->setText("0.3");
+	ui.edit_step_time->setText("2");
+	ui.edit_dsp->setText("0.45");
+	ui.edit_foot_z_swap->setText("0.06");
+	ui.edit_body_z_swap->setText("0");
+	ui.edit_y_zmp_conv->setText("0");
+}
+void MainWindow::on_setting_clear_pushButton_clicked()
+{
+	ui.edit_step_num->setText("");
+	ui.edit_step_length->setText("");
+	ui.edit_side_step_length->setText("");
+	ui.edit_step_angle_rad->setText("");
+	ui.edit_step_time->setText("");
+	ui.edit_dsp->setText("");
+	ui.edit_foot_z_swap->setText("");
+	ui.edit_body_z_swap->setText("");
+	ui.edit_y_zmp_conv->setText("");
+}
 void MainWindow::on_all_torque_on_button_clicked()
 {
 	torque_state(1);

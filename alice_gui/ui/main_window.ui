@@ -65,11 +65,14 @@
          <height>871</height>
         </rect>
        </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::ActionsContextMenu</enum>
+       </property>
        <property name="tabShape">
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>4</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -1769,6 +1772,32 @@ p, li { white-space: pre-wrap; }
           <string>Joint_feedback_2</string>
          </property>
         </widget>
+        <widget class="QPushButton" name="setting_default_pushButton">
+         <property name="geometry">
+          <rect>
+           <x>730</x>
+           <y>10</y>
+           <width>131</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Setting_default</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="setting_clear_pushButton">
+         <property name="geometry">
+          <rect>
+           <x>870</x>
+           <y>10</y>
+           <width>131</width>
+           <height>51</height>
+          </rect>
+         </property>
+         <property name="text">
+          <string>Setting_clear</string>
+         </property>
+        </widget>
        </widget>
        <widget class="QWidget" name="tab_8">
         <attribute name="title">
@@ -1801,7 +1830,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>20</x>
             <y>25</y>
-            <width>155</width>
+            <width>156</width>
             <height>161</height>
            </rect>
           </property>
@@ -1880,7 +1909,7 @@ p, li { white-space: pre-wrap; }
            <rect>
             <x>190</x>
             <y>104</y>
-            <width>102</width>
+            <width>103</width>
             <height>71</height>
            </rect>
           </property>

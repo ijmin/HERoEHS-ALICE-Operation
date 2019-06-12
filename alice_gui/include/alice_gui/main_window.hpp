@@ -56,6 +56,8 @@ public:
 
 	// <------------------------------------------------------------------- dynamixel offset -->
 	void on_update_button_clicked();
+	void on_setting_default_pushButton_clicked();
+	void on_setting_clear_pushButton_clicked();
 	void on_all_torque_on_button_clicked();
 	void on_all_torque_off_button_clicked();
 

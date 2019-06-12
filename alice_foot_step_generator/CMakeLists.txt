@@ -12,6 +12,8 @@ find_package(catkin REQUIRED COMPONENTS
   geometry_msgs
   message_generation
   robotis_controller_msgs
+  
+  robotis_math
 )
 
 find_package(Eigen REQUIRED)
@@ -53,9 +55,9 @@ include_directories(
 )
 
 add_executable(alice_foot_step_generator
+   src/main.cpp
    src/alice_foot_step_generator_node.cpp
    src/message_callback.cpp
-   src/main.cpp
 )
 
 add_dependencies(alice_foot_step_generator ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

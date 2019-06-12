@@ -48,7 +48,7 @@ void initialize(void)
   g_walking_module_status_msg_sub = nh.subscribe("/robotis/status", 10, walkingModuleStatusMSGCallback);
 
   g_walking_command_sub           = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 0, walkingCommandCallback);
- // g_footsteps_2d_sub              = nh.subscribe("/robotis/thormang3_foot_step_generator/footsteps_2d",    0, step2DArrayCallback);
+  g_footsteps_2d_sub              = nh.subscribe("/heroehs/alice_foot_step_generator/footsteps_2d",    0, step2DArrayCallback);
   g_dsp_sub                 = nh.subscribe("/heroehs/alice_foot_step_generator/dsp", 5, dspCallback);
   g_foot_z_swap_sub         = nh.subscribe("/heroehs/alice_foot_step_generator/foot_z_swap", 5, footZSwapCallback);
   g_body_z_swap_sub         = nh.subscribe("/heroehs/alice_foot_step_generator/body_z_swap", 5, bodyZSwapCallback);
@@ -295,17 +295,36 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
     if(isRunning() == true)
       return;
 
-	g_foot_stp_generator.calcTurnLeftAndRightKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
-	g_is_running_check_needed = true;
+    g_foot_stp_generator.calcTurnLeftAndRightKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
+    g_is_running_check_needed = true;
   }
   else if(msg->command == "turn right left kick")
   {
     if(isRunning() == true)
       return;
 
-	g_foot_stp_generator.calcTurnRightAndLeftKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
-	g_is_running_check_needed = true;
+    g_foot_stp_generator.calcTurnRightAndLeftKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
+    g_is_running_check_needed = true;
   }
+  else if(msg->command == "expanded left")
+  {
+    if(g_is_running_check_needed == true)
+                if(isRunning() == true)
+                  return;
+
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, EXPANDING_LEFT_WALKING);
+    g_is_running_check_needed = false;
+  }
+  else if(msg->command == "expanded right")
+  {
+    if(g_is_running_check_needed == true)
+            if(isRunning() == true)
+              return;
+
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, EXPANDING_RIGHT_WALKING);
+    g_is_running_check_needed = false;
+  }
+
   else if(msg->command == "stop")
   {
     if(g_is_running_check_needed == true)
@@ -361,7 +380,6 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   }
 
 }
-
 
 void step2DArrayCallback(const alice_foot_step_generator::Step2DArray::ConstPtr& msg)
 {
@@ -420,7 +438,7 @@ void step2DArrayCallback(const alice_foot_step_generator::Step2DArray::ConstPtr&
 
 bool isRunning(void)
 {
-	alice_walking_module_msgs::IsRunning is_running_srv;
+  alice_walking_module_msgs::IsRunning is_running_srv;
   if(g_is_running_client.call(is_running_srv) == false)
   {
     ROS_ERROR("[Demo]  : Failed to Walking Status");

@@ -22,8 +22,7 @@
 #include "alice_walking_module_msgs/SetBalanceParam.h"
 #include "alice_walking_module_msgs/SetJointFeedBackGain.h"
 #include "alice_msgs/FoundObjectArray.h"
-
-#include "op3_walking_module_msgs/WalkingParam.h"
+#include "alice_foot_step_generator/Step2DArray.h"
 
 #include "alice_msgs/MoveCommand.h"
 #include <std_msgs/String.h>
@@ -54,11 +53,13 @@ public:
 	ros::Subscriber move_command_sub_;
 	ros::Subscriber environment_detector_sub;
 
+	ros::Subscriber test_joystic_sub;
+
 	ros::Publisher  foot_step_command_pub;
 	ros::Publisher  on_process_pub;
 
 	ros::Publisher  walking_command_pub;
-	ros::Publisher  walking_param_pub;
+	ros::Publisher  foot_step_2d_pub;
 
 	//
 	ros::ServiceClient set_balance_param_client;
@@ -74,7 +75,6 @@ public:
 
 	//msg
 	alice_foot_step_generator::FootStepCommand foot_set_command_msg;
-	op3_walking_module_msgs::WalkingParam walking_param_msgs;
 	std_msgs::Bool on_process_msg;
 
 	alice_walking_module_msgs::SetBalanceParam set_balance_param_msg;
@@ -84,6 +84,7 @@ public:
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
 	void moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg);
 	void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
+	void testJoysticMsgCallback(const std_msgs::String::ConstPtr& msg);
 
 	bool setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
 			alice_walking_module_msgs::SetBalanceParam::Response &res);
@@ -98,8 +99,8 @@ public:
 	void parse_online_balance_param(std::string path);
 	void parse_online_joint_feedback_param(std::string path);
 	void change_walking_kick_mode(std::string mode, std::string kick_mode);
-
-
+	void readIDAlice();
+	std::string alice_id_num_;
 private:
 
 	int walking_mode;
@@ -116,6 +117,8 @@ private:
 	void AlignRobotYaw(double yaw_rad, std::string command, int mode);
 	void CalculateStepData(double x, double y, std::string command, int mode);
 	void DecideStepNumLength(double distance, std::string command, int mode);
+	//void ExpandedLeftStepArray();
+	//void ExpandedRightStepArray();
 };
 
 }

@@ -10,6 +10,12 @@
 
 #include <ros/ros.h>
 #include <eigen3/Eigen/Eigen>
+
+#include <yaml-cpp/yaml.h>  // above scilab!!!! or error!!
+#include <ros/package.h>
+
+#include "robotis_math/robotis_math.h"
+
 #include "alice_walking_module_msgs/AddStepDataArray.h"
 #include "alice_foot_step_generator/Step2DArray.h"
 
@@ -20,6 +26,8 @@
 #define LEFTWARD_WALKING       (4)
 #define LEFT_ROTATING_WALKING  (5)
 #define RIGHT_ROTATING_WALKING (6)
+#define EXPANDING_LEFT_WALKING  (7)
+#define EXPANDING_RIGHT_WALKING (8)
 
 #define MINIMUM_STEP_TIME_SEC  (0.4)
 
@@ -31,6 +39,9 @@ class FootStepGenerator
 public:
   FootStepGenerator();
   ~FootStepGenerator();
+
+  void readFootStep_Yaml();
+  double leg_offset_;
 
   void initialize();
 
@@ -75,12 +86,15 @@ public:
   double kick_time_sec_;
 
 
+
 private:
   bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type);
 
   void calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcRoStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+  void calcERLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+
   void calcStopStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
 
   Eigen::MatrixXd getTransformationXYZRPY(double position_x, double position_y, double position_z, double roll, double pitch, double yaw);
