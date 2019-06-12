@@ -8,6 +8,7 @@
 #include "alice_foot_step_generator/message_callback.h"
 
 
+
 ros::ServiceClient   g_get_ref_step_data_client;
 ros::ServiceClient   g_add_step_data_array_client;
 
@@ -116,6 +117,8 @@ void walkingModuleStatusMSGCallback(const robotis_controller_msgs::StatusMsg::Co
 
 void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::ConstPtr &msg)
 {
+
+
   double now_time = ros::Time::now().toSec();
 
   if((last_command.command == msg->command)
@@ -345,6 +348,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   add_stp_data_srv.request.remove_existing_step_data = true;
 
   //add step data
+
   if(g_add_step_data_array_client.call(add_stp_data_srv) == true)
   {
     int add_stp_data_srv_result = add_stp_data_srv.response.result;

@@ -613,7 +613,7 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 void FootStepPlanner::testJoysticMsgCallback(const std_msgs::String::ConstPtr& msg)
 {
   foot_set_command_msg.step_num = 4;
-  foot_set_command_msg.side_step_length = 0.05;
+  foot_set_command_msg.side_step_length = 0.1;
   foot_set_command_msg.step_length = 0.1;
   foot_set_command_msg.step_angle_rad = 0.3;
   foot_set_command_msg.step_time = 0.9;
@@ -621,10 +621,12 @@ void FootStepPlanner::testJoysticMsgCallback(const std_msgs::String::ConstPtr& m
   foot_set_command_msg.command = msg->data;
 
 
+
+
   if(msg->data == "expanded left")
   {
     foot_set_command_msg.step_num = 1;
-    foot_set_command_msg.side_step_length = 0.05;
+    foot_set_command_msg.side_step_length = 0.1;
     foot_set_command_msg.step_length = 0.05;
     foot_set_command_msg.step_angle_rad = 0.2;
     foot_set_command_msg.step_time = 0.9;
@@ -634,7 +636,7 @@ void FootStepPlanner::testJoysticMsgCallback(const std_msgs::String::ConstPtr& m
   else if(msg->data == "expanded right")
   {
     foot_set_command_msg.step_num = 1;
-    foot_set_command_msg.side_step_length = 0.05;
+    foot_set_command_msg.side_step_length = 0.1;
     foot_set_command_msg.step_length = 0.05;
     foot_set_command_msg.step_angle_rad = 0.2;
     foot_set_command_msg.step_time = 0.9;

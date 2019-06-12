@@ -15,6 +15,8 @@
 #include <std_msgs/String.h>
 #include <std_msgs/Float64.h>
 
+#include <boost/thread.hpp>
+
 #include "alice_foot_step_generator/FootStepCommand.h"
 #include "alice_foot_step_generator/Step2DArray.h"
 
@@ -45,6 +47,7 @@ void bodyZSwapCallback(const std_msgs::Float64::ConstPtr& msg);
 void yZMPConvergenceCallback(const std_msgs::Float64::ConstPtr& msg);
 
 bool isRunning(void);
+
 
 
 
