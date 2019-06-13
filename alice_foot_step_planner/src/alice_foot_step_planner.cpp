@@ -19,8 +19,6 @@ FootStepPlanner::FootStepPlanner()
   pre_position_y = 0;
   on_process_msg.data = 0;
   walking_mode = 1; // 0 : darwin walking / 1 : preview walking
-  darwin_step_length_x = 0;
-  darwin_step_length_y = 0;
   readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
@@ -115,7 +113,7 @@ void FootStepPlanner::initialize()
   on_process_pub            = nh.advertise<std_msgs::Bool>("/heroehs/alice/on_process", 1);
 
   walking_command_pub = nh.advertise<std_msgs::String>("/robotis/walking/command", 1);
-  foot_step_2d_pub    = nh.advertise<alice_foot_step_generator::Step2DArray>("/heroehs/alice_foot_step_generator/footsteps_2d", 1);
+  //foot_step_2d_pub    = nh.advertise<alice_foot_step_generator::Step2DArray>("/heroehs/alice_foot_step_generator/footsteps_2d", 1);
 
   //sub
   move_command_sub_         = nh.subscribe("/heroehs/alice/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
@@ -123,7 +121,7 @@ void FootStepPlanner::initialize()
   environment_detector_sub  = nh.subscribe("/heroehs/environment_detector", 5, &FootStepPlanner::environmentDetectorMsgCallback, this);
   //walking_path_planner_test_sub = nh.subscribe("/heroehs/alice_walking_path_planner_test", 10, &FootStepPlanner::walkingPathPlannerStatusMsgCallback, this);
 
-  test_joystic_sub  = nh.subscribe("/heroehs/test_joystic", 5, &FootStepPlanner::testJoysticMsgCallback, this);
+  command_generator_sub  = nh.subscribe("/heroehs/command_generator", 5, &FootStepPlanner::commandGeneratorMsgCallback, this);
 
 
   //service
@@ -472,56 +470,6 @@ void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kic
   }
 
 }
-void FootStepPlanner::loadWalkingParam(const std::string &path)
-{
-  /*	YAML::Node doc;
-	try
-	{
-		// load yaml
-		doc = YAML::LoadFile(path.c_str());
-	} catch (const std::exception& e)
-	{
-		ROS_ERROR("Fail to load yaml file.");
-		return;
-	}
-
-	// parse movement time
-	walking_param_msgs.init_x_offset = doc["x_offset"].as<double>();
-	walking_param_msgs.init_y_offset = doc["y_offset"].as<double>();
-	walking_param_msgs.init_z_offset = doc["z_offset"].as<double>();
-	walking_param_msgs.init_roll_offset = doc["roll_offset"].as<double>() * DEGREE2RADIAN;
-	walking_param_msgs.init_pitch_offset = doc["pitch_offset"].as<double>() * DEGREE2RADIAN;
-	walking_param_msgs.init_yaw_offset = doc["yaw_offset"].as<double>() * DEGREE2RADIAN;
-	walking_param_msgs.hip_pitch_offset = doc["hip_pitch_offset"].as<double>() * DEGREE2RADIAN;
-	// time
-	walking_param_msgs.period_time = doc["period_time"].as<double>() * 0.001;    // ms -> s
-	walking_param_msgs.dsp_ratio = doc["dsp_ratio"].as<double>();
-	walking_param_msgs.step_fb_ratio = doc["step_forward_back_ratio"].as<double>();
-	// walking
-	walking_param_msgs.x_move_amplitude = 0;
-	walking_param_msgs.y_move_amplitude = 0;
-	walking_param_msgs.z_move_amplitude = doc["foot_height"].as<double>();
-	walking_param_msgs.angle_move_amplitude = 0;
-	walking_param_msgs.move_aim_on = 0;
-
-	// balance
-	// walking_param_.balance_enable
-	walking_param_msgs.balance_hip_roll_gain = doc["balance_hip_roll_gain"].as<double>();
-	walking_param_msgs.balance_knee_gain = doc["balance_knee_gain"].as<double>();
-	walking_param_msgs.balance_ankle_roll_gain = doc["balance_ankle_roll_gain"].as<double>();
-	walking_param_msgs.balance_ankle_pitch_gain = doc["balance_ankle_pitch_gain"].as<double>();
-	walking_param_msgs.y_swap_amplitude = doc["swing_right_left"].as<double>();
-	walking_param_msgs.z_swap_amplitude = doc["swing_top_down"].as<double>();
-	walking_param_msgs.pelvis_offset = doc["pelvis_offset"].as<double>() * DEGREE2RADIAN;
-	walking_param_msgs.arm_swing_gain = doc["arm_swing_gain"].as<double>();
-
-	// gain
-	walking_param_msgs.p_gain = doc["p_gain"].as<int>();
-	walking_param_msgs.i_gain = doc["i_gain"].as<int>();
-	walking_param_msgs.d_gain = doc["d_gain"].as<int>();*/
-}
-
-
 bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_msgs::SetJointFeedBackGain::Request &req,
     alice_walking_module_msgs::SetJointFeedBackGain::Response &res)
 {
@@ -610,174 +558,35 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 
   return true;
 }
-void FootStepPlanner::testJoysticMsgCallback(const std_msgs::String::ConstPtr& msg)
+void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg)
 {
-  foot_set_command_msg.step_num = 4;
-  foot_set_command_msg.side_step_length = 0.1;
-  foot_set_command_msg.step_length = 0.1;
-  foot_set_command_msg.step_angle_rad = 0.3;
-  foot_set_command_msg.step_time = 0.9;
+  foot_set_command_msg.step_num = msg->step_num;
+  foot_set_command_msg.step_length = msg->step_length;
+  foot_set_command_msg.side_step_length = msg->side_step_length;
+  foot_set_command_msg.step_angle_rad = msg->step_angle_rad;
+  foot_set_command_msg.step_time = msg->step_time;
 
-  foot_set_command_msg.command = msg->data;
+  foot_set_command_msg.command = msg->command;
 
-
-
-
-  if(msg->data == "expanded left")
+  if(foot_set_command_msg.command == "expanded left")
   {
     foot_set_command_msg.step_num = 1;
-    foot_set_command_msg.side_step_length = 0.1;
+    foot_set_command_msg.side_step_length = 0.05;
     foot_set_command_msg.step_length = 0.05;
     foot_set_command_msg.step_angle_rad = 0.2;
     foot_set_command_msg.step_time = 0.9;
-    //ExpandedLeftStepArray();
-    //return;
   }
-  else if(msg->data == "expanded right")
+  else if(foot_set_command_msg.command == "expanded right")
   {
     foot_set_command_msg.step_num = 1;
-    foot_set_command_msg.side_step_length = 0.1;
+    foot_set_command_msg.side_step_length = 0.05;
     foot_set_command_msg.step_length = 0.05;
     foot_set_command_msg.step_angle_rad = 0.2;
     foot_set_command_msg.step_time = 0.9;
-    //ExpandedRightStepArray();
-    //return;
   }
-
   //else
   //{
     foot_step_command_pub.publish(foot_set_command_msg);
   //}
 }
-/*
-void FootStepPlanner::ExpandedLeftStepArray()
-{
-  Eigen::Matrix4d trans_expanded;
-  Eigen::MatrixXd goal_foot_left;
-  Eigen::MatrixXd goal_foot_right;
-
-  goal_foot_left.resize(4,1);
-  goal_foot_right.resize(4,1);
-
-  goal_foot_left<< 0    ,
-      0.09 ,
-      0    ,
-      1.0  ;
-
-  goal_foot_right<< 0     ,
-      -0.09 ,
-      0     ,
-      1.0   ;
-
-
-  trans_expanded = robotis_framework::getTransformationXYZRPY(0.05, 0.05, 0, 0, 0, 20*DEGREE2RADIAN);
-
-  goal_foot_left = trans_expanded*goal_foot_left;
-  goal_foot_right = trans_expanded*goal_foot_right;
-
-
-  alice_foot_step_generator::Step2DArray foot_2d_array_msg;
-  alice_foot_step_generator::Step2D foot_2d;
-
-  //foot_2d.moving_foot = 1; // left
-  //foot_2d.step2d.x = 0;
-  //foot_2d.step2d.y = 0.09;
-  //foot_2d.step2d.theta = 0;
-
-  //foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-  //foot_2d.moving_foot = 2; // right
-  //foot_2d.step2d.x = 0;
-  //foot_2d.step2d.y = -0.09;
-  //foot_2d.step2d.theta = 0;
-
-  //foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-  foot_2d.moving_foot = 1; // left
-  foot_2d.step2d.x = goal_foot_left(0,0);
-  foot_2d.step2d.y = goal_foot_left(1,0);
-  foot_2d.step2d.theta = 20*DEGREE2RADIAN;
-
-  foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-  foot_2d.moving_foot = 2; // left
-  foot_2d.step2d.x = goal_foot_right(0,0);
-  foot_2d.step2d.y = goal_foot_right(1,0);
-  foot_2d.step2d.theta = 20*DEGREE2RADIAN;
-
-  foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-  foot_step_2d_pub.publish(foot_2d_array_msg);
-  foot_2d_array_msg.footsteps_2d.clear();
-
-  goal_foot_left.fill(0);
-  goal_foot_right.fill(0);
-
-}
-
-void FootStepPlanner::ExpandedRightStepArray()
-{
-  Eigen::Matrix4d trans_expanded;
-    Eigen::MatrixXd goal_foot_left;
-    Eigen::MatrixXd goal_foot_right;
-
-    goal_foot_left.resize(4,1);
-    goal_foot_right.resize(4,1);
-
-    goal_foot_left<< 0    ,
-        0.09 ,
-        0    ,
-        1.0  ;
-
-    goal_foot_right<< 0     ,
-        -0.09 ,
-        0     ,
-        1.0   ;
-
-
-    trans_expanded = robotis_framework::getTransformationXYZRPY(0.05, -0.05, 0, 0, 0, -20*DEGREE2RADIAN);
-
-    goal_foot_left = trans_expanded*goal_foot_left;
-    goal_foot_right = trans_expanded*goal_foot_right;
-
-
-    alice_foot_step_generator::Step2DArray foot_2d_array_msg;
-    alice_foot_step_generator::Step2D foot_2d;
-
-    //foot_2d.moving_foot = 2; // right
-    //foot_2d.step2d.x = 0;
-    //foot_2d.step2d.y = -0.09;
-    //foot_2d.step2d.theta = 0;
-
-    //foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-    //foot_2d.moving_foot = 1; // left
-    //foot_2d.step2d.x = 0;
-    //foot_2d.step2d.y = 0.09;
-    //foot_2d.step2d.theta = 0;
-
-    //foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-    foot_2d.moving_foot = 2; // right
-    foot_2d.step2d.x = goal_foot_right(0,0);
-    foot_2d.step2d.y = goal_foot_right(1,0);
-    foot_2d.step2d.theta = -20*DEGREE2RADIAN;
-
-    foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-    foot_2d.moving_foot = 1; // left
-    foot_2d.step2d.x = goal_foot_left(0,0);
-    foot_2d.step2d.y = goal_foot_left(1,0);
-    foot_2d.step2d.theta = -20*DEGREE2RADIAN;
-
-    foot_2d_array_msg.footsteps_2d.push_back(foot_2d);
-
-    foot_step_2d_pub.publish(foot_2d_array_msg);
-    foot_2d_array_msg.footsteps_2d.clear();
-
-    goal_foot_left.fill(0);
-    goal_foot_right.fill(0);
-
-}
-*/
 

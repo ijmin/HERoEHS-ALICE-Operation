@@ -53,13 +53,12 @@ public:
 	ros::Subscriber move_command_sub_;
 	ros::Subscriber environment_detector_sub;
 
-	ros::Subscriber test_joystic_sub;
+	ros::Subscriber command_generator_sub;
 
 	ros::Publisher  foot_step_command_pub;
 	ros::Publisher  on_process_pub;
 
 	ros::Publisher  walking_command_pub;
-	ros::Publisher  foot_step_2d_pub;
 
 	//
 	ros::ServiceClient set_balance_param_client;
@@ -84,7 +83,7 @@ public:
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
 	void moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg);
 	void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
-	void testJoysticMsgCallback(const std_msgs::String::ConstPtr& msg);
+	void commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg);
 
 	bool setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
 			alice_walking_module_msgs::SetBalanceParam::Response &res);
@@ -104,21 +103,16 @@ public:
 private:
 
 	int walking_mode;
-	double darwin_step_length_x, darwin_step_length_y;
 
 	double step_length_max;
 	double step_length_min;
 	double pre_position_x, pre_position_y;
-
 	double current_x,current_y;
 
-
-	void loadWalkingParam(const std::string &path);
 	void AlignRobotYaw(double yaw_rad, std::string command, int mode);
 	void CalculateStepData(double x, double y, std::string command, int mode);
 	void DecideStepNumLength(double distance, std::string command, int mode);
-	//void ExpandedLeftStepArray();
-	//void ExpandedRightStepArray();
+
 };
 
 }
