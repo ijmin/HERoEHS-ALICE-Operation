@@ -19,6 +19,8 @@
 #include "ui_main_window.h"
 #include "qnode.hpp"
 #include "alice_foot_step_generator/FootStepCommand.h"
+#include <QGraphicsScene>
+#include <QPixmap>
 #endif
 
 /*****************************************************************************
@@ -104,7 +106,7 @@ public:
 	void on_initial_pose_real_button_clicked();
 	void on_initialize_ft_sensor_button_clicked();
 	//<------------------------------------------------------------------- leg_module-->
-	void on_alice_leg_module_button_clicked();
+	//void on_alice_leg_module_button_clicked();
 
 	//<------------------------------------------------------------------- upper_body_module-->
 	void on_upper_body_module_button_clicked();
@@ -115,8 +117,8 @@ public:
 	void on_op3_walking_module_clicked();
 
 	//<------------------------------------------------------------------- arm_body_module-->
-	void on_arm_module_button_clicked();
-	void on_arm_change_end_effector_button_clicked();
+	//void on_arm_module_button_clicked();
+	//void on_arm_change_end_effector_button_clicked();
 
 	//<------------------------------------------------------------------- control on off-->
 	void on_zmp_on_clicked();
@@ -146,6 +148,7 @@ public:
 	QTimer *dataTimer;
 	QFont legendFont;
 	double key;
+	QGraphicsScene scene;
 
 
 	// <------------------------------------------------------------------- dynamixel offset -->
