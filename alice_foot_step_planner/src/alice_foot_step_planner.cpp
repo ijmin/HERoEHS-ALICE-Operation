@@ -4,10 +4,7 @@
  *  Created on: Apr 25, 2018
  *      Author: robotemperor
  */
-
 #include "alice_foot_step_planner/alice_foot_step_planner.h"
-
-
 using namespace alice;
 // Foot step planner algorithm
 FootStepPlanner::FootStepPlanner()
