@@ -468,8 +468,8 @@
            </property>
            <property name="geometry">
             <rect>
-             <x>10</x>
-             <y>10</y>
+             <x>20</x>
+             <y>70</y>
              <width>171</width>
              <height>50</height>
             </rect>
@@ -481,8 +481,8 @@
           <widget class="QPushButton" name="initial_pose_real_button">
            <property name="geometry">
             <rect>
-             <x>10</x>
-             <y>80</y>
+             <x>20</x>
+             <y>10</y>
              <width>171</width>
              <height>50</height>
             </rect>
@@ -1034,19 +1034,6 @@ p, li { white-space: pre-wrap; }
             <string>B</string>
            </property>
           </widget>
-          <widget class="QPushButton" name="walking_start">
-           <property name="geometry">
-            <rect>
-             <x>200</x>
-             <y>560</y>
-             <width>201</width>
-             <height>41</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>start</string>
-           </property>
-          </widget>
           <widget class="QLineEdit" name="edit_foot_z_swap">
            <property name="geometry">
             <rect>
@@ -1060,10 +1047,10 @@ p, li { white-space: pre-wrap; }
           <widget class="QPushButton" name="apply_foot_step_generator">
            <property name="geometry">
             <rect>
-             <x>200</x>
-             <y>460</y>
+             <x>210</x>
+             <y>470</y>
              <width>201</width>
-             <height>41</height>
+             <height>61</height>
             </rect>
            </property>
            <property name="text">
@@ -1200,19 +1187,6 @@ p, li { white-space: pre-wrap; }
            </property>
            <property name="margin">
             <number>0</number>
-           </property>
-          </widget>
-          <widget class="QPushButton" name="op3_walking_module">
-           <property name="geometry">
-            <rect>
-             <x>200</x>
-             <y>510</y>
-             <width>201</width>
-             <height>41</height>
-            </rect>
-           </property>
-           <property name="text">
-            <string>op3_walking module on</string>
            </property>
           </widget>
           <widget class="QLabel" name="label_134">
