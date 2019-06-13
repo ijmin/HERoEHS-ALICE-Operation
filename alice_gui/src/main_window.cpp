@@ -33,8 +33,11 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 {
 	ui.setupUi(this); // Calling this incidentally connects all ui's triggers to on_...() callbacks in this class.
 	qnode.init();
-	setWindowIcon(QIcon(":/images/icon.png"));
-
+	setWindowIcon(QIcon(":/images/heroes.png"));
+	QPixmap pix(":/images/Alice.png");
+	scene.addPixmap(pix);
+	ui.graphicsView->setScene(&scene);
+	ui.graphicsView->show();
 	QObject::connect(&qnode, SIGNAL(rosShutdown()), this, SLOT(close()));
 
 	/****************************
@@ -140,7 +143,7 @@ void MainWindow::on_update_button_clicked()
 void MainWindow::on_setting_default_pushButton_clicked()
 {
 	ui.edit_step_num->setText("4");
-	ui.edit_step_length->setText("0.2");
+	ui.edit_step_length->setText("0.15");
 	ui.edit_side_step_length->setText("0.05");
 	ui.edit_step_angle_rad->setText("0.3");
 	ui.edit_step_time->setText("2");
@@ -490,13 +493,13 @@ void MainWindow::on_initialize_ft_sensor_button_clicked()
 	qnode.alice_ft_init_pub.publish(ft_init_msg);
 }
 //<------------------------------------------------------------------- leg_module-->
-void MainWindow::on_alice_leg_module_button_clicked()
+/*void MainWindow::on_alice_leg_module_button_clicked()
 {
 	qnode.enable_module_msg.data = "alice_leg_module";
 	qnode.enable_module_pub.publish(qnode.enable_module_msg);
 
 }
-/*void MainWindow::on_base_module_real_clicked()
+void MainWindow::on_base_module_real_clicked()
 {
 	ROS_INFO("!!");
 	qnode.enable_module_msg.data = "base_module";
@@ -514,10 +517,10 @@ void MainWindow::on_upper_body_module_button_clicked() {
 	qnode.module_on_off.publish(module_msg);
 }
 //<------------------------------------------------------------------- arm_module-->
-void MainWindow::on_arm_module_button_clicked() {
+/*void MainWindow::on_arm_module_button_clicked() {
 	module_msg.data = "arm_module";
 	qnode.module_on_off.publish(module_msg);
-}
+}*/
 //<------------------------------------------------------------------- desired pose -->
 void MainWindow::on_waist_change_button_clicked()
 {
@@ -560,7 +563,7 @@ void MainWindow::on_head_change_button_clicked()
 
 	desired_pose_head_msg.data.clear();
 }
-void MainWindow::on_arm_change_end_effector_button_clicked()
+/*void MainWindow::on_arm_change_end_effector_button_clicked()
 {
 	QString str_l_arm_x = ui.Edit_left_x->text();
 	double dl_arm_x = str_l_arm_x.toDouble();
@@ -599,7 +602,7 @@ void MainWindow::on_arm_change_end_effector_button_clicked()
 	qnode.desired_pose_arm_pub.publish(desired_pose_arm_msg);
 
 	desired_pose_arm_msg.data.clear();
-}
+}*/
 //<------------------------------------------------------------------- control-->
 void MainWindow::on_zmp_on_clicked() {
 	parse_gain_data();
