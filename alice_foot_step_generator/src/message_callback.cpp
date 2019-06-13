@@ -128,10 +128,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       && (last_command.side_step_length == msg->side_step_length)
       && (last_command.step_angle_rad == msg->step_angle_rad))
   {
-    //prevent double click
-    if( (fabs(now_time - g_last_command_time) < last_command.step_time) )
+    //prevent double click & switching foot step time
+    if( (fabs(now_time - g_last_command_time) < 2*last_command.step_time) )
     {
-      ROS_ERROR("Receive same command in short time");
+      ROS_ERROR("Receive same command in short time & Foot Step Switching time");
       return;
     }
   }
@@ -223,6 +223,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   ref_step_data = get_ref_stp_data_srv.response.reference_step_data;
 
   //calc step data
+
   if(msg->command == "forward")
   {
     if(g_is_running_check_needed == true)
@@ -249,6 +250,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
 
     g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, LEFT_ROTATING_WALKING);
     g_is_running_check_needed = false;
+
   }
   else if(msg->command == "turn right")
   {
@@ -267,6 +269,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
 
     g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, RIGHTWARD_WALKING);
     g_is_running_check_needed = false;
+
   }
   else if(msg->command == "left")
   {
