@@ -336,6 +336,25 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
     g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, EXPANDING_RIGHT_WALKING);
     g_is_running_check_needed = false;
   }
+  else if(msg->command == "centered left")
+  {
+    if(g_is_running_check_needed == true)
+            if(isRunning() == true)
+              return;
+
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, CENTERED_LEFT_WALKING);
+    g_is_running_check_needed = false;
+  }
+  else if(msg->command == "centered right")
+  {
+    if(g_is_running_check_needed == true)
+            if(isRunning() == true)
+              return;
+
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, CENTERED_RIGHT_WALKING);
+    g_is_running_check_needed = false;
+  }
+
 
   else if(msg->command == "stop")
   {

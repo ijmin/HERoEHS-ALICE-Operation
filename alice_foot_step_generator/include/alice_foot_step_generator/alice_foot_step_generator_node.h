@@ -28,6 +28,8 @@
 #define RIGHT_ROTATING_WALKING (6)
 #define EXPANDING_LEFT_WALKING  (7)
 #define EXPANDING_RIGHT_WALKING (8)
+#define CENTERED_LEFT_WALKING  (9)
+#define CENTERED_RIGHT_WALKING (10)
 
 #define MINIMUM_STEP_TIME_SEC  (0.4)
 
@@ -94,6 +96,7 @@ private:
   void calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcRoStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcERLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+  void calcCRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
 
   void calcStopStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
 

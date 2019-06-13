@@ -565,24 +565,17 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
 
   foot_set_command_msg.command = msg->command;
 
-  /*if(foot_set_command_msg.command == "expanded left")
+  if(foot_set_command_msg.command == "expanded left" || foot_set_command_msg.command == "expanded right")
   {
     foot_set_command_msg.step_num = 1;
-    foot_set_command_msg.side_step_length = 0.05;
-    foot_set_command_msg.step_length = 0.05;
-    foot_set_command_msg.step_angle_rad = 0.2;
   }
-  else if(foot_set_command_msg.command == "expanded right")
+  else if(foot_set_command_msg.command == "centered left" || foot_set_command_msg.command == "centered right")
   {
     foot_set_command_msg.step_num = 1;
-    foot_set_command_msg.side_step_length = 0.05;
-    foot_set_command_msg.step_length = 0.05;
-    foot_set_command_msg.step_angle_rad = 0.2;
-    foot_set_command_msg.step_time = 0.9;
-  }*/
+  }
   //else
   //{
-    foot_step_command_pub.publish(foot_set_command_msg);
+  foot_step_command_pub.publish(foot_set_command_msg);
   //}
 }
 
