@@ -33,6 +33,7 @@ alice_walking_module_msgs::AddStepDataArray     add_step_data_array_srv;
 
 alice_foot_step_generator::FootStepCommand last_command;
 double g_last_command_time = 0;
+alice_walking_module_msgs::StepData ref_stp_data_com[1];
 
 
 bool g_is_running_check_needed = false;
@@ -121,6 +122,9 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
 
   double now_time = ros::Time::now().toSec();
 
+  //ref_stp_data_com[1];
+  //ROS_INFO("WALKING STATE MESG: %d",stp_data[0].time_data.walking_state);
+
   if((last_command.command == msg->command)
       && (last_command.step_num == msg->step_num)
       && (last_command.step_time == msg->step_time)
@@ -134,6 +138,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       ROS_ERROR("Receive same command in short time & Foot Step Switching time");
       return;
     }
+
   }
 
   g_last_command_time = now_time;
@@ -144,7 +149,6 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   last_command.step_length      = msg->step_length;
   last_command.side_step_length = msg->side_step_length;
   last_command.step_angle_rad   = msg->step_angle_rad;
-
 
   ROS_INFO("[Demo]  : Walking Command");
   ROS_INFO_STREAM("  command          : " << msg->command );
@@ -221,6 +225,8 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   }
 
   ref_step_data = get_ref_stp_data_srv.response.reference_step_data;
+  ref_stp_data_com[0] = ref_step_data;
+
 
   //calc step data
 

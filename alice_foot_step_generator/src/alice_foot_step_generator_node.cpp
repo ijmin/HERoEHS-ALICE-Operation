@@ -305,7 +305,7 @@ void FootStepGenerator::getStepDataFromStepData2DArray(alice_walking_module_msgs
     if(fabs(stp_data.position_data.right_foot_pose.yaw - stp_data.position_data.left_foot_pose.yaw) > M_PI)
     {
       stp_data.position_data.body_pose.yaw = 0.5*(stp_data.position_data.right_foot_pose.yaw + stp_data.position_data.left_foot_pose.yaw)
-                                                                                                                    - sign(0.5*(stp_data.position_data.right_foot_pose.yaw - stp_data.position_data.left_foot_pose.yaw))*M_PI;
+                                                                                                                                                                                                                - sign(0.5*(stp_data.position_data.right_foot_pose.yaw - stp_data.position_data.left_foot_pose.yaw))*M_PI;
     }
     else
     {
@@ -550,6 +550,39 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
       }
       else if(desired_step_type == EXPANDING_LEFT_WALKING || desired_step_type == EXPANDING_RIGHT_WALKING )
       {
+        if(desired_step_type == EXPANDING_LEFT_WALKING)
+        {
+          if(ref_step_data.position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING)
+          {
+            ROS_INFO("CHAGE FOOT LEFT");
+
+            stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+
+            stp_data[0].time_data.abs_step_time += step_time_sec_;
+            stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+            stp_data[0].position_data.right_foot_pose.x   = stp_data[0].position_data.left_foot_pose.x;
+            stp_data[0].position_data.right_foot_pose.y   = stp_data[0].position_data.left_foot_pose.y- default_y_feet_offset_m_;
+            stp_data[0].position_data.right_foot_pose.yaw = stp_data[0].position_data.left_foot_pose.yaw;
+
+            step_data_array_.push_back(stp_data[0]);
+          }
+
+        }
+        if(desired_step_type == EXPANDING_RIGHT_WALKING)
+        {
+          if(ref_step_data.position_data.moving_foot == alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING)
+          {
+            ROS_INFO("CHAGE FOOT RIGHT");
+            stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+
+            stp_data[0].time_data.abs_step_time += step_time_sec_;
+            stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+            stp_data[0].position_data.left_foot_pose.x   = stp_data[0].position_data.right_foot_pose.x;
+            stp_data[0].position_data.left_foot_pose.y   = stp_data[0].position_data.right_foot_pose.y + default_y_feet_offset_m_;
+            stp_data[0].position_data.left_foot_pose.yaw = stp_data[0].position_data.right_foot_pose.yaw ;
+            step_data_array_.push_back(stp_data[0]);
+          }
+        }
         calcERLStep(stp_data[0], direction);
       }
       else if(desired_step_type == STOP_WALKING)
@@ -588,7 +621,7 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
     if(fabs(step_data_array_[stp_idx].position_data.right_foot_pose.yaw - step_data_array_[stp_idx].position_data.left_foot_pose.yaw) > M_PI)
     {
       step_data_array_[stp_idx].position_data.body_pose.yaw = 0.5*(step_data_array_[stp_idx].position_data.right_foot_pose.yaw + step_data_array_[stp_idx].position_data.left_foot_pose.yaw)
-                                                                                              - sign(0.5*(step_data_array_[stp_idx].position_data.right_foot_pose.yaw - step_data_array_[stp_idx].position_data.left_foot_pose.yaw))*M_PI;
+                                                                                                                                                                                          - sign(0.5*(step_data_array_[stp_idx].position_data.right_foot_pose.yaw - step_data_array_[stp_idx].position_data.left_foot_pose.yaw))*M_PI;
     }
     else
     {
@@ -1062,20 +1095,25 @@ void FootStepGenerator::calcRoStep(const alice_walking_module_msgs::StepData& re
 
 void FootStepGenerator::calcERLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
 {
+
   alice_walking_module_msgs::StepData stp_data[num_of_step_];
   stp_data[0] = ref_step_data;
 
 
-  ROS_INFO("Local REF DATA ++++++++++++");
-  ROS_INFO("right %f   %f   %f",stp_data[0].position_data.right_foot_pose.x,stp_data[0].position_data.right_foot_pose.y ,stp_data[0].position_data.right_foot_pose.yaw );
-  ROS_INFO("left %f   %f   %f",stp_data[0].position_data.left_foot_pose.x,stp_data[0].position_data.left_foot_pose.y ,stp_data[0].position_data.left_foot_pose.yaw );
+  //ROS_INFO("Local REF DATA   %d++++++++++++",stp_data[0].position_data.moving_foot);
+  //ROS_INFO("right %f   %f   %f",stp_data[0].position_data.right_foot_pose.x,stp_data[0].position_data.right_foot_pose.y ,stp_data[0].position_data.right_foot_pose.yaw );
+  //ROS_INFO("left %f   %f   %f",stp_data[0].position_data.left_foot_pose.x,stp_data[0].position_data.left_foot_pose.y ,stp_data[0].position_data.left_foot_pose.yaw );
 
   Eigen::Matrix4d trans_expanded;
-  Eigen::MatrixXd goal_foot_left;
-  Eigen::MatrixXd goal_foot_right;
+  Eigen::MatrixXd goal_foot_left;//, goal_foot_left_p,goal_foot_left_c;
+  Eigen::MatrixXd goal_foot_right;//, goal_foot_right_p,goal_foot_right_c;
 
   goal_foot_left.resize(4,1);
   goal_foot_right.resize(4,1);
+  //goal_foot_left_p.resize(4,1);
+  //goal_foot_right_p.resize(4,1);
+  //goal_foot_left_c.resize(4,1);
+  //goal_foot_right_c.resize(4,1);
 
 
 
@@ -1095,32 +1133,31 @@ void FootStepGenerator::calcERLStep(const alice_walking_module_msgs::StepData& r
   goal_foot_right = trans_expanded*goal_foot_right;
 
 
+
+
   if(ref_step_data.time_data.walking_state == alice_walking_module_msgs::StepTimeData::IN_WALKING)
   {
-
     stp_data[0].time_data.abs_step_time += step_time_sec_;
     stp_data[0].time_data.dsp_ratio = dsp_ratio_;
     stp_data[0].position_data.body_z_swap = body_z_swap_m_;
     stp_data[0].position_data.foot_z_swap = foot_z_swap_m_;
 
-    if(stp_data[0].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING && direction<0)
+    if(stp_data[0].position_data.moving_foot == alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING )
+      //if(direction<0)
     {
-      ROS_INFO("LEFT FOOT MOVING!!!!!!!!!!!++++++++++++");
       stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
       stp_data[0].position_data.right_foot_pose.x = (double)goal_foot_right(0,0); //stp_data[0].position_data.right_foot_pose.x
-      stp_data[0].position_data.right_foot_pose.y =(double)goal_foot_right(1,0);
+      stp_data[0].position_data.right_foot_pose.y = (double)goal_foot_right(1,0);
       stp_data[0].position_data.right_foot_pose.yaw =(double)direction*rotate_step_angle_rad_;
 
 
     }
     else
     {
-      ROS_INFO("RIGHT FOOT MOVING!!!!!!!!!!!++++++++++++");
       stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
       stp_data[0].position_data.left_foot_pose.x = (double)goal_foot_left(0,0); //stp_data[0].position_data.left_foot_pose.x
       stp_data[0].position_data.left_foot_pose.y = (double)goal_foot_left(1,0);
       stp_data[0].position_data.left_foot_pose.yaw = (double)direction*rotate_step_angle_rad_;
-
     }
 
     for(int stp_idx = 1; stp_idx < num_of_step_-2; stp_idx++)
@@ -1169,10 +1206,12 @@ void FootStepGenerator::calcERLStep(const alice_walking_module_msgs::StepData& r
     stp_data[num_of_step_-1].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING;
     stp_data[num_of_step_-1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
     stp_data[num_of_step_-1].position_data.body_z_swap = 0;
+
+
   }
   else
   {
-
+    ROS_INFO("Local MOVING START");
     stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING_STARTING;
     stp_data[0].time_data.abs_step_time += 0.1;//start_end_time_sec_;
     stp_data[0].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::STANDING;
@@ -1187,8 +1226,8 @@ void FootStepGenerator::calcERLStep(const alice_walking_module_msgs::StepData& r
     if(direction < 0)
     {
       stp_data[1].position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
-      stp_data[1].position_data.right_foot_pose.x =  (double)goal_foot_right(0,0); //stp_data[1].position_data.right_foot_pose.x
-      stp_data[1].position_data.right_foot_pose.y =  (double)goal_foot_right(1,0);
+      stp_data[1].position_data.right_foot_pose.x = (double)goal_foot_right(0,0); //stp_data[1].position_data.right_foot_pose.x
+      stp_data[1].position_data.right_foot_pose.y = (double)goal_foot_right(1,0);
       stp_data[1].position_data.right_foot_pose.yaw = (double)direction*rotate_step_angle_rad_;
     }
     else
@@ -1198,8 +1237,6 @@ void FootStepGenerator::calcERLStep(const alice_walking_module_msgs::StepData& r
       stp_data[1].position_data.left_foot_pose.y = (double)goal_foot_left(1,0);
       stp_data[1].position_data.left_foot_pose.yaw =  (double)direction*rotate_step_angle_rad_;
     }
-
-
 
     for(int stp_idx = 2; stp_idx < num_of_step_-2; stp_idx++)
     {
@@ -1249,12 +1286,11 @@ void FootStepGenerator::calcERLStep(const alice_walking_module_msgs::StepData& r
   }
 
 
-
   for(int stp_idx = 0; stp_idx < num_of_step_; stp_idx++)
   {
     step_data_array_.push_back(stp_data[stp_idx]);
 
-    ROS_INFO("idx : %d",stp_idx);
+    ROS_INFO("idx : %d    foot:  %d",stp_idx,stp_data[stp_idx].position_data.moving_foot);
     ROS_INFO("right %f   %f   %f",stp_data[stp_idx].position_data.right_foot_pose.x,stp_data[stp_idx].position_data.right_foot_pose.y ,stp_data[stp_idx].position_data.right_foot_pose.yaw );
     ROS_INFO("left %f   %f   %f",stp_data[stp_idx].position_data.left_foot_pose.x,stp_data[stp_idx].position_data.left_foot_pose.y ,stp_data[stp_idx].position_data.left_foot_pose.yaw );
 
