@@ -161,55 +161,100 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   if((msg->step_num == 0)
       && (msg->command != "left kick")
       && (msg->command != "right kick")
+      && (msg->command != "expanded stop")
+      && (msg->command != "centered stop")
       && (msg->command != "stop"))
     return;
 
   //set walking parameter
   if(msg->step_length < 0)
   {
-    g_foot_stp_generator.fb_step_length_m_ = 0;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.ep_step_length_m_= 0;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.ct_step_length_m_= 0;
+    else
+      g_foot_stp_generator.fb_step_length_m_ = 0;
     ROS_ERROR_STREAM("step_length is negative.");
     ROS_ERROR_STREAM("It will be set to zero.");
   }
   else
   {
-    g_foot_stp_generator.fb_step_length_m_ = msg->step_length;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.ep_step_length_m_= msg->step_length;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.ct_step_length_m_= msg->step_length;
+    else
+      g_foot_stp_generator.fb_step_length_m_ = msg->step_length;
   }
 
   if(msg->side_step_length < 0)
   {
-    g_foot_stp_generator.rl_step_length_m_ = 0;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.eps_step_length_m_= 0;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.cts_step_length_m_= 0;
+    else
+      g_foot_stp_generator.rl_step_length_m_ = 0;
     ROS_ERROR_STREAM("side_step_length is negative.");
     ROS_ERROR_STREAM("It will be set to zero.");
   }
   else
   {
-    g_foot_stp_generator.rl_step_length_m_ = msg->side_step_length;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.eps_step_length_m_= msg->side_step_length;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.cts_step_length_m_= msg->side_step_length;
+    else
+      g_foot_stp_generator.rl_step_length_m_ = msg->side_step_length;
+
   }
 
   if(msg->step_angle_rad < 0)
   {
-    g_foot_stp_generator.rotate_step_angle_rad_ = 0;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.ep_step_angle_rad_= 0;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.ct_step_angle_rad_= 0;
+    else
+      g_foot_stp_generator.rotate_step_angle_rad_ = 0;
     ROS_ERROR_STREAM("step_angle_rad is negative.");
     ROS_ERROR_STREAM("It will be set to zero.");
   }
   else
   {
-    g_foot_stp_generator.rotate_step_angle_rad_ = msg->step_angle_rad;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.ep_step_angle_rad_= msg->step_angle_rad;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.ct_step_angle_rad_= msg->step_angle_rad;
+    else
+      g_foot_stp_generator.rotate_step_angle_rad_ = msg->step_angle_rad;
+
   }
 
   if(msg->step_time < MINIMUM_STEP_TIME_SEC)
   {
-    g_foot_stp_generator.step_time_sec_ = MINIMUM_STEP_TIME_SEC;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.ep_step_time_sec_ = 0;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.ct_step_time_sec_ = 0;
+    else
+      g_foot_stp_generator.step_time_sec_ = 0;
     ROS_ERROR_STREAM("step_time is less than minimum step time. ");
     ROS_ERROR_STREAM("It will be set to minimum step time(0.4 sec).");
   }
   else
   {
-    g_foot_stp_generator.step_time_sec_ = msg->step_time;
+    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+      g_foot_stp_generator.ep_step_time_sec_ = msg->step_time;
+    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+      g_foot_stp_generator.ct_step_time_sec_ = msg->step_time;
+    else
+      g_foot_stp_generator.step_time_sec_ = msg->step_time;
   }
 
   g_foot_stp_generator.num_of_step_ = 2*(msg->step_num) + 2;
+
 
 
   alice_walking_module_msgs::GetReferenceStepData    get_ref_stp_data_srv;
@@ -236,7 +281,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, FORWARD_WALKING);
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, FORWARD_WALKING, 0);
     g_is_running_check_needed = false;
   }
   else if(msg->command == "backward")
@@ -245,7 +290,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, BACKWARD_WALKING);
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, BACKWARD_WALKING, 0);
     g_is_running_check_needed = false;
   }
   else if(msg->command == "turn left")
@@ -254,7 +299,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, LEFT_ROTATING_WALKING);
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, LEFT_ROTATING_WALKING, 0);
     g_is_running_check_needed = false;
 
   }
@@ -264,7 +309,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, RIGHT_ROTATING_WALKING);
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, RIGHT_ROTATING_WALKING, 0);
     g_is_running_check_needed = false;
   }
   else if(msg->command == "right")
@@ -273,7 +318,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, RIGHTWARD_WALKING);
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, RIGHTWARD_WALKING, 0);
     g_is_running_check_needed = false;
 
   }
@@ -283,7 +328,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, LEFTWARD_WALKING);
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, LEFTWARD_WALKING, 0);
     g_is_running_check_needed = false;
   }
   else if(msg->command == "right kick")
@@ -318,51 +363,37 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
     g_foot_stp_generator.calcTurnRightAndLeftKickStep( &add_stp_data_srv.request.step_data_array, ref_step_data);
     g_is_running_check_needed = true;
   }
-  else if(msg->command == "expanded left")
+  else if(msg->command == "expanded left" || msg->command == "centered left")
   {
     if(g_is_running_check_needed == true)
-                if(isRunning() == true)
-                  return;
-
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, EXPANDING_LEFT_WALKING);
+      if(isRunning() == true)
+        return;
+    if(msg->command == "centered left")
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, REVOLUTE_LEFT_WALKING, centered);
+    else if(msg->command == "expanded left")
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, REVOLUTE_LEFT_WALKING, expanded);
     g_is_running_check_needed = false;
   }
-  else if(msg->command == "expanded right")
+  else if(msg->command == "expanded right" || msg->command == "centered right")
   {
     if(g_is_running_check_needed == true)
-            if(isRunning() == true)
-              return;
-
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, EXPANDING_RIGHT_WALKING);
-    g_is_running_check_needed = false;
-  }
-  else if(msg->command == "centered left")
-  {
-    if(g_is_running_check_needed == true)
-            if(isRunning() == true)
-              return;
-
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, CENTERED_LEFT_WALKING);
-    g_is_running_check_needed = false;
-  }
-  else if(msg->command == "centered right")
-  {
-    if(g_is_running_check_needed == true)
-            if(isRunning() == true)
-              return;
-
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, CENTERED_RIGHT_WALKING);
+      if(isRunning() == true)
+        return;
+    if(msg->command == "centered right")
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, REVOLUTE_RIGHT_WALKING, centered);
+    else if(msg->command == "expanded right")
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, REVOLUTE_RIGHT_WALKING, expanded);
     g_is_running_check_needed = false;
   }
 
 
-  else if(msg->command == "stop")
+  else if(msg->command == "stop" || msg->command == "expanded stop" || msg->command == "centered stop")
   {
     if(g_is_running_check_needed == true)
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, STOP_WALKING);
+    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, STOP_WALKING, 0);
     g_is_running_check_needed = false;
   }
   else
