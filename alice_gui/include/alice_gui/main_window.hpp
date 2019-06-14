@@ -58,8 +58,7 @@ public:
 
 	// <------------------------------------------------------------------- dynamixel offset -->
 	void on_update_button_clicked();
-	void on_setting_default_pushButton_clicked();
-	void on_setting_clear_pushButton_clicked();
+	void on_setting_comboBox_currentIndexChanged(int index);
 	void on_all_torque_on_button_clicked();
 	void on_all_torque_off_button_clicked();
 
@@ -94,11 +93,15 @@ public:
 	void on_stop_clicked();
 	//parameter
 	void on_apply_data_clicked();
-	void on_joint_feedback_gain_1_clicked();
-	void on_balance_param_1_clicked();
+	void on_joint_feedback_gain_1_on_clicked();
+	void on_joint_feedback_gain_1_off_clicked();
+	void on_balance_param_1_on_clicked();
+	void on_balance_param_1_off_clicked();
 
-	void on_joint_feedback_gain_2_clicked();
-	void on_balance_param_2_clicked();
+	void on_joint_feedback_gain_2_on_clicked();
+	void on_joint_feedback_gain_2_off_clicked();
+	void on_balance_param_2_on_clicked();
+	void on_balance_param_2_off_clicked();
 
 	//<------------------------------------------------------------------- module on off -->
 	//<------------------------------------------------------------------- base_module-->
@@ -136,6 +139,10 @@ public:
 	//<------------------------------------------------------------------- foot step generator -->
 	void on_left_kick_clicked();
 	void on_right_kick_clicked();
+	void on_expanded_left_clicked();
+	void on_expanded_right_clicked();
+	void on_centered_left_clicked();
+	void on_centered_right_clicked();
 	void on_apply_foot_step_generator_clicked();
 
 

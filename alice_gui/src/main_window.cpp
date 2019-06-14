@@ -32,6 +32,11 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 , qnode(argc,argv)
 {
 	ui.setupUi(this); // Calling this incidentally connects all ui's triggers to on_...() callbacks in this class.
+	ui.setting_comboBox->clear();
+	ui.setting_comboBox->addItem("setting clear");
+        ui.setting_comboBox->addItem("setting default");
+	ui.setting_comboBox->addItem("setting expanded");
+	ui.setting_comboBox->addItem("setting centered");
 	qnode.init();
 	setWindowIcon(QIcon(":/images/heroes.png"));
 	QPixmap pix(":/images/Alice.png");
@@ -140,29 +145,56 @@ void MainWindow::on_update_button_clicked()
 		qnode.log(qnode.Error, "Check communication <SEND FAIL>");
 	}
 }
-void MainWindow::on_setting_default_pushButton_clicked()
+void MainWindow::on_setting_comboBox_currentIndexChanged(int index)
 {
-	ui.edit_step_num->setText("4");
-	ui.edit_step_length->setText("0.15");
-	ui.edit_side_step_length->setText("0.05");
-	ui.edit_step_angle_rad->setText("0.3");
-	ui.edit_step_time->setText("2");
-	ui.edit_dsp->setText("0.45");
-	ui.edit_foot_z_swap->setText("0.06");
-	ui.edit_body_z_swap->setText("0");
-	ui.edit_y_zmp_conv->setText("0");
-}
-void MainWindow::on_setting_clear_pushButton_clicked()
-{
-	ui.edit_step_num->setText("");
-	ui.edit_step_length->setText("");
-	ui.edit_side_step_length->setText("");
-	ui.edit_step_angle_rad->setText("");
-	ui.edit_step_time->setText("");
-	ui.edit_dsp->setText("");
-	ui.edit_foot_z_swap->setText("");
-	ui.edit_body_z_swap->setText("");
-	ui.edit_y_zmp_conv->setText("");
+	if(index == 0)
+	{
+		ui.edit_step_num->setText("");
+		ui.edit_step_length->setText("");
+		ui.edit_side_step_length->setText("");
+		ui.edit_step_angle_rad->setText("");
+		ui.edit_step_time->setText("");
+		ui.edit_dsp->setText("");
+		ui.edit_foot_z_swap->setText("");
+		ui.edit_body_z_swap->setText("");
+		ui.edit_y_zmp_conv->setText("");
+	}
+	if(index == 1)
+	{
+		ui.edit_step_num->setText("2");
+		ui.edit_step_length->setText("0.15");
+		ui.edit_side_step_length->setText("0.05");
+		ui.edit_step_angle_rad->setText("0.3");
+		ui.edit_step_time->setText("5");
+		ui.edit_dsp->setText("0.4");
+		ui.edit_foot_z_swap->setText("0.06");
+		ui.edit_body_z_swap->setText("0");
+		ui.edit_y_zmp_conv->setText("-0.03");
+	}
+	if(index == 2)
+	{
+		ui.edit_step_num->setText("1");
+		ui.edit_step_length->setText("0.10");
+		ui.edit_side_step_length->setText("0.05");
+		ui.edit_step_angle_rad->setText("0.3");
+		ui.edit_step_time->setText("5");
+		ui.edit_dsp->setText("0.4");
+		ui.edit_foot_z_swap->setText("0.06");
+		ui.edit_body_z_swap->setText("0");
+		ui.edit_y_zmp_conv->setText("-0.03");
+	}
+	if(index == 3)
+	{
+		ui.edit_step_num->setText("1");
+		ui.edit_step_length->setText("0.05");
+		ui.edit_side_step_length->setText("0.10");
+		ui.edit_step_angle_rad->setText("0.45");
+		ui.edit_step_time->setText("5");
+		ui.edit_dsp->setText("0.4");
+		ui.edit_foot_z_swap->setText("0.06");
+		ui.edit_body_z_swap->setText("0");
+		ui.edit_y_zmp_conv->setText("-0.03");
+	}
 }
 void MainWindow::on_all_torque_on_button_clicked()
 {
@@ -397,6 +429,26 @@ void MainWindow::on_right_kick_clicked()
 	foot_step_command_msg.command = "right kick";
 	qnode.foot_step_command_pub.publish(foot_step_command_msg);
 
+}
+void MainWindow::on_expanded_left_clicked() {
+
+	foot_step_command_msg.command = "expanded left";
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
+}
+void MainWindow::on_expanded_right_clicked() {
+
+	foot_step_command_msg.command = "expanded right";
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
+}
+void MainWindow::on_centered_left_clicked() {
+
+	foot_step_command_msg.command = "centered left";
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
+}
+void MainWindow::on_centered_right_clicked() {
+
+	foot_step_command_msg.command = "centered right";
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
 }
 void MainWindow::on_apply_data_clicked() {
 
@@ -693,35 +745,58 @@ void MainWindow::parse_gain_data()
 	foot_zmpFz_p_gain = doc["foot_copFz_p_gain"].as<double>();
 	foot_zmpFz_d_gain = doc["foot_copFz_d_gain"].as<double>();
 }
-void MainWindow::on_joint_feedback_gain_1_clicked()
+void MainWindow::on_joint_feedback_gain_1_on_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	parse_joint_feed_back_param_data(path_);
 	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
 	qnode.joint_feedback_gain_client_save.call(joint_feedback_gain_msg);
 }
-void MainWindow::on_joint_feedback_gain_2_clicked()
+void MainWindow::on_joint_feedback_gain_1_off_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_joint_feed_back_param_data(path_);
+	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
+}
+void MainWindow::on_joint_feedback_gain_2_on_clicked()
+{
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	parse_joint_feed_back_param_data(path_);
 	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
 	qnode.joint_feedback_gain_client_save.call(joint_feedback_gain_msg);
 }
-
-void MainWindow::on_balance_param_1_clicked()
+void MainWindow::on_joint_feedback_gain_2_off_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param1.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_joint_feed_back_param_data(path_);
+	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
+}
+
+void MainWindow::on_balance_param_1_on_clicked()
+{
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	parse_balance_param_data(path_);
 	qnode.set_balance_param_client.call(set_balance_param_msg);
 	qnode.set_balance_param_client_save.call(set_balance_param_msg);
 }
-
-void MainWindow::on_balance_param_2_clicked()
+void MainWindow::on_balance_param_1_off_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param2.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_balance_param_data(path_);
+	qnode.set_balance_param_client.call(set_balance_param_msg);
+}
+void MainWindow::on_balance_param_2_on_clicked()
+{
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	parse_balance_param_data(path_);
 	qnode.set_balance_param_client.call(set_balance_param_msg);
 	qnode.set_balance_param_client_save.call(set_balance_param_msg);
+}
+void MainWindow::on_balance_param_2_off_clicked()
+{
+	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	parse_balance_param_data(path_);
+	qnode.set_balance_param_client.call(set_balance_param_msg);
 }
 void MainWindow::parse_gain_tracking_data()
 {
