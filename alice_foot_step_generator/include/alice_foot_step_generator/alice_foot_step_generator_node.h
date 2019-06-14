@@ -99,7 +99,8 @@ public:
   double kick_pitch_rad_;
   double kick_time_sec_;
 
-
+  int previous_step_type_;
+  int revolute_type_;
 
 private:
   bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type, int desired_step_type_num);
@@ -118,7 +119,6 @@ private:
 
   alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type step_data_array_;
 
-  int previous_step_type_;
 
 };
 

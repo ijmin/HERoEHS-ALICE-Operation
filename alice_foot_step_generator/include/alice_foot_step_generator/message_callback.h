@@ -34,6 +34,7 @@
 
 
 void initialize(void);
+void publish_status(void);
 
 void walkingModuleStatusMSGCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
 

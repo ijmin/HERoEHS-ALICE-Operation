@@ -9,13 +9,21 @@
 
 int main( int argc , char **argv )
 {
+
     ros::init( argc , argv , "alice_foot_step_generator" );
 
     ROS_INFO("ALICE FOOT STEP GENERATOR IS EXCUTED");
 
     initialize();
 
-    ros::spin();
+    ros::Rate loop_rate(100);
+
+    while(ros::ok())
+    {
+      publish_status();
+      ros::spinOnce();
+      loop_rate.sleep();
+    }
     return 0;
 }
 

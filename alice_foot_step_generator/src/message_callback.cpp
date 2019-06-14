@@ -27,6 +27,8 @@ ros::Subscriber     g_foot_z_swap_sub;
 ros::Subscriber     g_body_z_swap_sub;
 ros::Subscriber     g_y_zmp_convergence_sub;
 
+ros::Publisher log_command_status_pub;
+
 alice::FootStepGenerator g_foot_stp_generator;
 
 alice_walking_module_msgs::AddStepDataArray     add_step_data_array_srv;
@@ -42,6 +44,8 @@ void initialize(void)
 {
   ros::NodeHandle nh;
 
+
+
   g_get_ref_step_data_client      = nh.serviceClient<alice_walking_module_msgs::GetReferenceStepData>("/heroehs/online_walking/get_reference_step_data");
   g_add_step_data_array_client    = nh.serviceClient<alice_walking_module_msgs::AddStepDataArray>("/heroehs/online_walking/add_step_data");
   g_set_balance_param_client      = nh.serviceClient<alice_walking_module_msgs::SetBalanceParam>("/heroehs/online_walking/set_balance_param");
@@ -55,11 +59,43 @@ void initialize(void)
   g_foot_z_swap_sub         = nh.subscribe("/heroehs/alice_foot_step_generator/foot_z_swap", 5, footZSwapCallback);
   g_body_z_swap_sub         = nh.subscribe("/heroehs/alice_foot_step_generator/body_z_swap", 5, bodyZSwapCallback);
   g_y_zmp_convergence_sub   = nh.subscribe("/heroehs/alice_foot_step_generator/y_zmp_convergence", 5, yZMPConvergenceCallback);
-
+  log_command_status_pub    = nh.advertise<std_msgs::String>("/heroehs/log_moving_status", 10);
 
   g_last_command_time = ros::Time::now().toSec();
 }
 
+void publish_status(void)
+{
+  std_msgs::String pub_status_msg;
+
+  if(g_foot_stp_generator.previous_step_type_ == STOP_WALKING)
+    pub_status_msg.data="stop";
+  else if(g_foot_stp_generator.previous_step_type_ == FORWARD_WALKING)
+    pub_status_msg.data="forward";
+  else if(g_foot_stp_generator.previous_step_type_ == BACKWARD_WALKING)
+    pub_status_msg.data="backward";
+  else if(g_foot_stp_generator.previous_step_type_ == RIGHTWARD_WALKING)
+    pub_status_msg.data="rightward";
+  else if(g_foot_stp_generator.previous_step_type_ == LEFTWARD_WALKING)
+    pub_status_msg.data="leftward";
+  else if(g_foot_stp_generator.previous_step_type_ == LEFT_ROTATING_WALKING)
+    pub_status_msg.data="left rotating";
+  else if(g_foot_stp_generator.previous_step_type_ == RIGHT_ROTATING_WALKING)
+    pub_status_msg.data="right rotating";
+  else if(g_foot_stp_generator.previous_step_type_ == REVOLUTE_LEFT_WALKING && g_foot_stp_generator.revolute_type_ == centered)
+    pub_status_msg.data="centered left";
+  else if(g_foot_stp_generator.previous_step_type_ == REVOLUTE_RIGHT_WALKING && g_foot_stp_generator.revolute_type_ == centered)
+    pub_status_msg.data="centered right";
+  else if(g_foot_stp_generator.previous_step_type_ == REVOLUTE_LEFT_WALKING && g_foot_stp_generator.revolute_type_ == expanded)
+    pub_status_msg.data="expanded left";
+  else if(g_foot_stp_generator.previous_step_type_ == REVOLUTE_RIGHT_WALKING && g_foot_stp_generator.revolute_type_ == expanded)
+    pub_status_msg.data="expanded right";
+  else
+    pub_status_msg.data="invalid";
+
+  log_command_status_pub.publish(pub_status_msg);
+
+}
 void dspCallback(const std_msgs::Float64::ConstPtr& msg)
 {
   if(msg->data <= 0 || msg->data >= 1)

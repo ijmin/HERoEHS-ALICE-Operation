@@ -237,6 +237,7 @@ void FootStepGenerator::getStepData(alice_walking_module_msgs::AddStepDataArray:
 
   if(calcStep(ref_step_data, previous_step_type_, desired_step_type, desired_step_type_num))
   {
+    revolute_type_ = desired_step_type_num;
     previous_step_type_ = desired_step_type;
     for(unsigned int stp_idx = 0; stp_idx < step_data_array_.size(); stp_idx++)
     {
