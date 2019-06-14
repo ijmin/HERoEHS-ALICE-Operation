@@ -114,7 +114,7 @@ public:
 	void on_head_change_button_clicked();
 
 	//<------------------------------------------------------------------- ope_walking_module-->
-	void on_op3_walking_module_clicked();
+	//void on_op3_walking_module_clicked();
 
 	//<------------------------------------------------------------------- arm_body_module-->
 	//void on_arm_module_button_clicked();
