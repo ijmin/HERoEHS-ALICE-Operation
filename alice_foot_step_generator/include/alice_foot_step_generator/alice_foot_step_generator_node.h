@@ -26,10 +26,11 @@
 #define LEFTWARD_WALKING       (4)
 #define LEFT_ROTATING_WALKING  (5)
 #define RIGHT_ROTATING_WALKING (6)
-#define EXPANDING_LEFT_WALKING  (7)
-#define EXPANDING_RIGHT_WALKING (8)
-#define CENTERED_LEFT_WALKING  (9)
-#define CENTERED_RIGHT_WALKING (10)
+#define REVOLUTE_LEFT_WALKING  (7)
+#define REVOLUTE_RIGHT_WALKING (8)
+
+#define centered (1)
+#define expanded (2)
 
 #define MINIMUM_STEP_TIME_SEC  (0.4)
 
@@ -49,7 +50,8 @@ public:
 
   void getStepData(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data,
-      int desired_step_type);
+      int desired_step_type,
+      int desired_step_type_num);
 
   void getStepDataFromStepData2DArray(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data,
@@ -72,6 +74,16 @@ public:
   double rotate_step_angle_rad_;
   double step_time_sec_;
 
+  double ep_step_length_m_;
+  double eps_step_length_m_;
+  double ep_step_angle_rad_;
+  double ep_step_time_sec_;
+
+  double ct_step_length_m_;
+  double cts_step_length_m_;
+  double ct_step_angle_rad_;
+  double ct_step_time_sec_;
+
   double dsp_ratio_;
   double foot_z_swap_m_;
   double body_z_swap_m_;
@@ -90,13 +102,12 @@ public:
 
 
 private:
-  bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type);
+  bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type, int desired_step_type_num);
 
   void calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcRoStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
-  void calcERLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
-  void calcCRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+  void calcRevRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, int desired_step_type_num);
 
   void calcStopStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
 
