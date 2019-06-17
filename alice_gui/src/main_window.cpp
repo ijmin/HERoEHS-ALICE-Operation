@@ -40,11 +40,14 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 	qnode.init();
 	setWindowIcon(QIcon(":/images/heroes.png"));
 	QPixmap pix(":/images/Alice.png");
-	scene.addPixmap(pix);
-	ui.graphicsView->setScene(&scene);
-	ui.graphicsView->show();
+	alice_scene.addPixmap(pix);
+	ui.alice_graphicsView->setScene(&alice_scene);
+	ui.alice_graphicsView->show();
+	QPixmap pix2(":/images/Alice_leg.png");
+	alice_leg_scene.addPixmap(pix2);
+	ui.alice_leg_graphicsView->setScene(&alice_leg_scene);
+	ui.alice_leg_graphicsView->show();
 	QObject::connect(&qnode, SIGNAL(rosShutdown()), this, SLOT(close()));
-
 	/****************************
 	 ** Connect
 	 ****************************/
@@ -52,6 +55,7 @@ MainWindow::MainWindow(int argc, char** argv, QWidget *parent)
 	QObject::connect(ui.goal_spin_box, SIGNAL(valueChanged(QString)), this, SLOT(offset_goal_value_changed_function()));
 	QObject::connect(ui.torque_state_check_box, SIGNAL(clicked()), this, SLOT(offset_torque_state_changed_function()));
 	QObject::connect(ui.change_button, SIGNAL(clicked()), this, SLOT(offset_change_button()));
+	// ALICE ID	
 
 
 	/*********************
@@ -115,6 +119,101 @@ void MainWindow::showNoMasterMessage() {
 	msgBox.exec();
 	close();
 }
+
+void MainWindow::on_ALICE_ID_1_Button_clicked(){
+	ALICE_ID = 1;
+	std::string balance_path_;
+	balance_path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_on.yaml";
+	parse_balance_param_data(balance_path_);
+	ui.balance_cob_x_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_x_offset_m));
+	ui.balance_cob_y_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_y_offset_m));
+	ui.balance_duration_value->setText(QString("%1").arg(set_balance_param_msg.request.updating_duration));
+
+	ui.balance_gyro_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain));
+	ui.balance_gyro_rd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain));
+	ui.balance_gyro_pp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain));
+	ui.balance_gyro_pd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain));
+	ui.balance_gyro_rc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency));
+	ui.balance_gyro_pc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency));
+
+	ui.balance_torque_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain));
+	ui.balance_torque_rd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain));
+	ui.balance_torque_pp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain));
+	ui.balance_torque_pd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain));
+	ui.balance_torque_rc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency));
+	ui.balance_torque_pc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_torque_cut_off_frequency));
+
+	ui.balance_imu_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain));
+	ui.balance_imu_rd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain));
+	ui.balance_imu_pp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain));
+	ui.balance_imu_pd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain));
+        ui.balance_imu_rc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency));
+        ui.balance_imu_pc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency));
+
+	ui.balance_force_xp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_x_force_p_gain));
+	ui.balance_force_xd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_x_force_d_gain));
+	ui.balance_force_yp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_y_force_p_gain));
+	ui.balance_force_yd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_y_force_d_gain));
+	ui.balance_force_zp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_p_gain));
+	ui.balance_force_zd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_d_gain));
+	ui.balance_force_xc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency));
+	ui.balance_force_yc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency));
+	ui.balance_force_zc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency));
+
+
+
+
+	ui.expanded_left->setEnabled(1);
+	ui.expanded_right->setEnabled(1);
+	ui.centered_left->setEnabled(1);
+	ui.centered_right->setEnabled(1);
+	
+}
+void MainWindow::on_ALICE_ID_2_Button_clicked(){
+	ALICE_ID = 2;
+	std::string balance_path_;
+	balance_path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_on.yaml";
+	parse_balance_param_data(balance_path_);
+	ui.balance_cob_x_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_x_offset_m));
+	ui.balance_cob_y_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_y_offset_m));
+	ui.balance_duration_value->setText(QString("%1").arg(set_balance_param_msg.request.updating_duration));
+
+	ui.balance_gyro_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain));
+	ui.balance_gyro_rd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain));
+	ui.balance_gyro_pp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain));
+	ui.balance_gyro_pd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain));
+	ui.balance_gyro_rc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency));
+	ui.balance_gyro_pc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency));
+
+	ui.balance_torque_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain));
+	ui.balance_torque_rd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain));
+	ui.balance_torque_pp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain));
+	ui.balance_torque_pd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain));
+	ui.balance_torque_rc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency));
+	ui.balance_torque_pc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_torque_cut_off_frequency));
+
+	ui.balance_imu_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain));
+	ui.balance_imu_rd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain));
+	ui.balance_imu_pp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain));
+	ui.balance_imu_pd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain));
+        ui.balance_imu_rc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency));
+        ui.balance_imu_pc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency));
+
+	ui.balance_force_xp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_x_force_p_gain));
+	ui.balance_force_xd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_x_force_d_gain));
+	ui.balance_force_yp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_y_force_p_gain));
+	ui.balance_force_yd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_y_force_d_gain));
+	ui.balance_force_zp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_p_gain));
+	ui.balance_force_zd_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_d_gain));
+	ui.balance_force_xc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency));
+	ui.balance_force_yc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency));
+	ui.balance_force_zc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency));
+	ui.expanded_left->setEnabled(0);
+	ui.expanded_right->setEnabled(0);
+	ui.centered_left->setEnabled(0);
+	ui.centered_right->setEnabled(0);
+}
+/*****************************************************************************
 /*****************************************************************************
  ** dynamixel offset
  *****************************************************************************/
@@ -382,6 +481,16 @@ void MainWindow::on_online_walking_module_clicked() {
 void MainWindow::on_none_clicked() {
 	module_msg.data = "none";
 	qnode.module_on_off.publish(module_msg);
+}
+void MainWindow::on_default_walking_button_clicked() {
+
+	foot_step_command_msg.command = "default walking type";
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
+}
+void MainWindow::on_y_walking_button_clicked() {
+
+	foot_step_command_msg.command = "y walking type";
+	qnode.foot_step_command_pub.publish(foot_step_command_msg);
 }
 //walking module button
 void MainWindow::on_turn_left_clicked() {
@@ -745,56 +854,37 @@ void MainWindow::parse_gain_data()
 	foot_zmpFz_p_gain = doc["foot_copFz_p_gain"].as<double>();
 	foot_zmpFz_d_gain = doc["foot_copFz_d_gain"].as<double>();
 }
-void MainWindow::on_joint_feedback_gain_1_on_clicked()
+void MainWindow::on_joint_feedback_gain_on_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_;
+	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_on.yaml";
 	parse_joint_feed_back_param_data(path_);
 	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
 	qnode.joint_feedback_gain_client_save.call(joint_feedback_gain_msg);
 }
-void MainWindow::on_joint_feedback_gain_1_off_clicked()
+void MainWindow::on_joint_feedback_gain_off_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_;
+	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_off.yaml";	
 	parse_joint_feed_back_param_data(path_);
 	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
 }
-void MainWindow::on_joint_feedback_gain_2_on_clicked()
+void MainWindow::on_balance_param_on_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	parse_joint_feed_back_param_data(path_);
-	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
-	qnode.joint_feedback_gain_client_save.call(joint_feedback_gain_msg);
-}
-void MainWindow::on_joint_feedback_gain_2_off_clicked()
-{
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	parse_joint_feed_back_param_data(path_);
-	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
-}
-
-void MainWindow::on_balance_param_1_on_clicked()
-{
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_;
+	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_on.yaml";
 	parse_balance_param_data(path_);
 	qnode.set_balance_param_client.call(set_balance_param_msg);
 	qnode.set_balance_param_client_save.call(set_balance_param_msg);
 }
-void MainWindow::on_balance_param_1_off_clicked()
+void MainWindow::on_balance_param_off_clicked()
 {
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	parse_balance_param_data(path_);
-	qnode.set_balance_param_client.call(set_balance_param_msg);
-}
-void MainWindow::on_balance_param_2_on_clicked()
-{
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	parse_balance_param_data(path_);
-	qnode.set_balance_param_client.call(set_balance_param_msg);
-	qnode.set_balance_param_client_save.call(set_balance_param_msg);
-}
-void MainWindow::on_balance_param_2_off_clicked()
-{
-	std::string path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	std::string path_;
+	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_off.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_off.yaml";
 	parse_balance_param_data(path_);
 	qnode.set_balance_param_client.call(set_balance_param_msg);
 }

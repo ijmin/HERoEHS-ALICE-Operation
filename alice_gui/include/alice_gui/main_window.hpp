@@ -38,9 +38,9 @@ class MainWindow : public QMainWindow {
 public:
 	MainWindow(int argc, char** argv, QWidget *parent = 0);
 	~MainWindow();
+	int ALICE_ID;
 	void closeEvent(QCloseEvent *event);
 	void showNoMasterMessage();
-
 	public Q_SLOTS:
 	void updateLoggingView(); // no idea why this can't connect automatically
 	void realtimeDataSlot();
@@ -53,7 +53,8 @@ public:
 	void graph_draw_clean(QCustomPlot *ui_graph);
 	void draw_ractangle(QCustomPlot *ui_graph, QCPItemRect* section, const QString layer_name);
 	void change_ractangle(QCPItemRect* section, double valueX, double valueY);
-
+	void on_ALICE_ID_1_Button_clicked();
+	void on_ALICE_ID_2_Button_clicked();
 
 
 	// <------------------------------------------------------------------- dynamixel offset -->
@@ -80,6 +81,8 @@ public:
 	//<------------------------------------------------------------------- walking test -->
 	void on_online_walking_module_clicked();
 	void on_none_clicked();
+	void on_default_walking_button_clicked();
+	void on_y_walking_button_clicked();
 	////command
 	void on_turn_left_clicked();
 	void on_turn_right_clicked();
@@ -93,15 +96,10 @@ public:
 	void on_stop_clicked();
 	//parameter
 	void on_apply_data_clicked();
-	void on_joint_feedback_gain_1_on_clicked();
-	void on_joint_feedback_gain_1_off_clicked();
-	void on_balance_param_1_on_clicked();
-	void on_balance_param_1_off_clicked();
-
-	void on_joint_feedback_gain_2_on_clicked();
-	void on_joint_feedback_gain_2_off_clicked();
-	void on_balance_param_2_on_clicked();
-	void on_balance_param_2_off_clicked();
+	void on_joint_feedback_gain_on_clicked();
+	void on_joint_feedback_gain_off_clicked();
+	void on_balance_param_on_clicked();
+	void on_balance_param_off_clicked();
 
 	//<------------------------------------------------------------------- module on off -->
 	//<------------------------------------------------------------------- base_module-->
@@ -155,7 +153,8 @@ public:
 	QTimer *dataTimer;
 	QFont legendFont;
 	double key;
-	QGraphicsScene scene;
+	QGraphicsScene alice_scene;
+	QGraphicsScene alice_leg_scene;
 
 
 	// <------------------------------------------------------------------- dynamixel offset -->
