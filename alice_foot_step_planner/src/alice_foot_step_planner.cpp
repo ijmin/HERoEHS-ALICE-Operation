@@ -572,9 +572,9 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
   else if(foot_set_command_msg.command == "centered left" || foot_set_command_msg.command == "centered right"|| foot_set_command_msg.command == "centered stop")
   {
     foot_set_command_msg.step_num = 1;
-    //foot_set_command_msg.step_length = 0.04;
-    //foot_set_command_msg.side_step_length = 0.1;
-    //foot_set_command_msg.step_angle_rad = 0.3;
+    //foot_set_command_msg.step_length = 0.01;
+    //foot_set_command_msg.side_step_length = 0.07;
+    //foot_set_command_msg.step_angle_rad = 0.4;
   }
 
   //else

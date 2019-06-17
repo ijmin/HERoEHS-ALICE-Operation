@@ -45,6 +45,7 @@ public:
 
   void readFootStep_Yaml();
   double leg_offset_;
+  double foot_offset_yaw_;
 
   void initialize();
 
@@ -92,7 +93,7 @@ public:
 
   double start_end_time_sec_;
   double default_y_feet_offset_m_;
-
+  double defalut_yaw_feet_offset_rad_;
 
   double kick_height_m_;
   double kick_far_m_;
