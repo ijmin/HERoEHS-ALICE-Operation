@@ -352,7 +352,7 @@ void FootStepGenerator::getStepDataFromStepData2DArray(alice_walking_module_msgs
   step_data_array->push_back(stp_data);
 }
 
-//
+
 bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type,  int desired_step_type_num)
 {
 
@@ -1331,7 +1331,6 @@ void FootStepGenerator::calcRevRLStep(const alice_walking_module_msgs::StepData&
   //ROS_INFO("+++++++++++++++++++++++++");
 }
 
-
 void FootStepGenerator::calcStopStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
 {
   alice_walking_module_msgs::StepData stp_data;
@@ -1343,6 +1342,9 @@ void FootStepGenerator::calcStopStep(const alice_walking_module_msgs::StepData& 
 
   step_data_array_.push_back(stp_data);
 }
+
+
+
 
 void FootStepGenerator::calcRightKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
     const alice_walking_module_msgs::StepData& ref_step_data)
@@ -1546,7 +1548,6 @@ void FootStepGenerator::calcLeftKickStep(alice_walking_module_msgs::AddStepDataA
     step_data_array->push_back(step_data_array_[stp_idx]);
   }
 }
-
 
 void FootStepGenerator::calcTurnLeftAndRightKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
     const alice_walking_module_msgs::StepData& ref_step_data)
