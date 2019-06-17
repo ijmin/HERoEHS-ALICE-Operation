@@ -58,6 +58,16 @@ public:
       const alice_walking_module_msgs::StepData& ref_step_data,
       const alice_foot_step_generator::Step2DArray::ConstPtr& request_step_2d);
 
+
+  void calcYType(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+        const alice_walking_module_msgs::StepData& ref_step_data);
+  void calcDefaultType(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+        const alice_walking_module_msgs::StepData& ref_step_data);
+  double type_offset_y_;
+  double type_offset_yaw_;
+
+
+
   void calcRightKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data);
   void calcLeftKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
@@ -93,7 +103,7 @@ public:
 
   double start_end_time_sec_;
   double default_y_feet_offset_m_;
-  double defalut_yaw_feet_offset_rad_;
+  double default_yaw_feet_offset_m_;
 
   double kick_height_m_;
   double kick_far_m_;
@@ -105,6 +115,9 @@ public:
 
 private:
   bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type, int desired_step_type_num);
+
+
+
 
   void calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
