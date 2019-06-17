@@ -39,6 +39,26 @@ public:
 	MainWindow(int argc, char** argv, QWidget *parent = 0);
 	~MainWindow();
 	int ALICE_ID;
+	double default_step_num;
+	double default_step_length;
+	double default_side_step_length;
+	double default_step_angle_radian;
+	double default_step_time;
+	double expanded_step_num;
+	double expanded_step_length;
+	double expanded_side_step_length;
+	double expanded_step_angle_radian;
+	double expanded_step_time;
+	double centered_step_num;
+	double centered_step_length;
+	double centered_side_step_length;
+	double centered_step_angle_radian;
+	double centered_step_time;
+	double foot_step_dsp;
+	double foot_step_foot_z_swap;
+	double foot_step_body_z_swap;
+	double foot_step_y_zmp_conv;
+
 	void closeEvent(QCloseEvent *event);
 	void showNoMasterMessage();
 	public Q_SLOTS:
@@ -58,6 +78,12 @@ public:
 
 
 	// <------------------------------------------------------------------- dynamixel offset -->
+	void on_balance_apply_button_clicked();
+	void on_balance_save_button_clicked();
+	void on_joint_apply_button_clicked();
+	void on_joint_save_button_clicked();
+	void on_step_apply_button_clicked();
+	void on_step_save_button_clicked();
 	void on_update_button_clicked();
 	void on_setting_comboBox_currentIndexChanged(int index);
 	void on_all_torque_on_button_clicked();
@@ -220,6 +246,7 @@ public:
 	//<------------------------------------------------------------------- param -->
 	void parse_balance_param_data(std::string path);
 	void parse_joint_feed_back_param_data(std::string path);
+	void parse_step_param_data(std::string path);
 
 };
 

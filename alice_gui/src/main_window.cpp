@@ -11,6 +11,7 @@
 
 #include <QtGui>
 #include <QMessageBox>
+#include <fstream>
 #include <iostream>
 #include <stdio.h>
 #include "../include/alice_gui/main_window.hpp"
@@ -127,6 +128,8 @@ void MainWindow::on_ALICE_ID_1_Button_clicked(){
 	parse_balance_param_data(balance_path_);
 	ui.balance_cob_x_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_x_offset_m));
 	ui.balance_cob_y_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_y_offset_m));
+	ui.balance_hip_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.hip_roll_swap_angle_rad));
+
 	ui.balance_duration_value->setText(QString("%1").arg(set_balance_param_msg.request.updating_duration));
 
 	ui.balance_gyro_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain));
@@ -161,7 +164,67 @@ void MainWindow::on_ALICE_ID_1_Button_clicked(){
 	ui.balance_force_zc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency));
 
 
+	std::string joint_path_;
+	joint_path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_on.yaml";
+	parse_joint_feed_back_param_data(joint_path_);
+	ui.joint_r_leg_hip_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain));
+	ui.joint_r_leg_hip_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain));
+	ui.joint_r_leg_hip_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain));
+	ui.joint_r_leg_hip_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain));
+	ui.joint_r_leg_hip_y_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain));
+	ui.joint_r_leg_hip_y_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain));
 
+	ui.joint_r_leg_kn_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain));
+	ui.joint_r_leg_kn_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain));
+
+	ui.joint_r_leg_an_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain));
+	ui.joint_r_leg_an_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain));
+	ui.joint_r_leg_an_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain));
+	ui.joint_r_leg_an_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain));
+
+	ui.joint_l_leg_hip_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain));
+	ui.joint_l_leg_hip_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain));
+	ui.joint_l_leg_hip_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain));
+	ui.joint_l_leg_hip_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain));
+	ui.joint_l_leg_hip_y_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain));
+	ui.joint_l_leg_hip_y_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain));
+
+	ui.joint_l_leg_kn_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain));
+	ui.joint_l_leg_kn_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain));
+
+	ui.joint_l_leg_an_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain));
+	ui.joint_l_leg_an_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain));
+	ui.joint_l_leg_an_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain));
+	ui.joint_l_leg_an_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain));
+
+	ui.joint_updating_duration->setText(QString("%1").arg(joint_feedback_gain_msg.request.updating_duration));
+	
+
+	std::string step_path_;
+	joint_path_ = ros::package::getPath("alice_gui") + "/config/step_parameter1.yaml";
+	parse_step_param_data(joint_path_);
+	ui.default_step_num->setText(QString("%1").arg(default_step_num));
+	ui.default_step_length->setText(QString("%1").arg(default_step_length));
+	ui.default_side_step_length->setText(QString("%1").arg(default_side_step_length));
+	ui.default_step_angle_radian->setText(QString("%1").arg(default_step_angle_radian));
+	ui.default_step_time->setText(QString("%1").arg(default_step_time));
+
+	ui.expanded_step_num->setText(QString("%1").arg(expanded_step_num));
+	ui.expanded_step_length->setText(QString("%1").arg(expanded_step_length));
+	ui.expanded_side_step_length->setText(QString("%1").arg(expanded_side_step_length));
+	ui.expanded_step_angle_radian->setText(QString("%1").arg(expanded_step_angle_radian));
+	ui.expanded_step_time->setText(QString("%1").arg(expanded_step_time));
+
+	ui.centered_step_num->setText(QString("%1").arg(centered_step_num));
+	ui.centered_step_length->setText(QString("%1").arg(centered_step_length));
+	ui.centered_side_step_length->setText(QString("%1").arg(centered_side_step_length));
+	ui.centered_step_angle_radian->setText(QString("%1").arg(centered_step_angle_radian));
+	ui.centered_step_time->setText(QString("%1").arg(centered_step_time));
+
+	ui.foot_step_dsp->setText(QString("%1").arg(foot_step_dsp));
+	ui.foot_step_foot_z_swap->setText(QString("%1").arg(foot_step_foot_z_swap));
+	ui.foot_step_body_z_swap->setText(QString("%1").arg(foot_step_body_z_swap));
+	ui.foot_step_y_zmp_conv->setText(QString("%1").arg(foot_step_y_zmp_conv));
 
 	ui.expanded_left->setEnabled(1);
 	ui.expanded_right->setEnabled(1);
@@ -176,6 +239,8 @@ void MainWindow::on_ALICE_ID_2_Button_clicked(){
 	parse_balance_param_data(balance_path_);
 	ui.balance_cob_x_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_x_offset_m));
 	ui.balance_cob_y_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.cob_y_offset_m));
+	ui.balance_hip_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.hip_roll_swap_angle_rad));
+
 	ui.balance_duration_value->setText(QString("%1").arg(set_balance_param_msg.request.updating_duration));
 
 	ui.balance_gyro_rp_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain));
@@ -208,6 +273,70 @@ void MainWindow::on_ALICE_ID_2_Button_clicked(){
 	ui.balance_force_xc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency));
 	ui.balance_force_yc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency));
 	ui.balance_force_zc_value->setText(QString("%1").arg(set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency));
+
+
+	std::string joint_path_;
+	joint_path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_on.yaml";
+	parse_joint_feed_back_param_data(joint_path_);
+	ui.joint_r_leg_hip_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain));
+	ui.joint_r_leg_hip_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain));
+	ui.joint_r_leg_hip_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain));
+	ui.joint_r_leg_hip_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain));
+	ui.joint_r_leg_hip_y_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain));
+	ui.joint_r_leg_hip_y_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain));
+
+	ui.joint_r_leg_kn_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain));
+	ui.joint_r_leg_kn_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain));
+
+	ui.joint_r_leg_an_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain));
+	ui.joint_r_leg_an_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain));
+	ui.joint_r_leg_an_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain));
+	ui.joint_r_leg_an_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain));
+
+	ui.joint_l_leg_hip_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain));
+	ui.joint_l_leg_hip_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain));
+	ui.joint_l_leg_hip_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain));
+	ui.joint_l_leg_hip_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain));
+	ui.joint_l_leg_hip_y_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain));
+	ui.joint_l_leg_hip_y_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain));
+
+	ui.joint_l_leg_kn_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain));
+	ui.joint_l_leg_kn_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain));
+
+	ui.joint_l_leg_an_p_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain));
+	ui.joint_l_leg_an_p_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain));
+	ui.joint_l_leg_an_r_p_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain));
+	ui.joint_l_leg_an_r_d_gain->setText(QString("%1").arg(joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain));
+
+	ui.joint_updating_duration->setText(QString("%1").arg(joint_feedback_gain_msg.request.updating_duration));
+
+
+	std::string step_path_;
+	joint_path_ = ros::package::getPath("alice_gui") + "/config/step_parameter2.yaml";
+	parse_step_param_data(joint_path_);
+	ui.default_step_num->setText(QString("%1").arg(default_step_num));
+	ui.default_step_length->setText(QString("%1").arg(default_step_length));
+	ui.default_side_step_length->setText(QString("%1").arg(default_side_step_length));
+	ui.default_step_angle_radian->setText(QString("%1").arg(default_step_angle_radian));
+	ui.default_step_time->setText(QString("%1").arg(default_step_time));
+
+	ui.expanded_step_num->setText(QString("%1").arg(expanded_step_num));
+	ui.expanded_step_length->setText(QString("%1").arg(expanded_step_length));
+	ui.expanded_side_step_length->setText(QString("%1").arg(expanded_side_step_length));
+	ui.expanded_step_angle_radian->setText(QString("%1").arg(expanded_step_angle_radian));
+	ui.expanded_step_time->setText(QString("%1").arg(expanded_step_time));
+
+	ui.centered_step_num->setText(QString("%1").arg(centered_step_num));
+	ui.centered_step_length->setText(QString("%1").arg(centered_step_length));
+	ui.centered_side_step_length->setText(QString("%1").arg(centered_side_step_length));
+	ui.centered_step_angle_radian->setText(QString("%1").arg(centered_step_angle_radian));
+	ui.centered_step_time->setText(QString("%1").arg(centered_step_time));
+
+	ui.foot_step_dsp->setText(QString("%1").arg(foot_step_dsp));
+	ui.foot_step_foot_z_swap->setText(QString("%1").arg(foot_step_foot_z_swap));
+	ui.foot_step_body_z_swap->setText(QString("%1").arg(foot_step_body_z_swap));
+	ui.foot_step_y_zmp_conv->setText(QString("%1").arg(foot_step_y_zmp_conv));
+
 	ui.expanded_left->setEnabled(0);
 	ui.expanded_right->setEnabled(0);
 	ui.centered_left->setEnabled(0);
@@ -217,6 +346,261 @@ void MainWindow::on_ALICE_ID_2_Button_clicked(){
 /*****************************************************************************
  ** dynamixel offset
  *****************************************************************************/
+void MainWindow::on_balance_apply_button_clicked()
+{
+	set_balance_param_msg.request.updating_duration = ui.balance_duration_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.cob_x_offset_m = ui.balance_cob_x_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.cob_y_offset_m = ui.balance_cob_y_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.hip_roll_swap_angle_rad = ui.balance_hip_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain = ui.balance_gyro_rp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain = ui.balance_gyro_rd_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain = ui.balance_gyro_pp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain = ui.balance_gyro_pd_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain = ui.balance_imu_rp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain = ui.balance_imu_rd_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain = ui.balance_imu_pp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain = ui.balance_imu_pd_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_x_force_p_gain = ui.balance_force_xp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_x_force_d_gain = ui.balance_force_xd_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_y_force_p_gain = ui.balance_force_yp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_y_force_d_gain = ui.balance_force_yd_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_z_force_p_gain = ui.balance_force_zp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_z_force_d_gain = ui.balance_force_zd_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain = ui.balance_torque_rp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain = ui.balance_torque_rd_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain = ui.balance_torque_pp_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = ui.balance_torque_pd_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = ui.balance_gyro_rc_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = ui.balance_gyro_pc_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = ui.balance_imu_rc_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = ui.balance_imu_pc_value->text().toDouble();
+
+	set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = ui.balance_force_xc_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = ui.balance_force_yc_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = ui.balance_force_zc_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = ui.balance_torque_rc_value->text().toDouble();
+	set_balance_param_msg.request.balance_param.foot_pitch_torque_cut_off_frequency = ui.balance_torque_pc_value->text().toDouble();
+}
+void MainWindow::on_balance_save_button_clicked()
+{
+	YAML::Emitter out;
+	std::string path_;
+	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_on.yaml";
+	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_on.yaml";
+
+	out << YAML::BeginMap;
+	out << YAML::Key << "cob_x_offset_m" << YAML::Value << ui.balance_cob_x_value->text().toDouble();
+	out << YAML::Key << "cob_y_offset_m" << YAML::Value << ui.balance_cob_y_value->text().toDouble();
+	out << YAML::Key << "hip_roll_swap_angle_rad" << YAML::Value << ui.balance_hip_value->text().toDouble();
+
+	out << YAML::Key << "foot_roll_gyro_p_gain" << YAML::Value << ui.balance_gyro_rp_value->text().toDouble();
+	out << YAML::Key << "foot_roll_gyro_d_gain" << YAML::Value << ui.balance_gyro_rd_value->text().toDouble();
+	out << YAML::Key << "foot_pitch_gyro_p_gain" << YAML::Value << ui.balance_gyro_pp_value->text().toDouble();
+	out << YAML::Key << "foot_pitch_gyro_d_gain" << YAML::Value << ui.balance_gyro_pd_value->text().toDouble();
+
+	out << YAML::Key << "foot_roll_angle_p_gain" << YAML::Value << ui.balance_imu_rp_value->text().toDouble();
+	out << YAML::Key << "foot_roll_angle_d_gain" << YAML::Value << ui.balance_imu_rd_value->text().toDouble();
+	out << YAML::Key << "foot_pitch_angle_p_gain" << YAML::Value << ui.balance_imu_pp_value->text().toDouble();
+	out << YAML::Key << "foot_pitch_angle_d_gain" << YAML::Value << ui.balance_imu_pd_value->text().toDouble();
+
+	out << YAML::Key << "foot_x_force_p_gain" << YAML::Value << ui.balance_force_xp_value->text().toDouble();
+	out << YAML::Key << "foot_x_force_d_gain" << YAML::Value << ui.balance_force_xd_value->text().toDouble();
+
+	out << YAML::Key << "foot_y_force_p_gain" << YAML::Value << ui.balance_force_yp_value->text().toDouble();
+	out << YAML::Key << "foot_y_force_d_gain" << YAML::Value << ui.balance_force_yd_value->text().toDouble();
+
+	out << YAML::Key << "foot_z_force_p_gain" << YAML::Value << ui.balance_force_zp_value->text().toDouble();
+	out << YAML::Key << "foot_z_force_d_gain" << YAML::Value << ui.balance_force_zd_value->text().toDouble();
+
+	out << YAML::Key << "foot_roll_torque_p_gain" << YAML::Value << ui.balance_torque_rp_value->text().toDouble();
+	out << YAML::Key << "foot_roll_torque_d_gain" << YAML::Value << ui.balance_torque_rd_value->text().toDouble();
+
+	out << YAML::Key << "foot_pitch_torque_p_gain" << YAML::Value << ui.balance_torque_pp_value->text().toDouble();
+	out << YAML::Key << "foot_pitch_torque_d_gain" << YAML::Value << ui.balance_torque_pd_value->text().toDouble();
+
+	out << YAML::Key << "roll_gyro_cut_off_frequency" << YAML::Value << ui.balance_gyro_rc_value->text().toDouble();
+	out << YAML::Key << "pitch_gyro_cut_off_frequency" << YAML::Value << ui.balance_gyro_pc_value->text().toDouble();
+
+	out << YAML::Key << "roll_angle_cut_off_frequency" << YAML::Value << ui.balance_imu_rc_value->text().toDouble();
+	out << YAML::Key << "pitch_angle_cut_off_frequency" << YAML::Value << ui.balance_imu_pc_value->text().toDouble();
+
+	out << YAML::Key << "foot_x_force_cut_off_frequency" << YAML::Value << ui.balance_force_xc_value->text().toDouble();
+	out << YAML::Key << "foot_y_force_cut_off_frequency" << YAML::Value << ui.balance_force_yc_value->text().toDouble();
+	out << YAML::Key << "foot_z_force_cut_off_frequency" << YAML::Value << ui.balance_force_zc_value->text().toDouble();
+	out << YAML::Key << "foot_roll_torque_cut_off_frequency" << YAML::Value << ui.balance_torque_rc_value->text().toDouble();
+	out << YAML::Key << "foot_pitch_torque_cut_off_frequency" << YAML::Value << ui.balance_torque_pc_value->text().toDouble();
+
+	out << YAML::Key << "updating_duration" << YAML::Value << ui.balance_duration_value->text().toDouble();
+	out << YAML::EndMap;
+	std::ofstream fout(path_.c_str());
+	fout << out.c_str(); // dump it back into the file
+	on_balance_apply_button_clicked();
+}
+
+void MainWindow::on_joint_apply_button_clicked()
+{
+	joint_feedback_gain_msg.request.updating_duration = ui.joint_updating_duration->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = ui.joint_r_leg_hip_y_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = ui.joint_r_leg_hip_y_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain = ui.joint_r_leg_hip_r_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain = ui.joint_r_leg_hip_r_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain = ui.joint_r_leg_hip_p_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain = ui.joint_r_leg_hip_p_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain = ui.joint_r_leg_an_p_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain = ui.joint_r_leg_an_p_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain = ui.joint_r_leg_kn_p_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain = ui.joint_r_leg_kn_p_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain = ui.joint_r_leg_an_r_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain = ui.joint_r_leg_an_r_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain = ui.joint_l_leg_hip_y_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain = ui.joint_l_leg_hip_y_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain = ui.joint_l_leg_hip_r_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain = ui.joint_l_leg_hip_r_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = ui.joint_l_leg_hip_p_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = ui.joint_l_leg_hip_p_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain = ui.joint_l_leg_kn_p_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain = ui.joint_l_leg_kn_p_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain = ui.joint_l_leg_an_p_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain = ui.joint_l_leg_an_p_d_gain->text().toDouble();
+
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain = ui.joint_l_leg_an_r_p_gain->text().toDouble();
+	joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain = ui.joint_l_leg_an_r_d_gain->text().toDouble();
+}
+
+void MainWindow::on_joint_save_button_clicked()
+{
+	YAML::Emitter out;
+	std::string path_;
+	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_on.yaml";
+	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_on.yaml";
+
+	out << YAML::BeginMap;
+	out << YAML::Key << "r_leg_hip_y_p_gain" << YAML::Value << ui.joint_r_leg_hip_y_p_gain->text().toDouble();
+	out << YAML::Key << "r_leg_hip_y_d_gain" << YAML::Value << ui.joint_r_leg_hip_y_d_gain->text().toDouble();
+
+	out << YAML::Key << "r_leg_hip_r_p_gain" << YAML::Value << ui.joint_r_leg_hip_r_p_gain->text().toDouble();
+	out << YAML::Key << "r_leg_hip_r_d_gain" << YAML::Value << ui.joint_r_leg_hip_r_d_gain->text().toDouble();
+
+	out << YAML::Key << "r_leg_hip_p_p_gain" << YAML::Value << ui.joint_r_leg_hip_p_p_gain->text().toDouble();
+	out << YAML::Key << "r_leg_hip_p_d_gain" << YAML::Value << ui.joint_r_leg_hip_p_d_gain->text().toDouble();
+
+	out << YAML::Key << "r_leg_an_p_p_gain" << YAML::Value << ui.joint_r_leg_an_p_p_gain->text().toDouble();
+	out << YAML::Key << "r_leg_an_p_d_gain" << YAML::Value << ui.joint_r_leg_an_p_d_gain->text().toDouble();
+
+	out << YAML::Key << "r_leg_kn_p_p_gain" << YAML::Value << ui.joint_r_leg_kn_p_p_gain->text().toDouble();
+	out << YAML::Key << "r_leg_kn_p_d_gain" << YAML::Value << ui.joint_r_leg_kn_p_d_gain->text().toDouble();
+
+	out << YAML::Key << "r_leg_an_r_p_gain" << YAML::Value << ui.joint_r_leg_an_r_p_gain->text().toDouble();
+	out << YAML::Key << "r_leg_an_r_d_gain" << YAML::Value << ui.joint_r_leg_an_r_d_gain->text().toDouble();
+
+	out << YAML::Key << "l_leg_hip_y_p_gain" << YAML::Value << ui.joint_l_leg_hip_y_p_gain->text().toDouble();
+	out << YAML::Key << "l_leg_hip_y_d_gain" << YAML::Value << ui.joint_l_leg_hip_y_d_gain->text().toDouble();
+
+	out << YAML::Key << "l_leg_hip_r_p_gain" << YAML::Value << ui.joint_l_leg_hip_r_p_gain->text().toDouble();
+	out << YAML::Key << "l_leg_hip_r_d_gain" << YAML::Value << ui.joint_l_leg_hip_r_d_gain->text().toDouble();
+
+	out << YAML::Key << "l_leg_hip_p_p_gain" << YAML::Value << ui.joint_l_leg_hip_p_p_gain->text().toDouble();
+	out << YAML::Key << "l_leg_hip_p_d_gain" << YAML::Value << ui.joint_l_leg_hip_p_d_gain->text().toDouble();
+
+	out << YAML::Key << "l_leg_an_p_p_gain" << YAML::Value << ui.joint_l_leg_an_p_p_gain->text().toDouble();
+	out << YAML::Key << "l_leg_an_p_d_gain" << YAML::Value << ui.joint_l_leg_an_p_d_gain->text().toDouble();
+
+	out << YAML::Key << "l_leg_kn_p_p_gain" << YAML::Value << ui.joint_l_leg_kn_p_p_gain->text().toDouble();
+	out << YAML::Key << "l_leg_kn_p_d_gain" << YAML::Value << ui.joint_l_leg_kn_p_d_gain->text().toDouble();
+
+	out << YAML::Key << "l_leg_an_r_p_gain" << YAML::Value << ui.joint_l_leg_an_r_p_gain->text().toDouble();
+	out << YAML::Key << "l_leg_an_r_d_gain" << YAML::Value << ui.joint_l_leg_an_r_d_gain->text().toDouble();
+
+	out << YAML::Key << "updating_duration" << YAML::Value << ui.joint_updating_duration->text().toDouble();
+	out << YAML::EndMap;
+	std::ofstream fout(path_.c_str());
+	fout << out.c_str(); // dump it back into the file
+	on_joint_apply_button_clicked();
+}
+
+void MainWindow::on_step_apply_button_clicked()
+{
+	default_step_num = ui.default_step_num->text().toDouble();
+	default_step_length = ui.default_step_length->text().toDouble();
+	default_side_step_length = ui.default_side_step_length->text().toDouble();
+	default_step_angle_radian = ui.default_step_angle_radian->text().toDouble();
+	default_step_time = ui.default_step_time->text().toDouble();
+
+	expanded_step_num = ui.expanded_step_num->text().toDouble();
+	expanded_step_length = ui.expanded_step_length->text().toDouble();
+	expanded_side_step_length = ui.expanded_side_step_length->text().toDouble();
+	expanded_step_angle_radian = ui.expanded_step_angle_radian->text().toDouble();
+	expanded_step_time = ui.expanded_step_time->text().toDouble();
+
+	centered_step_num = ui.centered_step_num->text().toDouble();
+	centered_step_length = ui.centered_step_length->text().toDouble();
+	centered_side_step_length = ui.centered_side_step_length->text().toDouble();
+	centered_step_angle_radian = ui.centered_step_angle_radian->text().toDouble();
+	centered_step_time = ui.centered_step_time->text().toDouble();
+
+	foot_step_dsp = ui.foot_step_dsp->text().toDouble();
+	foot_step_foot_z_swap = ui.foot_step_foot_z_swap->text().toDouble();
+	foot_step_body_z_swap = ui.foot_step_body_z_swap->text().toDouble();
+	foot_step_y_zmp_conv = ui.foot_step_y_zmp_conv->text().toDouble();
+}
+
+void MainWindow::on_step_save_button_clicked()
+{
+	YAML::Emitter out;
+	std::string path_;
+	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/step_parameter1.yaml";
+	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/step_parameter1.yaml";
+
+	out << YAML::BeginMap;
+	out << YAML::Key << "default_step_num" << YAML::Value << ui.default_step_num->text().toDouble();
+	out << YAML::Key << "default_step_length" << YAML::Value << ui.default_step_length->text().toDouble();
+	out << YAML::Key << "default_side_step_length" << YAML::Value << ui.default_side_step_length->text().toDouble();
+	out << YAML::Key << "default_step_angle_radian" << YAML::Value << ui.default_step_angle_radian->text().toDouble();
+	out << YAML::Key << "default_step_time" << YAML::Value << ui.default_step_time->text().toDouble();
+
+	out << YAML::Key << "expanded_step_num" << YAML::Value << ui.expanded_step_num->text().toDouble();
+	out << YAML::Key << "expanded_step_length" << YAML::Value << ui.expanded_step_length->text().toDouble();
+	out << YAML::Key << "expanded_side_step_length" << YAML::Value << ui.expanded_side_step_length->text().toDouble();
+	out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << ui.expanded_step_angle_radian->text().toDouble();
+	out << YAML::Key << "expanded_step_time" << YAML::Value << ui.expanded_step_time->text().toDouble();
+
+	out << YAML::Key << "centered_step_num" << YAML::Value << ui.centered_step_num->text().toDouble();
+	out << YAML::Key << "centered_step_length" << YAML::Value << ui.centered_step_length->text().toDouble();
+	out << YAML::Key << "centered_side_step_length" << YAML::Value << ui.centered_side_step_length->text().toDouble();
+	out << YAML::Key << "centered_step_angle_radian" << YAML::Value << ui.centered_step_angle_radian->text().toDouble();
+	out << YAML::Key << "centered_step_time" << YAML::Value << ui.centered_step_time->text().toDouble();
+
+	out << YAML::Key << "foot_step_dsp" << YAML::Value << ui.foot_step_dsp->text().toDouble();
+	out << YAML::Key << "foot_step_foot_z_swap" << YAML::Value << ui.foot_step_foot_z_swap->text().toDouble();
+	out << YAML::Key << "foot_step_body_z_swap" << YAML::Value << ui.foot_step_body_z_swap->text().toDouble();
+	out << YAML::Key << "foot_step_y_zmp_conv" << YAML::Value << ui.foot_step_y_zmp_conv->text().toDouble();
+
+	out << YAML::EndMap;
+	std::ofstream fout(path_.c_str());
+	fout << out.c_str(); // dump it back into the file
+	on_step_apply_button_clicked();
+}
 void MainWindow::on_update_button_clicked()
 {
 	qnode.present_joint_state_array_srv.request.update_check = true;
@@ -260,39 +644,39 @@ void MainWindow::on_setting_comboBox_currentIndexChanged(int index)
 	}
 	if(index == 1)
 	{
-		ui.edit_step_num->setText("2");
-		ui.edit_step_length->setText("0.15");
-		ui.edit_side_step_length->setText("0.05");
-		ui.edit_step_angle_rad->setText("0.3");
-		ui.edit_step_time->setText("5");
-		ui.edit_dsp->setText("0.4");
-		ui.edit_foot_z_swap->setText("0.06");
-		ui.edit_body_z_swap->setText("0");
-		ui.edit_y_zmp_conv->setText("-0.03");
+		ui.edit_step_num->setText(QString("%1").arg(default_step_num));
+		ui.edit_step_length->setText(QString("%1").arg(default_step_length));
+		ui.edit_side_step_length->setText(QString("%1").arg(default_side_step_length));
+		ui.edit_step_angle_rad->setText(QString("%1").arg(default_step_angle_radian));
+		ui.edit_step_time->setText(QString("%1").arg(default_step_time));
+		ui.edit_dsp->setText(QString("%1").arg(foot_step_dsp));
+		ui.edit_foot_z_swap->setText(QString("%1").arg(foot_step_foot_z_swap));
+		ui.edit_body_z_swap->setText(QString("%1").arg(foot_step_body_z_swap));
+		ui.edit_y_zmp_conv->setText(QString("%1").arg(foot_step_y_zmp_conv));
 	}
 	if(index == 2)
 	{
-		ui.edit_step_num->setText("1");
-		ui.edit_step_length->setText("0.10");
-		ui.edit_side_step_length->setText("0.05");
-		ui.edit_step_angle_rad->setText("0.3");
-		ui.edit_step_time->setText("5");
-		ui.edit_dsp->setText("0.4");
-		ui.edit_foot_z_swap->setText("0.06");
-		ui.edit_body_z_swap->setText("0");
-		ui.edit_y_zmp_conv->setText("-0.03");
+		ui.edit_step_num->setText(QString("%1").arg(expanded_step_num));
+		ui.edit_step_length->setText(QString("%1").arg(expanded_step_length));
+		ui.edit_side_step_length->setText(QString("%1").arg(expanded_side_step_length));
+		ui.edit_step_angle_rad->setText(QString("%1").arg(expanded_step_angle_radian));
+		ui.edit_step_time->setText(QString("%1").arg(expanded_step_time));
+		ui.edit_dsp->setText(QString("%1").arg(foot_step_dsp));
+		ui.edit_foot_z_swap->setText(QString("%1").arg(foot_step_foot_z_swap));
+		ui.edit_body_z_swap->setText(QString("%1").arg(foot_step_body_z_swap));
+		ui.edit_y_zmp_conv->setText(QString("%1").arg(foot_step_y_zmp_conv));
 	}
 	if(index == 3)
 	{
-		ui.edit_step_num->setText("1");
-		ui.edit_step_length->setText("0.05");
-		ui.edit_side_step_length->setText("0.10");
-		ui.edit_step_angle_rad->setText("0.45");
-		ui.edit_step_time->setText("5");
-		ui.edit_dsp->setText("0.4");
-		ui.edit_foot_z_swap->setText("0.06");
-		ui.edit_body_z_swap->setText("0");
-		ui.edit_y_zmp_conv->setText("-0.03");
+		ui.edit_step_num->setText(QString("%1").arg(centered_step_num));
+		ui.edit_step_length->setText(QString("%1").arg(centered_step_length));
+		ui.edit_side_step_length->setText(QString("%1").arg(centered_side_step_length));
+		ui.edit_step_angle_rad->setText(QString("%1").arg(centered_step_angle_radian));
+		ui.edit_step_time->setText(QString("%1").arg(centered_step_time));
+		ui.edit_dsp->setText(QString("%1").arg(foot_step_dsp));
+		ui.edit_foot_z_swap->setText(QString("%1").arg(foot_step_foot_z_swap));
+		ui.edit_body_z_swap->setText(QString("%1").arg(foot_step_body_z_swap));
+		ui.edit_y_zmp_conv->setText(QString("%1").arg(foot_step_y_zmp_conv));
 	}
 }
 void MainWindow::on_all_torque_on_button_clicked()
@@ -856,10 +1240,10 @@ void MainWindow::parse_gain_data()
 }
 void MainWindow::on_joint_feedback_gain_on_clicked()
 {
-	std::string path_;
+/*	std::string path_;
 	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/joint_feedback_gain2_on.yaml";
-	parse_joint_feed_back_param_data(path_);
+	parse_joint_feed_back_param_data(path_);*/
 	qnode.joint_feedback_gain_client.call(joint_feedback_gain_msg);
 	qnode.joint_feedback_gain_client_save.call(joint_feedback_gain_msg);
 }
@@ -873,10 +1257,6 @@ void MainWindow::on_joint_feedback_gain_off_clicked()
 }
 void MainWindow::on_balance_param_on_clicked()
 {
-	std::string path_;
-	if(ALICE_ID == 1) path_ = ros::package::getPath("alice_gui") + "/config/balance_param1_on.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
-	if(ALICE_ID == 2) path_ = ros::package::getPath("alice_gui") + "/config/balance_param2_on.yaml";
-	parse_balance_param_data(path_);
 	qnode.set_balance_param_client.call(set_balance_param_msg);
 	qnode.set_balance_param_client_save.call(set_balance_param_msg);
 }
@@ -926,9 +1306,10 @@ void MainWindow::parse_balance_param_data(std::string path)
 
 	set_balance_param_msg.request.updating_duration = doc["updating_duration"].as<double>();
 
-
 	set_balance_param_msg.request.balance_param.cob_x_offset_m = doc["cob_x_offset_m"].as<double>();
 	set_balance_param_msg.request.balance_param.cob_y_offset_m = doc["cob_y_offset_m"].as<double>();
+
+	set_balance_param_msg.request.balance_param.hip_roll_swap_angle_rad = doc["hip_roll_swap_angle_rad"].as<double>();
 
 	//gain load //
 	set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain = doc["foot_roll_gyro_p_gain"].as<double>();
@@ -1023,6 +1404,43 @@ void MainWindow::parse_joint_feed_back_param_data(std::string path)
 
 }
 
+void MainWindow::parse_step_param_data(std::string path)
+{
+	YAML::Node doc;
+	try
+	{
+		// load yaml
+		doc = YAML::LoadFile(path.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+
+	}catch(const std::exception& e) // 에러 점검
+	{
+		ROS_ERROR("Fail to load yaml file!");
+		return;
+	}
+	default_step_num = doc["default_step_num"].as<double>();
+	default_step_length = doc["default_step_length"].as<double>();
+	default_side_step_length = doc["default_side_step_length"].as<double>();
+	default_step_angle_radian = doc["default_step_angle_radian"].as<double>();
+	default_step_time = doc["default_step_time"].as<double>();
+
+	expanded_step_num = doc["expanded_step_num"].as<double>();
+	expanded_step_length = doc["expanded_step_length"].as<double>();
+	expanded_side_step_length = doc["expanded_side_step_length"].as<double>();
+	expanded_step_angle_radian = doc["expanded_step_angle_radian"].as<double>();
+	expanded_step_time = doc["expanded_step_time"].as<double>();
+
+	centered_step_num = doc["centered_step_num"].as<double>();
+	centered_step_length = doc["centered_step_length"].as<double>();
+	centered_side_step_length = doc["centered_side_step_length"].as<double>();
+	centered_step_angle_radian = doc["centered_step_angle_radian"].as<double>();
+	centered_step_time = doc["centered_step_time"].as<double>();
+
+	foot_step_dsp = doc["foot_step_dsp"].as<double>();
+	foot_step_foot_z_swap = doc["foot_step_foot_z_swap"].as<double>();
+	foot_step_body_z_swap = doc["foot_step_body_z_swap"].as<double>();
+	foot_step_y_zmp_conv = doc["foot_step_y_zmp_conv"].as<double>();
+
+}
 
 }  // namespace offset_tuner_operation
 

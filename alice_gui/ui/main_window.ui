@@ -72,7 +72,7 @@
         <enum>QTabWidget::Rounded</enum>
        </property>
        <property name="currentIndex">
-        <number>2</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tab">
         <attribute name="title">
@@ -969,7 +969,7 @@ p, li { white-space: pre-wrap; }
                </layout>
               </widget>
              </widget>
-             <widget class="QWidget" name="">
+             <widget class="QWidget" name="layoutWidget">
               <property name="geometry">
                <rect>
                 <x>10</x>
@@ -1653,7 +1653,7 @@ p, li { white-space: pre-wrap; }
                 <x>10</x>
                 <y>10</y>
                 <width>141</width>
-                <height>731</height>
+                <height>721</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout">
@@ -1673,7 +1673,7 @@ p, li { white-space: pre-wrap; }
                   </property>
                   <layout class="QGridLayout" name="gridLayout_8">
                    <item row="4" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_4"/>
+                    <widget class="QLineEdit" name="joint_r_leg_hip_y_p_gain"/>
                    </item>
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_139">
@@ -1788,16 +1788,16 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLineEdit" name="edit_dsp_3"/>
+                    <widget class="QLineEdit" name="joint_r_leg_hip_p_p_gain"/>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLineEdit" name="edit_foot_z_swap_3"/>
+                    <widget class="QLineEdit" name="joint_r_leg_hip_p_d_gain"/>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QLineEdit" name="edit_body_z_swap_3"/>
+                    <widget class="QLineEdit" name="joint_r_leg_hip_r_p_gain"/>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_3"/>
+                    <widget class="QLineEdit" name="joint_r_leg_hip_r_d_gain"/>
                    </item>
                    <item row="4" column="0">
                     <widget class="QLabel" name="label_144">
@@ -1845,7 +1845,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Y_P&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Y_D&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
                      <property name="textFormat">
                       <enum>Qt::AutoText</enum>
@@ -1856,7 +1856,7 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_5"/>
+                    <widget class="QLineEdit" name="joint_r_leg_hip_y_d_gain"/>
                    </item>
                   </layout>
                  </widget>
@@ -1918,7 +1918,7 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QLineEdit" name="edit_foot_z_swap_7"/>
+                     <widget class="QLineEdit" name="joint_r_leg_kn_p_d_gain"/>
                     </item>
                     <item row="0" column="0">
                      <widget class="QLabel" name="label_163">
@@ -1949,7 +1949,7 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QLineEdit" name="edit_dsp_7"/>
+                     <widget class="QLineEdit" name="joint_r_leg_kn_p_p_gain"/>
                     </item>
                    </layout>
                   </widget>
@@ -1972,7 +1972,7 @@ p, li { white-space: pre-wrap; }
                   </property>
                   <layout class="QGridLayout" name="gridLayout_10">
                    <item row="0" column="1">
-                    <widget class="QLineEdit" name="edit_dsp_5"/>
+                    <widget class="QLineEdit" name="joint_r_leg_an_p_p_gain"/>
                    </item>
                    <item row="3" column="0">
                     <widget class="QLabel" name="label_155">
@@ -2031,7 +2031,7 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_10"/>
+                    <widget class="QLineEdit" name="joint_r_leg_an_r_d_gain"/>
                    </item>
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_153">
@@ -2062,10 +2062,10 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLineEdit" name="edit_foot_z_swap_5"/>
+                    <widget class="QLineEdit" name="joint_r_leg_an_p_d_gain"/>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QLineEdit" name="edit_body_z_swap_5"/>
+                    <widget class="QLineEdit" name="joint_r_leg_an_r_p_gain"/>
                    </item>
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_152">
@@ -2127,7 +2127,7 @@ p, li { white-space: pre-wrap; }
                   </property>
                   <layout class="QGridLayout" name="gridLayout_9">
                    <item row="4" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_6"/>
+                    <widget class="QLineEdit" name="joint_l_leg_hip_y_p_gain"/>
                    </item>
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_146">
@@ -2242,16 +2242,16 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="0" column="1">
-                    <widget class="QLineEdit" name="edit_dsp_4"/>
+                    <widget class="QLineEdit" name="joint_l_leg_hip_p_p_gain"/>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLineEdit" name="edit_foot_z_swap_4"/>
+                    <widget class="QLineEdit" name="joint_l_leg_hip_p_d_gain"/>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QLineEdit" name="edit_body_z_swap_4"/>
+                    <widget class="QLineEdit" name="joint_l_leg_hip_r_p_gain"/>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_7"/>
+                    <widget class="QLineEdit" name="joint_l_leg_hip_r_d_gain"/>
                    </item>
                    <item row="4" column="0">
                     <widget class="QLabel" name="label_150">
@@ -2299,7 +2299,7 @@ p, li { white-space: pre-wrap; }
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
 &lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Y_P&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;Y_D&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                      </property>
                      <property name="textFormat">
                       <enum>Qt::AutoText</enum>
@@ -2310,7 +2310,7 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="5" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_8"/>
+                    <widget class="QLineEdit" name="joint_l_leg_hip_y_d_gain"/>
                    </item>
                   </layout>
                  </widget>
@@ -2372,7 +2372,7 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item row="1" column="1">
-                     <widget class="QLineEdit" name="edit_foot_z_swap_8"/>
+                     <widget class="QLineEdit" name="joint_l_leg_kn_p_d_gain"/>
                     </item>
                     <item row="0" column="0">
                      <widget class="QLabel" name="label_165">
@@ -2403,7 +2403,7 @@ p, li { white-space: pre-wrap; }
                      </widget>
                     </item>
                     <item row="0" column="1">
-                     <widget class="QLineEdit" name="edit_dsp_8"/>
+                     <widget class="QLineEdit" name="joint_l_leg_kn_p_p_gain"/>
                     </item>
                    </layout>
                   </widget>
@@ -2426,7 +2426,7 @@ p, li { white-space: pre-wrap; }
                   </property>
                   <layout class="QGridLayout" name="gridLayout_11">
                    <item row="0" column="1">
-                    <widget class="QLineEdit" name="edit_dsp_6"/>
+                    <widget class="QLineEdit" name="joint_l_leg_an_p_p_gain"/>
                    </item>
                    <item row="3" column="0">
                     <widget class="QLabel" name="label_156">
@@ -2485,7 +2485,7 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="3" column="1">
-                    <widget class="QLineEdit" name="edit_y_zmp_conv_11"/>
+                    <widget class="QLineEdit" name="joint_l_leg_an_r_d_gain"/>
                    </item>
                    <item row="1" column="0">
                     <widget class="QLabel" name="label_158">
@@ -2516,10 +2516,10 @@ p, li { white-space: pre-wrap; }
                     </widget>
                    </item>
                    <item row="1" column="1">
-                    <widget class="QLineEdit" name="edit_foot_z_swap_6"/>
+                    <widget class="QLineEdit" name="joint_l_leg_an_p_d_gain"/>
                    </item>
                    <item row="2" column="1">
-                    <widget class="QLineEdit" name="edit_body_z_swap_6"/>
+                    <widget class="QLineEdit" name="joint_l_leg_an_r_p_gain"/>
                    </item>
                    <item row="0" column="0">
                     <widget class="QLabel" name="label_159">
@@ -2552,6 +2552,49 @@ p, li { white-space: pre-wrap; }
                   </layout>
                  </widget>
                 </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="gridLayoutWidget_24">
+              <property name="geometry">
+               <rect>
+                <x>10</x>
+                <y>740</y>
+                <width>231</width>
+                <height>41</height>
+               </rect>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_24">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_215">
+                 <property name="font">
+                  <font>
+                   <family>Ubuntu</family>
+                   <pointsize>24</pointsize>
+                   <weight>50</weight>
+                   <bold>false</bold>
+                  </font>
+                 </property>
+                 <property name="frameShape">
+                  <enum>QFrame::NoFrame</enum>
+                 </property>
+                 <property name="text">
+                  <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
+p, li { white-space: pre-wrap; }
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Ubuntu'; font-size:24pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p align=&quot;center&quot; style=&quot; margin-top:12px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:11pt;&quot;&gt;updating duration&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
+                 <property name="textFormat">
+                  <enum>Qt::AutoText</enum>
+                 </property>
+                 <property name="margin">
+                  <number>0</number>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="joint_updating_duration"/>
                </item>
               </layout>
              </widget>
@@ -2619,7 +2662,7 @@ p, li { white-space: pre-wrap; }
                </property>
                <layout class="QGridLayout" name="gridLayout_20">
                 <item row="4" column="1">
-                 <widget class="QLineEdit" name="edit_y_zmp_conv_26"/>
+                 <widget class="QLineEdit" name="default_step_time"/>
                 </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_195">
@@ -2734,16 +2777,16 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QLineEdit" name="edit_body_z_swap_12"/>
+                 <widget class="QLineEdit" name="default_side_step_length"/>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QLineEdit" name="edit_dsp_15"/>
+                 <widget class="QLineEdit" name="default_step_num"/>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QLineEdit" name="edit_foot_z_swap_14"/>
+                 <widget class="QLineEdit" name="default_step_length"/>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QLineEdit" name="edit_y_zmp_conv_27"/>
+                 <widget class="QLineEdit" name="default_step_angle_radian"/>
                 </item>
                 <item row="4" column="0">
                  <widget class="QLabel" name="label_199">
@@ -2799,7 +2842,7 @@ p, li { white-space: pre-wrap; }
                </property>
                <layout class="QGridLayout" name="gridLayout_21">
                 <item row="4" column="1">
-                 <widget class="QLineEdit" name="edit_y_zmp_conv_28"/>
+                 <widget class="QLineEdit" name="expanded_step_time"/>
                 </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_200">
@@ -2914,16 +2957,16 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QLineEdit" name="edit_body_z_swap_13"/>
+                 <widget class="QLineEdit" name="expanded_side_step_length"/>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QLineEdit" name="edit_dsp_16"/>
+                 <widget class="QLineEdit" name="expanded_step_num"/>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QLineEdit" name="edit_foot_z_swap_15"/>
+                 <widget class="QLineEdit" name="expanded_step_length"/>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QLineEdit" name="edit_y_zmp_conv_29"/>
+                 <widget class="QLineEdit" name="expanded_step_angle_radian"/>
                 </item>
                 <item row="4" column="0">
                  <widget class="QLabel" name="label_204">
@@ -2979,7 +3022,7 @@ p, li { white-space: pre-wrap; }
                </property>
                <layout class="QGridLayout" name="gridLayout_22">
                 <item row="4" column="1">
-                 <widget class="QLineEdit" name="edit_y_zmp_conv_30"/>
+                 <widget class="QLineEdit" name="centered_step_time"/>
                 </item>
                 <item row="0" column="0">
                  <widget class="QLabel" name="label_205">
@@ -3094,16 +3137,16 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QLineEdit" name="edit_body_z_swap_14"/>
+                 <widget class="QLineEdit" name="centered_side_step_length"/>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QLineEdit" name="edit_dsp_17"/>
+                 <widget class="QLineEdit" name="centered_step_num"/>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QLineEdit" name="edit_foot_z_swap_16"/>
+                 <widget class="QLineEdit" name="centered_step_length"/>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QLineEdit" name="edit_y_zmp_conv_31"/>
+                 <widget class="QLineEdit" name="centered_step_angle_radian"/>
                 </item>
                 <item row="4" column="0">
                  <widget class="QLabel" name="label_209">
@@ -3215,10 +3258,10 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QLineEdit" name="edit_y_zmp_conv_33"/>
+                 <widget class="QLineEdit" name="foot_step_y_zmp_conv"/>
                 </item>
                 <item row="0" column="1">
-                 <widget class="QLineEdit" name="edit_dsp_18"/>
+                 <widget class="QLineEdit" name="foot_step_dsp"/>
                 </item>
                 <item row="2" column="0">
                  <widget class="QLabel" name="label_212">
@@ -3277,10 +3320,10 @@ p, li { white-space: pre-wrap; }
                  </widget>
                 </item>
                 <item row="1" column="1">
-                 <widget class="QLineEdit" name="edit_foot_z_swap_17"/>
+                 <widget class="QLineEdit" name="foot_step_foot_z_swap"/>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QLineEdit" name="edit_body_z_swap_15"/>
+                 <widget class="QLineEdit" name="foot_step_body_z_swap"/>
                 </item>
                </layout>
               </widget>
