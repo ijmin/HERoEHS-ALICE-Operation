@@ -1350,10 +1350,6 @@ void FootStepGenerator::calcRightKickStep(alice_walking_module_msgs::AddStepData
 
   alice_walking_module_msgs::StepData step_data_msg;
 
-  kick_height_m_  = 0.08;
-  kick_far_m_     = 0.23;
-  kick_pitch_rad_ = 15.0*M_PI/180.0;
-
   step_data_msg = ref_step_data;
 
   step_data_array->clear();
@@ -1454,10 +1450,6 @@ void FootStepGenerator::calcLeftKickStep(alice_walking_module_msgs::AddStepDataA
     const alice_walking_module_msgs::StepData& ref_step_data)
 {
   alice_walking_module_msgs::StepData step_data_msg;
-
-  kick_height_m_  = 0.08;
-  kick_far_m_     = 0.23;
-  kick_pitch_rad_ = 15.0*M_PI/180.0;
 
   step_data_msg = ref_step_data;
 
