@@ -46,6 +46,8 @@ public:
   void readFootStep_Yaml();
   double leg_offset_;
   double foot_offset_yaw_;
+  double y_steptype_offset_y_;
+  double y_steptype_offset_yaw_;
 
   void initialize();
 

@@ -129,6 +129,8 @@ void FootStepGenerator::readFootStep_Yaml()
     return;
   }
   leg_offset_ = kinematics_doc["leg_side_offset_m"].as<double>();
+  y_steptype_offset_y_= kinematics_doc["y_steptype_y_offeset"].as<double>();
+  y_steptype_offset_yaw_= kinematics_doc["y_steptype_yaw_offeset"].as<double>()*RAD2DEG;
 }
 
 void FootStepGenerator::initialize()
@@ -1364,17 +1366,17 @@ void FootStepGenerator::calcYType(alice_walking_module_msgs::AddStepDataArray::R
 
     step_data_msg = ref_step_data;
 
-    double dispose_step_time = 1.5;
+    double dispose_step_time = step_time_sec_;
 
     step_data_array->clear();
     step_data_array_.clear();
 
-    if(type_offset_y_== 0.06 && type_offset_yaw_== 20*RAD2DEG)
+    if(type_offset_y_== y_steptype_offset_y_ && type_offset_yaw_== y_steptype_offset_yaw_)
     {
       return;
     }
-    type_offset_y_ = 0.06;
-    type_offset_yaw_ = 20*RAD2DEG;
+    type_offset_y_ = y_steptype_offset_y_;
+    type_offset_yaw_ = y_steptype_offset_yaw_;
     default_y_feet_offset_m_ += type_offset_y_;
     default_yaw_feet_offset_m_ +=  type_offset_yaw_;
 
@@ -1428,7 +1430,7 @@ void FootStepGenerator::calcDefaultType(alice_walking_module_msgs::AddStepDataAr
 
   step_data_msg = ref_step_data;
 
-  double dispose_step_time = 1.5;
+  double dispose_step_time = step_time_sec_ ;
 
   step_data_array->clear();
   step_data_array_.clear();
