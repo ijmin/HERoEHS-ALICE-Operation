@@ -199,6 +199,8 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       && (msg->command != "right kick")
       && (msg->command != "expanded stop")
       && (msg->command != "centered stop")
+      && (msg->command != "y walking type")
+      && (msg->command != "default walking type")
       && (msg->command != "stop"))
     return;
 
@@ -293,7 +295,6 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   g_foot_stp_generator.num_of_step_ = 2*(msg->step_num) + 2;
 
 
-
   alice_walking_module_msgs::GetReferenceStepData    get_ref_stp_data_srv;
   alice_walking_module_msgs::StepData                ref_step_data;
   alice_walking_module_msgs::AddStepDataArray        add_stp_data_srv;
@@ -312,7 +313,24 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
 
   //calc step data
 
-  if(msg->command == "forward")
+  if(msg->command == "y walking type")
+  {
+    if(isRunning() == true)
+      return;
+
+    g_foot_stp_generator.calcYType( &add_stp_data_srv.request.step_data_array, ref_step_data);
+    g_is_running_check_needed = true;
+  }
+  else if(msg->command == "default walking type")
+  {
+    if(isRunning() == true)
+      return;
+
+    g_foot_stp_generator.calcDefaultType( &add_stp_data_srv.request.step_data_array, ref_step_data);
+    g_is_running_check_needed = true;
+  }
+
+  else if(msg->command == "forward")
   {
     if(g_is_running_check_needed == true)
       if(isRunning() == true)
@@ -422,7 +440,6 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, REVOLUTE_RIGHT_WALKING, expanded);
     g_is_running_check_needed = false;
   }
-
 
   else if(msg->command == "stop" || msg->command == "expanded stop" || msg->command == "centered stop")
   {
