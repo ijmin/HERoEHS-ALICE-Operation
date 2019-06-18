@@ -87,7 +87,8 @@ public:
 	ros::Publisher joint_offset_state_pub;
 	ros::Publisher command_state_pub;
 	ros::Publisher enable_module_pub;
-
+	ros::Publisher alice_id_pub;
+	ros::Publisher gui_step_parameter_pub;
 	//test
 	ros::Publisher ball_tracking_pub;
 
@@ -101,6 +102,8 @@ public:
 	std_msgs::Float64 foot_z_swap_msgs;
 	std_msgs::Float64 body_z_swap_msgs;
 	std_msgs::Float64 y_zmp_convergence_msgs;
+	std_msgs::String alice_id_msgs;
+	//std_msgs::String gui_step_parameter_msgs;
 
 
 

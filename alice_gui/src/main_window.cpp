@@ -201,8 +201,8 @@ void MainWindow::on_ALICE_ID_1_Button_clicked(){
 	
 
 	std::string step_path_;
-	joint_path_ = ros::package::getPath("alice_gui") + "/config/step_parameter1.yaml";
-	parse_step_param_data(joint_path_);
+	step_path_ = ros::package::getPath("alice_gui") + "/config/step_parameter1.yaml";
+	parse_step_param_data(step_path_);
 	ui.default_step_num->setText(QString("%1").arg(default_step_num));
 	ui.default_step_length->setText(QString("%1").arg(default_step_length));
 	ui.default_side_step_length->setText(QString("%1").arg(default_side_step_length));
@@ -230,6 +230,8 @@ void MainWindow::on_ALICE_ID_1_Button_clicked(){
 	ui.expanded_right->setEnabled(1);
 	ui.centered_left->setEnabled(1);
 	ui.centered_right->setEnabled(1);
+	qnode.alice_id_msgs.data = "1";
+	qnode.alice_id_pub.publish(qnode.alice_id_msgs);
 	
 }
 void MainWindow::on_ALICE_ID_2_Button_clicked(){
@@ -312,8 +314,8 @@ void MainWindow::on_ALICE_ID_2_Button_clicked(){
 
 
 	std::string step_path_;
-	joint_path_ = ros::package::getPath("alice_gui") + "/config/step_parameter2.yaml";
-	parse_step_param_data(joint_path_);
+	step_path_ = ros::package::getPath("alice_gui") + "/config/step_parameter2.yaml";
+	parse_step_param_data(step_path_);
 	ui.default_step_num->setText(QString("%1").arg(default_step_num));
 	ui.default_step_length->setText(QString("%1").arg(default_step_length));
 	ui.default_side_step_length->setText(QString("%1").arg(default_side_step_length));
@@ -341,6 +343,8 @@ void MainWindow::on_ALICE_ID_2_Button_clicked(){
 	ui.expanded_right->setEnabled(0);
 	ui.centered_left->setEnabled(0);
 	ui.centered_right->setEnabled(0);
+	qnode.alice_id_msgs.data = "2";
+	qnode.alice_id_pub.publish(qnode.alice_id_msgs);
 }
 /*****************************************************************************
 /*****************************************************************************
@@ -600,6 +604,16 @@ void MainWindow::on_step_save_button_clicked()
 	std::ofstream fout(path_.c_str());
 	fout << out.c_str(); // dump it back into the file
 	on_step_apply_button_clicked();
+	if(ALICE_ID == 1)
+	{
+		qnode.alice_id_msgs.data = "1";
+		qnode.alice_id_pub.publish(qnode.alice_id_msgs);
+	}
+	if(ALICE_ID == 2)
+	{
+		qnode.alice_id_msgs.data = "2";
+		qnode.alice_id_pub.publish(qnode.alice_id_msgs);
+	}
 }
 void MainWindow::on_update_button_clicked()
 {

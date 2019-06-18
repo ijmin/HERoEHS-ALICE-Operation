@@ -90,6 +90,8 @@ bool QNode::init() {
 	joint_offset_state_pub = n.advertise<offset_tuner_msgs::JointOffsetState>("/heroehs/joint_offset_state", 10);
 	command_state_pub = n.advertise<std_msgs::String>("/heroehs/command_state", 10);
 	enable_module_pub = n.advertise<std_msgs::String>("/robotis/enable_ctrl_module", 100);
+	alice_id_pub = n.advertise<std_msgs::String>("/heroehs/alice_id", 10);
+	//gui_step_parameter_pub = n.advertise<std_msgs::String>("/heroehs/gui_step_parameter", 10);
 
 
 	// Subscriber
