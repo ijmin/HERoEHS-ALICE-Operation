@@ -132,6 +132,9 @@ void FootStepPlanner::initialize()
   walking_module_status_sub = nh.subscribe("/heroehs/status", 10, &FootStepPlanner::walkingModuleStatusMsgCallback, this);
   environment_detector_sub  = nh.subscribe("/heroehs/environment_detector", 5, &FootStepPlanner::environmentDetectorMsgCallback, this);
   //walking_path_planner_test_sub = nh.subscribe("/heroehs/alice_walking_path_planner_test", 10, &FootStepPlanner::walkingPathPlannerStatusMsgCallback, this);
+  alice_id_sub_ = nh.subscribe<std_msgs::String>("/heroehs/alice_id", 10, &FootStepPlanner::alice_id_Callback, this);
+
+
 
   command_generator_sub  = nh.subscribe("/heroehs/command_generator", 5, &FootStepPlanner::commandGeneratorMsgCallback, this);
 
@@ -245,145 +248,139 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command,
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
-  if(move_command->key == "left")
-  {
-    command_controller.FootParam.command = "left";
-    command_controller.step_type = "default";
-  }
-  else if(move_command->key == "right")
-  {
-    command_controller.FootParam.command = "right";
-    command_controller.step_type = "default";
-  }
-  else if(move_command->key == "forward")
-  {
-    command_controller.FootParam.command = "forward";
-    command_controller.step_type = "default";
-  }
-  else if(move_command->key == "backward")
-  {
-    command_controller.FootParam.command = "backward";
-    command_controller.step_type = "default";
-  }
-  else if(move_command->key == "turn left")
-  {
-    command_controller.FootParam.command = "turn_left";
-    command_controller.step_type = "default";
-  }
-  else if(move_command->key == "turn right")
-  {
-    command_controller.FootParam.command = "turn_right";
-    command_controller.step_type = "default";
-  }
-  else if(move_command->key == "expanded left")
-  {
-    command_controller.FootParam.command = "expanded_left";
-    command_controller.step_type = "expanded";
-  }
-  else if(move_command->key == "expanded right")
-  {
-    command_controller.FootParam.command = "expanded_right";
-    command_controller.step_type = "expanded";
-  }
-  else if(move_command->key == "centered left")
-  {
-    command_controller.FootParam.command = "centered_left";
-    command_controller.step_type = "centered";
-  }
-  else if(move_command->key == "centered right")
-  {
-    command_controller.FootParam.command = "centered_right";
-    command_controller.step_type = "centered";
-  }
-  else if(move_command->key == "stop")
-  {
-    command_controller.FootParam.command = "stop";
-    command_controller.step_type = "default";
-  }
-
-  if(move_command->value == "1")
-  {
-    command_controller.speed_switch = "1";
-  }
-  else if(move_command->value == "3")
-  {
-    command_controller.speed_switch = "3";
-  }
-  else if(move_command->value == "2")
-  {
-    command_controller.speed_switch = "2";
-  }
-  command_controller.command_switch = 2;
-  command_controller.Set_FootParam(alice_id_int);
-
-  /*
-  if(msg->mode == 0)
+  if(move_command->key == "forward_pricision" || move_command->key == "backward_pricision" ||
+      move_command->key == "left_pricision" || move_command->key == "right_pricision")
   {
     change_walking_kick_mode("walking", "");
 
-    if(msg->command == 2)
+    /*if(msg->command == 2)
+      {
+        if(msg->transform.z > 0)
+        {
+          AlignRobotYaw(msg->transform.z, "turn left", walking_mode);
+        }
+        if(msg->transform.z < 0)
+        {
+          AlignRobotYaw(fabs(msg->transform.z), "turn right", walking_mode);
+        }
+      }*/
+
+    if(move_command->key == "forward_pricision" || move_command->key == "backward_pricision" )
     {
-      if(msg->transform.z > 0)
+      double temp_value = atof(move_command->key.c_str());
+      if(temp_value> 0)
+        CalculateStepData(temp_value, 0, "forward", walking_mode);
+      else if(temp_value < 0)
+        CalculateStepData(fabs(temp_value), 0, "backward", walking_mode);
+      else
       {
-        AlignRobotYaw(msg->transform.z, "turn left", walking_mode);
-      }
-      if(msg->transform.z < 0)
-      {
-        AlignRobotYaw(fabs(msg->transform.z), "turn right", walking_mode);
+        CalculateStepData(0, 0, "stop", walking_mode);
       }
     }
-    else
+    if(move_command->key == "left_pricision" || move_command->key == "right_pricision")
     {
-      if(msg->command == 0)
+      double temp_value = atof(move_command->key.c_str());
+      if(temp_value > 0)
+        CalculateStepData(0, temp_value, "left", walking_mode);
+      else if(temp_value < 0)
+        CalculateStepData(0, fabs(temp_value), "right", walking_mode);
+      else
       {
-        if(msg->transform.x > 0)
-          CalculateStepData(msg->transform.x, 0, "forward", walking_mode);
-        else if(msg->transform.x < 0)
-          CalculateStepData(fabs(msg->transform.x), 0, "backward", walking_mode);
-        else
-        {
-          CalculateStepData(0, 0, "stop", walking_mode);
-        }
-
-      }
-      if(msg->command == 1)
-      {
-        if(msg->transform.y > 0)
-          CalculateStepData(0, msg->transform.y, "left", walking_mode);
-        else if(msg->transform.y < 0)
-          CalculateStepData(0, fabs(msg->transform.y), "right", walking_mode);
-        else
-        {
-          CalculateStepData(0, 0, "stop", walking_mode);
-        }
+        CalculateStepData(0, 0, "stop", walking_mode);
       }
     }
   }
-  else if (msg->mode == 1) //kick
+  else
   {
-    if(msg->command == 0)
+    if(move_command->key == "left")
+    {
+      command_controller.FootParam.command = "left";
+      command_controller.step_type = "default";
+    }
+    else if(move_command->key == "right")
+    {
+      command_controller.FootParam.command = "right";
+      command_controller.step_type = "default";
+    }
+    else if(move_command->key == "forward")
+    {
+      command_controller.FootParam.command = "forward";
+      command_controller.step_type = "default";
+    }
+    else if(move_command->key == "backward")
+    {
+      command_controller.FootParam.command = "backward";
+      command_controller.step_type = "default";
+    }
+    else if(move_command->key == "turn_left")
+    {
+      command_controller.FootParam.command = "turn left";
+      command_controller.step_type = "default";
+    }
+    else if(move_command->key == "turn_right")
+    {
+      command_controller.FootParam.command = "turn right";
+      command_controller.step_type = "default";
+    }
+    else if(move_command->key == "expanded_left")
+    {
+      command_controller.FootParam.command = "expanded left";
+      command_controller.step_type = "expanded";
+    }
+    else if(move_command->key == "expanded_right")
+    {
+      command_controller.FootParam.command = "expanded right";
+      command_controller.step_type = "expanded";
+    }
+    else if(move_command->key == "centered_left")
+    {
+      command_controller.FootParam.command = "centered left";
+      command_controller.step_type = "centered";
+    }
+    else if(move_command->key == "centered right")
+    {
+      command_controller.FootParam.command = "centered_right";
+      command_controller.step_type = "centered";
+    }
+    else if(move_command->key == "stop")
+    {
+      command_controller.FootParam.command = "stop";
+      command_controller.step_type = "default";
+    }
+
+    if(move_command->value == "1")
+    {
+      command_controller.speed_switch = "1";
+    }
+    else if(move_command->value == "3")
+    {
+      command_controller.speed_switch = "3";
+    }
+    else if(move_command->value == "2")
+    {
+      command_controller.speed_switch = "2";
+    }
+    command_controller.command_switch = 2;
+    command_controller.Set_FootParam(alice_id_int);
+    foot_set_command_msg = command_controller.FootParam;
+
+    if (move_command->key == "left_kick") //kick
     {
       change_walking_kick_mode("kick", "left kick");
       foot_set_command_msg.command = "left kick";
       foot_step_command_pub.publish(foot_set_command_msg);
     }
-    else
+    if(move_command->key == "right_kick")
     {
       change_walking_kick_mode("kick", "right kick");
       foot_set_command_msg.command = "right kick";
       foot_step_command_pub.publish(foot_set_command_msg);
+
     }
+
+    foot_step_command_pub.publish(foot_set_command_msg);
+    return;
   }
-  else
-  {
-    CalculateStepData(0, 0, "stop", walking_mode);
-  }
-
-   */
-
-  foot_set_command_msg = command_controller.FootParam;
-
-  foot_step_command_pub.publish(foot_set_command_msg);
 }
 void FootStepPlanner::parse_init_data_(const std::string &path)
 {
@@ -650,6 +647,8 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 
   return true;
 }
+
+// joystic
 void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg)
 {
   foot_set_command_msg.step_num = msg->step_num;
