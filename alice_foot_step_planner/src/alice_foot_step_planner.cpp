@@ -172,79 +172,89 @@ void FootStepPlanner::read_kick_param()
   kick_y_cob_  = kick_doc["kick_y_cob"].as<double>();
 }
 
-void FootStepPlanner::DecideStepNumLength(double distance , std::string command, int mode)
+void FootStepPlanner::DecideStepNumLength(double distance , std::string command, int robot_id)
 {
-  if(mode == 1)// preview control
+
+  if(!command.compare("forward") || !command.compare("backward") )
   {
-
-    if(!command.compare("forward") || !command.compare("backward") )
+    if(distance >= 2.0)
     {
-      if(distance >= 2.0)
-      {
 
-        foot_set_command_msg.step_num = ((int)(distance*6)) + 1;
-        foot_set_command_msg.step_length = 0.1;
-        foot_set_command_msg.step_time = 5;
-
-      }
-      else
-      {
-        foot_set_command_msg.step_num = ((int)(distance*5)) + 1;
-        foot_set_command_msg.step_length = 0.1;
-        foot_set_command_msg.step_time = 5;
-      }
+      foot_set_command_msg.step_num = ((int)(distance*6)) + 1;
+      foot_set_command_msg.step_length = 0.1;
     }
-    else  // left right
+    else
     {
-      if(distance >= 0.05)
-      {
-        foot_set_command_msg.step_num =  (int) (distance*20);
-        foot_set_command_msg.side_step_length = 0.05;
-        foot_set_command_msg.step_time =5;
-      }
-      else
-      {
-        foot_set_command_msg.step_num = 1;
-        foot_set_command_msg.side_step_length = distance;
-        foot_set_command_msg.step_time =5;
-      }
+      foot_set_command_msg.step_num = ((int)(distance*5)) + 1;
+      foot_set_command_msg.step_length = 0.1;
     }
   }
-}
-void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int mode)
-{
-  if(mode == 1) // preview control
+  else  // left right
   {
-    if(yaw_rad >= 0.15)
+    if(distance >= 0.05)
     {
-      foot_set_command_msg.step_num = (int) (yaw_rad/0.15);
-      foot_set_command_msg.step_angle_rad = 0.15;
-      foot_set_command_msg.step_time = 5;
-
+      foot_set_command_msg.step_num =  (int) (distance*20);
+      foot_set_command_msg.side_step_length = 0.05;
     }
     else
     {
       foot_set_command_msg.step_num = 1;
-      foot_set_command_msg.step_angle_rad = yaw_rad;
+      foot_set_command_msg.side_step_length = distance;
+    }
+  }
+
+  if(robot_id == 1)
+  {
+    foot_set_command_msg.step_time = 2;
+  }
+  else // number 2 robot
+    foot_set_command_msg.step_time = 5;
+
+}
+void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int robot_id)
+{
+
+  if(yaw_rad >= 0.15)
+  {
+    foot_set_command_msg.step_num = (int) (yaw_rad/0.15);
+    if(robot_id == 1)
+    {
+      foot_set_command_msg.step_angle_rad = 0.15;
+      foot_set_command_msg.step_time = 2;
+    }
+    if(robot_id == 2)
+    {
+      foot_set_command_msg.step_angle_rad = 0.15;
       foot_set_command_msg.step_time = 5;
     }
-    foot_set_command_msg.command = command;
-    foot_step_command_pub.publish(foot_set_command_msg);
   }
-}
-void FootStepPlanner::CalculateStepData(double x, double y, std::string command, int mode)
-{
-  if(mode == 1) // preview control
+  else
   {
-    data_initialize();// have to modify
-    double desired_distance_ = 0;
-    desired_distance_ = sqrt(pow(x,2) + pow(y,2));
-    if(command.compare("stop"))
-      DecideStepNumLength(desired_distance_, command, mode);
-
-    foot_set_command_msg.command = command;
-    foot_step_command_pub.publish(foot_set_command_msg);
+    foot_set_command_msg.step_num = 1;
+    foot_set_command_msg.step_angle_rad = yaw_rad;
+    if(robot_id == 1)
+    {
+      foot_set_command_msg.step_time = 2;
+    }
+    if(robot_id == 2)
+    {
+      foot_set_command_msg.step_time = 5;
+    }
   }
+  foot_set_command_msg.command = command;
+  foot_step_command_pub.publish(foot_set_command_msg);
+
+}
+void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
+{
+  data_initialize();// have to modify
+  double desired_distance_ = 0;
+  desired_distance_ = sqrt(pow(x,2) + pow(y,2));
+  if(command.compare("stop"))
+    DecideStepNumLength(desired_distance_, command, alice_id_int);
+
+  foot_set_command_msg.command = command;
+  foot_step_command_pub.publish(foot_set_command_msg);
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
@@ -269,24 +279,24 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     {
       double temp_value = atof(move_command->key.c_str());
       if(temp_value> 0)
-        CalculateStepData(temp_value, 0, "forward", walking_mode);
+        CalculateStepData(temp_value, 0, "forward");
       else if(temp_value < 0)
-        CalculateStepData(fabs(temp_value), 0, "backward", walking_mode);
+        CalculateStepData(fabs(temp_value), 0, "backward");
       else
       {
-        CalculateStepData(0, 0, "stop", walking_mode);
+        CalculateStepData(0, 0, "stop");
       }
     }
     if(move_command->key == "left_pricision" || move_command->key == "right_pricision")
     {
       double temp_value = atof(move_command->key.c_str());
       if(temp_value > 0)
-        CalculateStepData(0, temp_value, "left", walking_mode);
+        CalculateStepData(0, temp_value, "left");
       else if(temp_value < 0)
-        CalculateStepData(0, fabs(temp_value), "right", walking_mode);
+        CalculateStepData(0, fabs(temp_value), "right");
       else
       {
-        CalculateStepData(0, 0, "stop", walking_mode);
+        CalculateStepData(0, 0, "stop");
       }
     }
   }

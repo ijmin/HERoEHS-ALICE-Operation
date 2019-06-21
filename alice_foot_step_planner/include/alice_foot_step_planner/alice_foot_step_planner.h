@@ -126,9 +126,9 @@ private:
 	double pre_position_x, pre_position_y;
 	double current_x,current_y;
 
-	void AlignRobotYaw(double yaw_rad, std::string command, int mode);
-	void CalculateStepData(double x, double y, std::string command, int mode);
-	void DecideStepNumLength(double distance, std::string command, int mode);
+	void AlignRobotYaw(double yaw_rad, std::string command, int robot_id);
+	void CalculateStepData(double x, double y, std::string command);
+	void DecideStepNumLength(double distance, std::string command, int robot_id);
 
 };
 class Command_generator
