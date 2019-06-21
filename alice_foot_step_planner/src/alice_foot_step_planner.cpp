@@ -23,6 +23,10 @@ FootStepPlanner::FootStepPlanner()
   current_x = 0;
   current_y = 0;
   alice_id_int = 1;
+  side_step_length_max = 0;
+  side_step_length_min = 0;
+  step_rad_max = 0;
+  step_rad_min = 0;
   //readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
@@ -111,6 +115,7 @@ void FootStepPlanner::initialize()
 
   alice_id_int  = nh.param<int>("alice_userid",0);
 
+
   std::stringstream alice_id_stream;
   alice_id_stream << alice_id_int;
   alice_id_num_ = alice_id_stream.str();
@@ -177,24 +182,23 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 
   if(!command.compare("forward") || !command.compare("backward") )
   {
-    if(distance >= 2.0)
+    if(distance >= step_length_max)
     {
-
-      foot_set_command_msg.step_num = ((int)(distance*6)) + 1;
-      foot_set_command_msg.step_length = 0.1;
+      foot_set_command_msg.step_num = (int)(distance/step_length_max);
+      foot_set_command_msg.step_length = step_length_max;
     }
     else
     {
-      foot_set_command_msg.step_num = ((int)(distance*5)) + 1;
-      foot_set_command_msg.step_length = 0.1;
+      foot_set_command_msg.step_num = 1;
+      foot_set_command_msg.step_length = distance;
     }
   }
   else  // left right
   {
-    if(distance >= 0.05)
+    if(distance >= side_step_length_max)
     {
-      foot_set_command_msg.step_num =  (int) (distance*20);
-      foot_set_command_msg.side_step_length = 0.05;
+      foot_set_command_msg.step_num =  (int) (distance/side_step_length_max);
+      foot_set_command_msg.side_step_length = side_step_length_max;
     }
     else
     {
@@ -243,7 +247,6 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int rob
   }
   foot_set_command_msg.command = command;
   foot_step_command_pub.publish(foot_set_command_msg);
-
 }
 void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 {
@@ -258,8 +261,8 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
-  if(move_command->key == "forward_pricision" || move_command->key == "backward_pricision" ||
-      move_command->key == "left_pricision" || move_command->key == "right_pricision")
+  if(move_command->key == "forward_precision" || move_command->key == "backward_precision" ||
+      move_command->key == "left_precision" || move_command->key == "right_precision")
   {
     change_walking_kick_mode("walking", "");
 
@@ -275,10 +278,11 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
         }
       }*/
 
-    if(move_command->key == "forward_pricision" || move_command->key == "backward_pricision" )
+    if(move_command->key == "forward_precision" || move_command->key == "backward_precision" )
     {
-      double temp_value = atof(move_command->key.c_str());
-      if(temp_value> 0)
+
+      double temp_value = atof(move_command->value.c_str());
+      if(temp_value > 0)
         CalculateStepData(temp_value, 0, "forward");
       else if(temp_value < 0)
         CalculateStepData(fabs(temp_value), 0, "backward");
@@ -287,9 +291,9 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
         CalculateStepData(0, 0, "stop");
       }
     }
-    if(move_command->key == "left_pricision" || move_command->key == "right_pricision")
+    if(move_command->key == "left_precision" || move_command->key == "right_precision")
     {
-      double temp_value = atof(move_command->key.c_str());
+      double temp_value = atof(move_command->value.c_str());
       if(temp_value > 0)
         CalculateStepData(0, temp_value, "left");
       else if(temp_value < 0)
@@ -408,6 +412,10 @@ void FootStepPlanner::parse_init_data_(const std::string &path)
 
   step_length_max = doc["step_length_max"].as<double>();
   step_length_min = doc["step_length_min"].as<double>();
+  side_step_length_max = doc["side_step_length_max"].as<double>();
+  side_step_length_min = doc["side_step_length_min"].as<double>();
+  step_rad_max   = doc["step_rad_max"].as<double>();
+  step_rad_min   = doc["step_rad_min"].as<double>();
   foot_set_command_msg.step_num = doc["step_num"].as<double>();
   foot_set_command_msg.step_length = doc["step_length"].as<double>();
   foot_set_command_msg.step_time = doc["step_time"].as<double>();

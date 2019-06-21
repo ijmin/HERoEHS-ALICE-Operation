@@ -4,3 +4,9 @@ kick_far_m: 0.23
 kick_pitch: 15.0
 kick_time_sec: 1.6
 kick_y_cob: 0.05
+
+precision_step_length : 0.2
+precision_side_step_length : 0.05
+precision_side_step_angle : 0.05
+precision_time : 2
+

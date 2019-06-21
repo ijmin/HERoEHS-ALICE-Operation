@@ -1,6 +1,12 @@
 step_length_max : 0.1
 step_length_min : 0.02
 
+side_step_length_max : 0.1
+side_step_length_min : 0.02
+
+step_rad_max : 0.1
+step_rad_min : 0.02
+
 #initial foot step data
 step_num : 1
 step_length : 0.1
