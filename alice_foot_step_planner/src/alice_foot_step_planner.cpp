@@ -7,6 +7,8 @@
 #include "alice_foot_step_planner/alice_foot_step_planner.h"
 using namespace alice;
 // Foot step planner algorithm
+Command_generator command_controller;
+
 FootStepPlanner::FootStepPlanner()
 {
   // load yaml
@@ -17,6 +19,10 @@ FootStepPlanner::FootStepPlanner()
   on_process_msg.data = 0;
   walking_mode = 1; // 0 : darwin walking / 1 : preview walking
   alice_id_num_="";
+  kick_y_cob_ = 0;
+  current_x = 0;
+  current_y = 0;
+  alice_id_int = 1;
   //readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
@@ -103,7 +109,7 @@ void FootStepPlanner::initialize()
   balance_param_file = nh.param<std::string>("balance_param_path", "");
   joint_feedback_file  = nh.param<std::string>("joint_feedback_path", "");
 
-  int alice_id_int  = nh.param<int>("alice_userid",0);
+  alice_id_int  = nh.param<int>("alice_userid",0);
 
   std::stringstream alice_id_stream;
   alice_id_stream << alice_id_int;
@@ -122,7 +128,7 @@ void FootStepPlanner::initialize()
   //foot_step_2d_pub    = nh.advertise<alice_foot_step_generator::Step2DArray>("/heroehs/alice_foot_step_generator/footsteps_2d", 1);
 
   //sub
-  move_command_sub_         = nh.subscribe("/heroehs/alice/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
+  move_command_sub_         = nh.subscribe("/heroehs/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
   walking_module_status_sub = nh.subscribe("/heroehs/status", 10, &FootStepPlanner::walkingModuleStatusMsgCallback, this);
   environment_detector_sub  = nh.subscribe("/heroehs/environment_detector", 5, &FootStepPlanner::environmentDetectorMsgCallback, this);
   //walking_path_planner_test_sub = nh.subscribe("/heroehs/alice_walking_path_planner_test", 10, &FootStepPlanner::walkingPathPlannerStatusMsgCallback, this);
@@ -201,10 +207,6 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
       }
     }
   }
-  else // darwin walking
-  {
-
-  }
 }
 void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int mode)
 {
@@ -226,10 +228,6 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int mod
     foot_set_command_msg.command = command;
     foot_step_command_pub.publish(foot_set_command_msg);
   }
-  else // darwing walking
-  {
-
-  }
 }
 void FootStepPlanner::CalculateStepData(double x, double y, std::string command, int mode)
 {
@@ -244,14 +242,81 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command,
     foot_set_command_msg.command = command;
     foot_step_command_pub.publish(foot_set_command_msg);
   }
-  else // darwing walking
-  {
-
-  }
 }
-void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg)
+void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
+  if(move_command->key == "left")
+  {
+    command_controller.FootParam.command = "left";
+    command_controller.step_type = "default";
+  }
+  else if(move_command->key == "right")
+  {
+    command_controller.FootParam.command = "right";
+    command_controller.step_type = "default";
+  }
+  else if(move_command->key == "forward")
+  {
+    command_controller.FootParam.command = "forward";
+    command_controller.step_type = "default";
+  }
+  else if(move_command->key == "backward")
+  {
+    command_controller.FootParam.command = "backward";
+    command_controller.step_type = "default";
+  }
+  else if(move_command->key == "turn left")
+  {
+    command_controller.FootParam.command = "turn_left";
+    command_controller.step_type = "default";
+  }
+  else if(move_command->key == "turn right")
+  {
+    command_controller.FootParam.command = "turn_right";
+    command_controller.step_type = "default";
+  }
+  else if(move_command->key == "expanded left")
+  {
+    command_controller.FootParam.command = "expanded_left";
+    command_controller.step_type = "expanded";
+  }
+  else if(move_command->key == "expanded right")
+  {
+    command_controller.FootParam.command = "expanded_right";
+    command_controller.step_type = "expanded";
+  }
+  else if(move_command->key == "centered left")
+  {
+    command_controller.FootParam.command = "centered_left";
+    command_controller.step_type = "centered";
+  }
+  else if(move_command->key == "centered right")
+  {
+    command_controller.FootParam.command = "centered_right";
+    command_controller.step_type = "centered";
+  }
+  else if(move_command->key == "stop")
+  {
+    command_controller.FootParam.command = "stop";
+    command_controller.step_type = "default";
+  }
 
+  if(move_command->value == "1")
+  {
+    command_controller.speed_switch = "1";
+  }
+  else if(move_command->value == "3")
+  {
+    command_controller.speed_switch = "3";
+  }
+  else if(move_command->value == "2")
+  {
+    command_controller.speed_switch = "2";
+  }
+  command_controller.command_switch = 2;
+  command_controller.Set_FootParam(alice_id_int);
+
+  /*
   if(msg->mode == 0)
   {
     change_walking_kick_mode("walking", "");
@@ -313,6 +378,12 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const alice_msgs::MoveCommand
   {
     CalculateStepData(0, 0, "stop", walking_mode);
   }
+
+   */
+
+  foot_set_command_msg = command_controller.FootParam;
+
+  foot_step_command_pub.publish(foot_set_command_msg);
 }
 void FootStepPlanner::parse_init_data_(const std::string &path)
 {
@@ -588,24 +659,241 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
   foot_set_command_msg.step_time = msg->step_time;
 
   foot_set_command_msg.command = msg->command;
-  //change_walking_kick_mode("kick", "left kick");
-  //change_walking_kick_mode("walking", "");
-  //change_walking_kick_mode("kick", "right kick");
-  /*if(foot_set_command_msg.command == "expanded left" || foot_set_command_msg.command == "expanded right" || foot_set_command_msg.command == "expanded stop")
-  {
-    foot_set_command_msg.step_num = 1;
-  }
-  else if(foot_set_command_msg.command == "centered left" || foot_set_command_msg.command == "centered right"|| foot_set_command_msg.command == "centered stop")
-  {
-    foot_set_command_msg.step_num = 1;
-    //foot_set_command_msg.step_length = 0.01;
-    //foot_set_command_msg.side_step_length = 0.07;
-    //foot_set_command_msg.step_angle_rad = 0.4;
-  }*/
 
-  //else
-  //{
   foot_step_command_pub.publish(foot_set_command_msg);
-  //}
 }
+
+
+
+void FootStepPlanner::alice_id_Callback(const std_msgs::String::ConstPtr& alice_id)
+{
+  std::string step_path_;
+  if(alice_id->data == "1")
+  {
+    step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter1.yaml";
+  }
+  else if(alice_id->data == "2")
+  {
+    step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter2.yaml";
+  }
+  command_controller.parse_step_param_data(step_path_);
+}
+void FootStepPlanner::current_status_Callback(const std_msgs::String::ConstPtr& log_moving_status)
+{
+  command_controller.current_status = log_moving_status->data;
+}
+/////////////////////////
+/////////////////////////
+/////////////////////////
+/////////////////////////
+Command_generator::Command_generator()
+{
+  //Default_Setting//
+  Input_Text();
+  Make_Log();
+  command_switch = 0;
+  speed_switch = 2;
+  FootParam.step_num = 0;
+  FootParam.step_length = 0;
+  FootParam.side_step_length = 0;
+  FootParam.step_angle_rad = 0;
+  FootParam.step_time = 0;
+  start_time = clock();
+  //////////////////
+
+  ROS_INFO("command_generator_start");
+}
+void Command_generator::Set_FootParam(int alice_id)
+{
+  if(step_type == "default")
+  {
+    FootParam.step_num = default_step_num;
+    FootParam.step_length = default_step_length;
+    FootParam.side_step_length = default_side_step_length;
+    FootParam.step_angle_rad = default_step_angle_rad;
+    FootParam.step_time = default_step_time;
+  }
+  else if(step_type == "expanded")
+  {
+    FootParam.step_num = expanded_step_num;
+    FootParam.step_length = expanded_step_length;
+    FootParam.side_step_length = expanded_side_step_length;
+    FootParam.step_angle_rad = expanded_step_angle_rad;
+    FootParam.step_time = expanded_step_time;
+  }
+  else if(step_type == "centered")
+  {
+    FootParam.step_num = centered_step_num;
+    FootParam.step_length = centered_step_length;
+    FootParam.side_step_length = centered_side_step_length;
+    FootParam.step_angle_rad = centered_step_angle_rad;
+    FootParam.step_time = centered_step_time;
+  }
+  if(alice_id == 1)
+  {
+    if(speed_switch == "1")
+    {
+      FootParam.step_time = FootParam.step_time*1.5;
+    }
+    else if(speed_switch == "2")
+    {
+      FootParam.step_time = FootParam.step_time*1;
+    }
+    else if(speed_switch == "3")
+    {
+      FootParam.step_time = FootParam.step_time*0.5;
+    }
+  }
+}
+void Command_generator::parse_step_param_data(std::string path)
+{
+  YAML::Node doc;
+  try
+  {
+    // load yaml
+    doc = YAML::LoadFile(path.c_str()); // 파일 경로를 입력하여 파일을 로드 한다.
+
+  }catch(const std::exception& e) // 에러 점검
+  {
+    ROS_ERROR("Fail to load yaml file!");
+    return;
+  }
+  default_step_num = doc["default_step_num"].as<double>();
+  default_step_length = doc["default_step_length"].as<double>();
+  default_side_step_length = doc["default_side_step_length"].as<double>();
+  default_step_angle_rad = doc["default_step_angle_radian"].as<double>();
+  default_step_time = doc["default_step_time"].as<double>();
+
+  expanded_step_num = doc["expanded_step_num"].as<double>();
+  expanded_step_length = doc["expanded_step_length"].as<double>();
+  expanded_side_step_length = doc["expanded_side_step_length"].as<double>();
+  expanded_step_angle_rad = doc["expanded_step_angle_radian"].as<double>();
+  expanded_step_time = doc["expanded_step_time"].as<double>();
+
+  centered_step_num = doc["centered_step_num"].as<double>();
+  centered_step_length = doc["centered_step_length"].as<double>();
+  centered_side_step_length = doc["centered_side_step_length"].as<double>();
+  centered_step_angle_rad = doc["centered_step_angle_radian"].as<double>();
+  centered_step_time = doc["centered_step_time"].as<double>();
+}
+
+void Command_generator::Make_Log(void)
+{
+  time_t curr_time;
+  struct tm *curr_tm;
+  int year, month, day;
+  curr_time = time(NULL);
+  curr_tm = localtime(&curr_time);
+  year = curr_tm->tm_year + 1900;
+  month = curr_tm->tm_mon + 1;
+  day = curr_tm->tm_mday;
+  init_hour = curr_tm->tm_hour;
+  init_min = curr_tm->tm_min;
+  init_sec = curr_tm->tm_sec;
+  char Logname[256];
+  sprintf(Logname,"%d-%d-%d-%d-%d-%d",year,month,day,init_hour,init_min,init_sec);
+  init_log_path = ros::package::getPath("command_generator") + "/log/" + Logname + ".txt";
+  out.open(init_log_path.c_str());
+  out<<"command|";
+  out<<"status|";
+  out<<"accept/ignore|";
+  out<<"step_time|";
+  out<<"step_num|";
+  out<<"step_length|";
+  out<<"side_step_length|";
+  out<<"step_angle_rad|";
+  out<<"logtime|"<<'\n';
+}
+
+void Command_generator::Write_Log(void)
+{
+  clock_t curr_t;
+  curr_t = clock();
+  float result_time;
+  result_time = (float)(curr_t-start_time)/(CLOCKS_PER_SEC);
+  time_t curr_time;
+  struct tm *curr_tm;
+  int year, month, day, hour, min, sec;
+  curr_time = time(NULL);
+  curr_tm = localtime(&curr_time);
+  year = curr_tm->tm_year + 1900;
+  month = curr_tm->tm_mon + 1;
+  day = curr_tm->tm_mday;
+  hour = curr_tm->tm_hour - init_hour;
+  min = curr_tm->tm_min - init_min;
+  sec = curr_tm->tm_sec - init_sec;
+  if(sec < 0)
+  {
+    sec = sec+60;
+    min = min - 1;
+  }
+  if(min < 0)
+  {
+    min = min+60;
+    hour = hour - 1;
+  }
+  if(hour < 0)
+  {
+    hour = hour+24;
+  }
+  if(FootParam.command == current_status)accept_or_ignore = "accept";
+  else accept_or_ignore = "ignore";
+  char Logname[256];
+  sprintf(Logname,"%d:%d:%d",hour,min,sec);
+  out<<FootParam.command<<"|";
+  out<<current_status<<"|";
+  out<<accept_or_ignore<<"|";
+  out<<FootParam.step_time<<"|";
+  out<<FootParam.step_num<<"|";
+  out<<FootParam.step_length<<"|";
+  out<<FootParam.side_step_length<<"|";
+  out<<FootParam.step_angle_rad<<"|";
+  out<<Logname<<"|"<<'\n';
+}
+void Command_generator::Input_Text(void)
+{
+  int i = 0;
+  size_t found;
+  string init_pose_path;
+  ifstream inFile;
+  init_pose_path = ros::package::getPath("command_generator") + "/command_input.txt";
+  inFile.open(init_pose_path.c_str());
+  for(string line; std::getline(inFile,line);)
+  {
+    found=line.find("=");
+
+    switch(i)
+    {
+    case 0: Command_Period = atof(line.substr(found+2).c_str()); break;
+    }
+    i +=1;
+  }
+  inFile.close();
+}
+/*int main(int argc, char** argv)
+{
+  Command_generator command_controller;
+  float count;
+  count = 0;
+
+  while(ros::ok())
+  {
+
+    if(count > 1000*command_controller.Command_Period)
+    {
+      if(command_controller.command_switch > 0)
+      {
+        command_controller.vel_pub_.publish(command_controller.FootParam);
+        command_controller.Write_Log();
+      }
+      count = 0;
+    }
+    else count += 1;
+    usleep(1000);
+    ros::spinOnce();
+  }
+  command_controller.out.close();
+}*/
+
+
 

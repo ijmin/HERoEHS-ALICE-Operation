@@ -27,11 +27,13 @@
 #include "alice_msgs/MoveCommand.h"
 #include <std_msgs/String.h>
 #include <std_msgs/Bool.h>
+#include <diagnostic_msgs/KeyValue.h>
 
 #include <math.h>
 #include <cmath>
 #include <stdio.h>
 
+using namespace std;
 
 namespace alice
 {
@@ -53,6 +55,7 @@ public:
 	ros::Subscriber move_command_sub_;
 	ros::Subscriber environment_detector_sub;
 
+
 	ros::Subscriber command_generator_sub;
 
 	ros::Publisher  foot_step_command_pub;
@@ -68,6 +71,10 @@ public:
 	ros::ServiceServer set_balance_param_nuke_server;
 	ros::ServiceServer joint_feedback_gain_nuke_server;
 
+	//command generator
+  ros::Subscriber curr_status_sub_;
+  ros::Subscriber alice_id_sub_;
+
 
 
 
@@ -81,7 +88,7 @@ public:
 
 
 	void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
-	void moveCommandStatusMsgCallback(const alice_msgs::MoveCommand::ConstPtr& msg);
+	void moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command);
 	void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
 	void commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg);
 
@@ -90,6 +97,11 @@ public:
 
 	bool setJointFeedBackGainServiceCallback(alice_walking_module_msgs::SetJointFeedBackGain::Request  &req,
 			alice_walking_module_msgs::SetJointFeedBackGain::Response &res);
+
+  void alice_id_Callback(const std_msgs::String::ConstPtr& alice_id);
+  void current_status_Callback(const std_msgs::String::ConstPtr& log_moving_status);
+
+  ///
 
 
 	void initialize();
@@ -103,6 +115,7 @@ public:
 	//void readIDAlice();
 	std::string alice_id_num_;
   double kick_y_cob_;
+  int alice_id_int;
 
 private:
 
@@ -118,7 +131,50 @@ private:
 	void DecideStepNumLength(double distance, std::string command, int mode);
 
 };
+class Command_generator
+{
+public:
+  Command_generator();
+  void parse_step_param_data(std::string path);
+  std_msgs::String motion_command;
+  std_msgs::String speed_command;
+  alice_foot_step_generator::FootStepCommand FootParam;
+  double default_step_num;
+  double default_step_length;
+  double default_side_step_length;
+  double default_step_angle_rad;
+  double default_step_time;
+  double expanded_step_num;
+  double expanded_step_length;
+  double expanded_side_step_length;
+  double expanded_step_angle_rad;
+  double expanded_step_time;
+  double centered_step_num;
+  double centered_step_length;
+  double centered_side_step_length;
+  double centered_step_angle_rad;
+  double centered_step_time;
 
+  ros::Publisher vel_pub_;
+  string step_type;
+  void Set_FootParam(int alice_id);
+  void Write_Log(void);
+  int command_switch;
+  string speed_switch;
+  string init_log_path;
+  string current_status;
+  string accept_or_ignore;
+  clock_t start_time;
+  int init_hour, init_min, init_sec;
+  ofstream out;
+  //Text_Input//
+  float Command_Period;
+  /////////////
+
+private:
+  void Input_Text(void);
+  void Make_Log(void);
+};
 }
 
 
