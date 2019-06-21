@@ -33,54 +33,6 @@ FootStepPlanner::~FootStepPlanner()
 {
 
 }
-/*
-void FootStepPlanner::readIDAlice()
-{
-  const char* env_p = std::getenv("ALICE_HOST");
-  std::string alice_id;
-  ROS_INFO("%s",env_p);
-  if(env_p == NULL )
-  {
-    ROS_INFO("FROM Test yaml");
-    alice_id="";
-  }
-  else
-  {
-    alice_id=env_p;
-    if(alice_id == "" )
-    {
-      ROS_INFO("FROM 1 yaml");
-      alice_id="_1";
-    }
-
-    else if(alice_id == "alice1nuke")
-    {
-      ROS_INFO("FROM 1 yaml");
-      alice_id="_1";
-    }
-    else if(alice_id == "alice2nuke")
-    {
-      ROS_INFO("FROM 2 yaml");
-      alice_id="_2";
-    }
-  }
-  std::string kick_path = ros::package::getPath("alice_foot_step_generator")+"/data/kick_param"+alice_id+".yaml";
-  YAML::Node kick_doc;
-  try
-  {
-    kick_doc = YAML::LoadFile(kick_path.c_str());
-  }catch(const std::exception& e)
-  {
-    ROS_ERROR("Fail to load kick yaml file!");
-    return;
-  }
-  int alice_id_int  = kick_doc["id"].as<int>();
-
-  std::stringstream alice_id_stream;
-  alice_id_stream << alice_id_int;
-  alice_id_num_ = alice_id_stream.str();
-}
- */
 void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
 {
   if(msg->type == msg->STATUS_ERROR)
@@ -351,9 +303,9 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       command_controller.FootParam.command = "centered left";
       command_controller.step_type = "centered";
     }
-    else if(move_command->key == "centered right")
+    else if(move_command->key == "centered_right")
     {
-      command_controller.FootParam.command = "centered_right";
+      command_controller.FootParam.command = "centered right";
       command_controller.step_type = "centered";
     }
     else if(move_command->key == "stop")
