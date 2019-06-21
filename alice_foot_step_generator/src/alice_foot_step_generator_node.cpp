@@ -53,12 +53,13 @@ FootStepGenerator::FootStepGenerator()
   y_zmp_convergence_m_ = 0.0;
 
   start_end_time_sec_ = 1.6;
-  default_y_feet_offset_m_ = leg_offset_;
+  default_y_feet_offset_m_ = leg_offset_ ;
   default_yaw_feet_offset_m_ = 0;
 
   type_offset_y_ = 0;
   type_offset_yaw_ = 0;
 
+  revolute_type_=0;
   previous_step_type_ = STOP_WALKING;
 
 }
@@ -80,13 +81,13 @@ void FootStepGenerator::readFootStep_Yaml()
   else
   {
     alice_id=env_p;
-    if(alice_id == "" )
-    {
-      ROS_INFO("FROM 1 yaml");
-      alice_id="_1";
-    }
+    //if(alice_id == "" )
+    //{
+    /// ROS_INFO("FROM 1 yaml");
+    //  alice_id="_1";
+    // }
 
-    else if(alice_id == "alice1nuke")
+    if(alice_id == "alice1nuke")
     {
       ROS_INFO("FROM 1 yaml");
       alice_id="_1";
@@ -117,6 +118,7 @@ void FootStepGenerator::readFootStep_Yaml()
   std::stringstream alice_id_stream;
   alice_id_stream << alice_id_int;
   std::string alice_id_kin = alice_id_stream.str();
+  ROS_INFO("ID FROM FOOTSTEP GEN :  %d",alice_id_int);
 
   std::string kinematics_path = ros::package::getPath("alice_kinematics_dynamics")+"/data/kin_dyn_"+alice_id_kin+".yaml";
   YAML::Node kinematics_doc;
@@ -235,7 +237,8 @@ Eigen::MatrixXd FootStepGenerator::getInverseTransformation(Eigen::MatrixXd tran
   return inv_t;
 }
 
-void FootStepGenerator::getStepData(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array, const alice_walking_module_msgs::StepData& ref_step_data,int desired_step_type,int desired_step_type_num)
+void FootStepGenerator::getStepData(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+    const alice_walking_module_msgs::StepData& ref_step_data,int desired_step_type,double desired_step_type_num)
 {
   step_data_array->clear();
   step_data_array_.clear();
@@ -357,7 +360,7 @@ void FootStepGenerator::getStepDataFromStepData2DArray(alice_walking_module_msgs
 }
 
 
-bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type,  int desired_step_type_num)
+bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type,  double desired_step_type_num)
 {
 
   int direction = 0;
@@ -447,7 +450,7 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
   {
     //ROS_INFO("11111111111111111111");
     if(desired_step_type == FORWARD_WALKING || desired_step_type == BACKWARD_WALKING )
-      calcFBStep(stp_data[0], direction);
+      calcFBStep(stp_data[0], direction,0);
     else if(desired_step_type == RIGHTWARD_WALKING || desired_step_type == LEFTWARD_WALKING )
       calcRLStep(stp_data[0], direction);
     else if(desired_step_type == LEFT_ROTATING_WALKING || desired_step_type == RIGHT_ROTATING_WALKING )
@@ -528,7 +531,7 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
       //ROS_INFO("33333333333333");
       if(desired_step_type == FORWARD_WALKING || desired_step_type == BACKWARD_WALKING )
       {
-        calcFBStep(stp_data[1], direction);
+        calcFBStep(stp_data[1], direction,0);
       }
       else if(desired_step_type == RIGHTWARD_WALKING || desired_step_type == LEFTWARD_WALKING )
       {
@@ -558,7 +561,7 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
       //ROS_INFO("4444444444444444");
       if(desired_step_type == FORWARD_WALKING || desired_step_type == BACKWARD_WALKING )
       {
-        calcFBStep(stp_data[0], direction);
+        calcFBStep(stp_data[0], direction,0);
       }
       else if(desired_step_type == RIGHTWARD_WALKING || desired_step_type == LEFTWARD_WALKING )
       {
@@ -675,7 +678,7 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
   return true;
 }
 
-void FootStepGenerator::calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
+void FootStepGenerator::calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, double desired_step_type_num)
 {
   alice_walking_module_msgs::StepData stp_data[num_of_step_];
   stp_data[0] = ref_step_data;
@@ -1126,7 +1129,7 @@ void FootStepGenerator::calcRoStep(const alice_walking_module_msgs::StepData& re
   }
 }
 
-void FootStepGenerator::calcRevRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, int desired_step_type_num)
+void FootStepGenerator::calcRevRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, double desired_step_type_num)
 {
 
   alice_walking_module_msgs::StepData stp_data[num_of_step_];

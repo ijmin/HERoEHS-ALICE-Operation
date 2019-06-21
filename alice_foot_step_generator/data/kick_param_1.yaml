@@ -3,3 +3,4 @@ kick_height_m: 0.08
 kick_far_m: 0.23
 kick_pitch: 15.0
 kick_time_sec: 1.6
+kick_y_cob: 0.05

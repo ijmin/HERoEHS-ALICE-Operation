@@ -37,7 +37,6 @@ alice_foot_step_generator::FootStepCommand last_command;
 double g_last_command_time = 0;
 alice_walking_module_msgs::StepData ref_stp_data_com[1];
 
-
 bool g_is_running_check_needed = false;
 
 void initialize(void)
@@ -201,94 +200,95 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       && (msg->command != "centered stop")
       && (msg->command != "y walking type")
       && (msg->command != "default walking type")
-      && (msg->command != "stop"))
+      && (msg->command != "stop")
+      && (msg->command != "default stop"))
     return;
 
   //set walking parameter
   if(msg->step_length < 0)
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       //g_foot_stp_generator.ep_step_length_m_= 0;
       g_foot_stp_generator.ep_step_length_m_= msg->step_length;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.ct_step_length_m_=  msg->step_length;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.fb_step_length_m_ = 0;
     ROS_ERROR_STREAM("step_length is negative.");
     ROS_ERROR_STREAM("It will be set to zero.");
   }
   else
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       g_foot_stp_generator.ep_step_length_m_= msg->step_length;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.ct_step_length_m_= msg->step_length;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.fb_step_length_m_ = msg->step_length;
   }
 
   if(msg->side_step_length < 0)
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       g_foot_stp_generator.eps_step_length_m_= msg->side_step_length;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.cts_step_length_m_= msg->side_step_length;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.rl_step_length_m_ = 0;
     ROS_ERROR_STREAM("side_step_length is negative.");
     ROS_ERROR_STREAM("It will be set to zero.");
   }
   else
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       g_foot_stp_generator.eps_step_length_m_= msg->side_step_length;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.cts_step_length_m_= msg->side_step_length;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.rl_step_length_m_ = msg->side_step_length;
 
   }
 
   if(msg->step_angle_rad < 0)
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       g_foot_stp_generator.ep_step_angle_rad_= 0;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.ct_step_angle_rad_= 0;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.rotate_step_angle_rad_ = 0;
     ROS_ERROR_STREAM("step_angle_rad is negative.");
     ROS_ERROR_STREAM("It will be set to zero.");
   }
   else
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       g_foot_stp_generator.ep_step_angle_rad_= msg->step_angle_rad;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.ct_step_angle_rad_= msg->step_angle_rad;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.rotate_step_angle_rad_ = msg->step_angle_rad;
 
   }
 
   if(msg->step_time < MINIMUM_STEP_TIME_SEC)
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       g_foot_stp_generator.ep_step_time_sec_ = 0;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.ct_step_time_sec_ = 0;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.step_time_sec_ = 0;
     ROS_ERROR_STREAM("step_time is less than minimum step time. ");
     ROS_ERROR_STREAM("It will be set to minimum step time(0.4 sec).");
   }
   else
   {
-    if(msg->command =="expanded stop" || msg->command =="expanded left" || msg->command =="expanded right")
+    if(msg->command =="expanded stop")
       g_foot_stp_generator.ep_step_time_sec_ = msg->step_time;
-    else if(msg->command =="centered stop" ||msg->command =="centered left" || msg->command =="centered right")
+    else if(msg->command =="centered stop")
       g_foot_stp_generator.ct_step_time_sec_ = msg->step_time;
-    else
+    else if(msg->command =="default stop")
       g_foot_stp_generator.step_time_sec_ = msg->step_time;
   }
 
@@ -441,7 +441,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
     g_is_running_check_needed = false;
   }
 
-  else if(msg->command == "stop" || msg->command == "expanded stop" || msg->command == "centered stop")
+  else if(msg->command == "stop" || msg->command == "expanded stop" || msg->command == "centered stop" || msg->command == "default stop")
   {
     if(g_is_running_check_needed == true)
       if(isRunning() == true)

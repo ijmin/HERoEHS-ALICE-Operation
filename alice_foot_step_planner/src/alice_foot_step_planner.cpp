@@ -16,12 +16,14 @@ FootStepPlanner::FootStepPlanner()
   pre_position_y = 0;
   on_process_msg.data = 0;
   walking_mode = 1; // 0 : darwin walking / 1 : preview walking
-  readIDAlice();
+  alice_id_num_="";
+  //readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
 {
 
 }
+/*
 void FootStepPlanner::readIDAlice()
 {
   const char* env_p = std::getenv("ALICE_HOST");
@@ -68,6 +70,7 @@ void FootStepPlanner::readIDAlice()
   alice_id_stream << alice_id_int;
   alice_id_num_ = alice_id_stream.str();
 }
+ */
 void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg)  //string
 {
   if(msg->type == msg->STATUS_ERROR)
@@ -99,6 +102,12 @@ void FootStepPlanner::initialize()
   /* Load ROS Parameter */
   balance_param_file = nh.param<std::string>("balance_param_path", "");
   joint_feedback_file  = nh.param<std::string>("joint_feedback_path", "");
+
+  int alice_id_int  = nh.param<int>("alice_userid",0);
+
+  std::stringstream alice_id_stream;
+  alice_id_stream << alice_id_int;
+  alice_id_num_ = alice_id_stream.str();
 
   if(balance_param_file == "" || joint_feedback_file == "")
   {
@@ -137,6 +146,21 @@ void FootStepPlanner::data_initialize()
   init_pose_path = ros::package::getPath("alice_foot_step_planner") + "/data/initial_condition"+ alice_id_num_+".yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
   //data initialize
   parse_init_data_(init_pose_path);
+}
+void FootStepPlanner::read_kick_param()
+{
+  std::string kick_path;// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+  kick_path = ros::package::getPath("alice_foot_step_generator") + "/data/kick_param_"+ alice_id_num_+".yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
+  YAML::Node kick_doc;
+  try
+  {
+    kick_doc = YAML::LoadFile(kick_path.c_str());
+  }catch(const std::exception& e)
+  {
+    ROS_ERROR("Fail to load kick yaml file!");
+    return;
+  }
+  kick_y_cob_  = kick_doc["kick_y_cob"].as<double>();
 }
 
 void FootStepPlanner::DecideStepNumLength(double distance , std::string command, int mode)
@@ -433,9 +457,9 @@ void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kic
   else
   {
     if(!kick_mode.compare("right kick"))
-      set_balance_param_msg.request.balance_param.cob_y_offset_m = 0.05;
+      set_balance_param_msg.request.balance_param.cob_y_offset_m = kick_y_cob_;
     else
-      set_balance_param_msg.request.balance_param.cob_y_offset_m = -0.05;
+      set_balance_param_msg.request.balance_param.cob_y_offset_m = -kick_y_cob_;
 
     joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = 0;
     joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = 0;
@@ -564,8 +588,10 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
   foot_set_command_msg.step_time = msg->step_time;
 
   foot_set_command_msg.command = msg->command;
-
-  if(foot_set_command_msg.command == "expanded left" || foot_set_command_msg.command == "expanded right" || foot_set_command_msg.command == "expanded stop")
+  //change_walking_kick_mode("kick", "left kick");
+  //change_walking_kick_mode("walking", "");
+  //change_walking_kick_mode("kick", "right kick");
+  /*if(foot_set_command_msg.command == "expanded left" || foot_set_command_msg.command == "expanded right" || foot_set_command_msg.command == "expanded stop")
   {
     foot_set_command_msg.step_num = 1;
   }
@@ -575,7 +601,7 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
     //foot_set_command_msg.step_length = 0.01;
     //foot_set_command_msg.side_step_length = 0.07;
     //foot_set_command_msg.step_angle_rad = 0.4;
-  }
+  }*/
 
   //else
   //{

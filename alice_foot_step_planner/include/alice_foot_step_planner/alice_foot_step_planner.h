@@ -94,12 +94,16 @@ public:
 
 	void initialize();
 	void data_initialize();
+	void read_kick_param();
 	void parse_init_data_(const std::string &path);
 	void parse_online_balance_param(std::string path);
 	void parse_online_joint_feedback_param(std::string path);
 	void change_walking_kick_mode(std::string mode, std::string kick_mode);
-	void readIDAlice();
+
+	//void readIDAlice();
 	std::string alice_id_num_;
+  double kick_y_cob_;
+
 private:
 
 	int walking_mode;

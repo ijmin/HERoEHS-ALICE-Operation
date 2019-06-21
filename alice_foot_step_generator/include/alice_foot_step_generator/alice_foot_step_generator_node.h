@@ -29,8 +29,8 @@
 #define REVOLUTE_LEFT_WALKING  (7)
 #define REVOLUTE_RIGHT_WALKING (8)
 
-#define centered (1)
-#define expanded (2)
+#define centered (3.0)
+#define expanded (4.0)
 
 #define MINIMUM_STEP_TIME_SEC  (0.4)
 
@@ -45,7 +45,6 @@ public:
 
   void readFootStep_Yaml();
   double leg_offset_;
-  double foot_offset_yaw_;
   double y_steptype_offset_y_;
   double y_steptype_offset_yaw_;
 
@@ -54,7 +53,7 @@ public:
   void getStepData(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data,
       int desired_step_type,
-      int desired_step_type_num);
+      double desired_step_type_num);
 
   void getStepDataFromStepData2DArray(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data,
@@ -116,15 +115,15 @@ public:
   int revolute_type_;
 
 private:
-  bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type, int desired_step_type_num);
+  bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type, double desired_step_type_num);
 
 
 
 
-  void calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
+  void calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, double desired_step_type_num);
   void calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
   void calcRoStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
-  void calcRevRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, int desired_step_type_num);
+  void calcRevRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, double desired_step_type_num);
 
   void calcStopStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
 
