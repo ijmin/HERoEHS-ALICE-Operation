@@ -7,8 +7,6 @@
 #include "alice_foot_step_planner/alice_foot_step_planner.h"
 using namespace alice;
 // Foot step planner algorithm
-Command_generator command_controller;
-
 FootStepPlanner::FootStepPlanner()
 {
   // load yaml
@@ -27,6 +25,8 @@ FootStepPlanner::FootStepPlanner()
   side_step_length_min = 0;
   step_rad_max = 0;
   step_rad_min = 0;
+
+  command_controller = new Command_generator;
   //readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
@@ -86,7 +86,7 @@ void FootStepPlanner::initialize()
   {
     step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter2.yaml";
   }
-  command_controller.parse_step_param_data(step_path_);
+  command_controller->parse_step_param_data(step_path_);
 
   //pub
   foot_step_command_pub     = nh.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_generator/walking_command", 1);
@@ -96,7 +96,7 @@ void FootStepPlanner::initialize()
   //foot_step_2d_pub    = nh.advertise<alice_foot_step_generator::Step2DArray>("/heroehs/alice_foot_step_generator/footsteps_2d", 1);
 
   //sub
-  step_data_apply_sub = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 10, &FootStepPlanner::stepDataApplyMsgCallback, this);
+  //step_data_apply_sub = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 10, &FootStepPlanner::stepDataApplyMsgCallback, this);
   move_command_sub_         = nh.subscribe("/heroehs/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
   walking_module_status_sub = nh.subscribe("/heroehs/status", 10, &FootStepPlanner::walkingModuleStatusMsgCallback, this);
   environment_detector_sub  = nh.subscribe("/heroehs/environment_detector", 5, &FootStepPlanner::environmentDetectorMsgCallback, this);
@@ -272,75 +272,75 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
   {
     if(move_command->key == "left")
     {
-      command_controller.FootParam.command = "left";
-      command_controller.step_type = "default";
+      command_controller->FootParam.command = "left";
+      command_controller->step_type = "default";
     }
     else if(move_command->key == "right")
     {
-      command_controller.FootParam.command = "right";
-      command_controller.step_type = "default";
+      command_controller->FootParam.command = "right";
+      command_controller->step_type = "default";
     }
     else if(move_command->key == "forward")
     {
-      command_controller.FootParam.command = "forward";
-      command_controller.step_type = "default";
+      command_controller->FootParam.command = "forward";
+      command_controller->step_type = "default";
     }
     else if(move_command->key == "backward")
     {
-      command_controller.FootParam.command = "backward";
-      command_controller.step_type = "default";
+      command_controller->FootParam.command = "backward";
+      command_controller->step_type = "default";
     }
     else if(move_command->key == "turn_left")
     {
-      command_controller.FootParam.command = "turn left";
-      command_controller.step_type = "default";
+      command_controller->FootParam.command = "turn left";
+      command_controller->step_type = "default";
     }
     else if(move_command->key == "turn_right")
     {
-      command_controller.FootParam.command = "turn right";
-      command_controller.step_type = "default";
+      command_controller->FootParam.command = "turn right";
+      command_controller->step_type = "default";
     }
     else if(move_command->key == "expanded_left")
     {
-      command_controller.FootParam.command = "expanded left";
-      command_controller.step_type = "expanded";
+      command_controller->FootParam.command = "expanded left";
+      command_controller->step_type = "expanded";
     }
     else if(move_command->key == "expanded_right")
     {
-      command_controller.FootParam.command = "expanded right";
-      command_controller.step_type = "expanded";
+      command_controller->FootParam.command = "expanded right";
+      command_controller->step_type = "expanded";
     }
     else if(move_command->key == "centered_left")
     {
-      command_controller.FootParam.command = "centered left";
-      command_controller.step_type = "centered";
+      command_controller->FootParam.command = "centered left";
+      command_controller->step_type = "centered";
     }
     else if(move_command->key == "centered_right")
     {
-      command_controller.FootParam.command = "centered right";
-      command_controller.step_type = "centered";
+      command_controller->FootParam.command = "centered right";
+      command_controller->step_type = "centered";
     }
     else if(move_command->key == "stop")
     {
-      command_controller.FootParam.command = "stop";
-      command_controller.step_type = "default";
+      command_controller->FootParam.command = "stop";
+      command_controller->step_type = "default";
     }
 
     if(move_command->value == "1")
     {
-      command_controller.speed_switch = "1";
+      command_controller->speed_switch = "1";
     }
     else if(move_command->value == "3")
     {
-      command_controller.speed_switch = "3";
+      command_controller->speed_switch = "3";
     }
     else if(move_command->value == "2")
     {
-      command_controller.speed_switch = "2";
+      command_controller->speed_switch = "2";
     }
-    command_controller.command_switch = 2;
-    command_controller.Set_FootParam(alice_id_int);
-    foot_set_command_msg = command_controller.FootParam;
+
+    command_controller->Set_FootParam(alice_id_int);
+    foot_set_command_msg = command_controller->FootParam;
 
     if (move_command->key == "left_kick") //kick
     {
@@ -630,7 +630,7 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 
   return true;
 }
-void FootStepPlanner::stepDataApplyMsgCallback(const alice_foot_step_generator::FootStepCommand::ConstPtr& msg)
+/*void FootStepPlanner::stepDataApplyMsgCallback(const alice_foot_step_generator::FootStepCommand::ConstPtr& msg)
 {
   foot_set_command_msg.step_num = msg->step_num;
   foot_set_command_msg.step_length = msg->step_length;
@@ -654,30 +654,27 @@ void FootStepPlanner::stepDataApplyMsgCallback(const alice_foot_step_generator::
      out << YAML::Key << "default_step_angle_radian" << YAML::Value << foot_set_command_msg.step_angle_rad;
      out << YAML::Key << "default_step_time" << YAML::Value << foot_set_command_msg.step_time;
 
-     out << YAML::Key << "expanded_step_num" << YAML::Value << command_controller.expanded_step_num;
-     out << YAML::Key << "expanded_step_length" << YAML::Value << command_controller.expanded_step_length;
-     out << YAML::Key << "expanded_side_step_length" << YAML::Value << command_controller.expanded_side_step_length;
-     out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << command_controller.expanded_step_angle_rad;
-     out << YAML::Key << "expanded_step_time" << YAML::Value << command_controller.expanded_step_time;
+     out << YAML::Key << "expanded_step_num" << YAML::Value << command_controller->expanded_step_num;
+     out << YAML::Key << "expanded_step_length" << YAML::Value << command_controller->expanded_step_length;
+     out << YAML::Key << "expanded_side_step_length" << YAML::Value << command_controller->expanded_side_step_length;
+     out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << command_controller->expanded_step_angle_rad;
+     out << YAML::Key << "expanded_step_time" << YAML::Value << command_controller->expanded_step_time;
 
-     out << YAML::Key << "centered_step_num" << YAML::Value << command_controller.centered_step_num;
-     out << YAML::Key << "centered_step_length" << YAML::Value << command_controller.centered_step_length;
-     out << YAML::Key << "centered_side_step_length" << YAML::Value << command_controller.centered_side_step_length;
-     out << YAML::Key << "centered_step_angle_radian" << YAML::Value << command_controller.centered_step_angle_rad;
-     out << YAML::Key << "centered_step_time" << YAML::Value << command_controller.centered_step_time;
+     out << YAML::Key << "centered_step_num" << YAML::Value << command_controller->centered_step_num;
+     out << YAML::Key << "centered_step_length" << YAML::Value << command_controller->centered_step_length;
+     out << YAML::Key << "centered_side_step_length" << YAML::Value << command_controller->centered_side_step_length;
+     out << YAML::Key << "centered_step_angle_radian" << YAML::Value << command_controller->centered_step_angle_rad;
+     out << YAML::Key << "centered_step_time" << YAML::Value << command_controller->centered_step_time;
 
-     out << YAML::EndMap;
-     std::ofstream fout(path_.c_str());
-     fout << out.c_str(); // dump it back into the file
   }
   else if(foot_set_command_msg.command == "expanded stop")
   {
      out << YAML::BeginMap;
-     out << YAML::Key << "default_step_num" << YAML::Value << command_controller.default_step_num;
-     out << YAML::Key << "default_step_length" << YAML::Value << command_controller.default_step_length;
-     out << YAML::Key << "default_side_step_length" << YAML::Value << command_controller.default_side_step_length;
-     out << YAML::Key << "default_step_angle_radian" << YAML::Value << command_controller.default_step_angle_rad;
-     out << YAML::Key << "default_step_time" << YAML::Value << command_controller.default_step_time;
+     out << YAML::Key << "default_step_num" << YAML::Value << command_controller->default_step_num;
+     out << YAML::Key << "default_step_length" << YAML::Value << command_controller->default_step_length;
+     out << YAML::Key << "default_side_step_length" << YAML::Value << command_controller->default_side_step_length;
+     out << YAML::Key << "default_step_angle_radian" << YAML::Value << command_controller->default_step_angle_rad;
+     out << YAML::Key << "default_step_time" << YAML::Value << command_controller->default_step_time;
 
      out << YAML::Key << "expanded_step_num" << YAML::Value << foot_set_command_msg.step_num;
      out << YAML::Key << "expanded_step_length" << YAML::Value << foot_set_command_msg.step_length;
@@ -685,43 +682,39 @@ void FootStepPlanner::stepDataApplyMsgCallback(const alice_foot_step_generator::
      out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << foot_set_command_msg.step_angle_rad;
      out << YAML::Key << "expanded_step_time" << YAML::Value << foot_set_command_msg.step_time;
 
-     out << YAML::Key << "centered_step_num" << YAML::Value << command_controller.centered_step_num;
-     out << YAML::Key << "centered_step_length" << YAML::Value << command_controller.centered_step_length;
-     out << YAML::Key << "centered_side_step_length" << YAML::Value << command_controller.centered_side_step_length;
-     out << YAML::Key << "centered_step_angle_radian" << YAML::Value << command_controller.centered_step_angle_rad;
-     out << YAML::Key << "centered_step_time" << YAML::Value << command_controller.centered_step_time;
-
-     out << YAML::EndMap;
-     std::ofstream fout(path_.c_str());
-     fout << out.c_str(); // dump it back into the file
+     out << YAML::Key << "centered_step_num" << YAML::Value << command_controller->centered_step_num;
+     out << YAML::Key << "centered_step_length" << YAML::Value << command_controller->centered_step_length;
+     out << YAML::Key << "centered_side_step_length" << YAML::Value << command_controller->centered_side_step_length;
+     out << YAML::Key << "centered_step_angle_radian" << YAML::Value << command_controller->centered_step_angle_rad;
+     out << YAML::Key << "centered_step_time" << YAML::Value << command_controller->centered_step_time;
   }
   else if(foot_set_command_msg.command == "centered stop")
   {
      out << YAML::BeginMap;
-     out << YAML::Key << "default_step_num" << YAML::Value << command_controller.default_step_num;
-     out << YAML::Key << "default_step_length" << YAML::Value << command_controller.default_step_length;
-     out << YAML::Key << "default_side_step_length" << YAML::Value << command_controller.default_side_step_length;
-     out << YAML::Key << "default_step_angle_radian" << YAML::Value << command_controller.default_step_angle_rad;
-     out << YAML::Key << "default_step_time" << YAML::Value << command_controller.default_step_time;
+     out << YAML::Key << "default_step_num" << YAML::Value << command_controller->default_step_num;
+     out << YAML::Key << "default_step_length" << YAML::Value << command_controller->default_step_length;
+     out << YAML::Key << "default_side_step_length" << YAML::Value << command_controller->default_side_step_length;
+     out << YAML::Key << "default_step_angle_radian" << YAML::Value << command_controller->default_step_angle_rad;
+     out << YAML::Key << "default_step_time" << YAML::Value << command_controller->default_step_time;
 
-     out << YAML::Key << "expanded_step_num" << YAML::Value << command_controller.expanded_step_num;
-     out << YAML::Key << "expanded_step_length" << YAML::Value << command_controller.expanded_step_length;
-     out << YAML::Key << "expanded_side_step_length" << YAML::Value << command_controller.expanded_side_step_length;
-     out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << command_controller.expanded_step_angle_rad;
-     out << YAML::Key << "expanded_step_time" << YAML::Value << command_controller.expanded_step_time;
+     out << YAML::Key << "expanded_step_num" << YAML::Value << command_controller->expanded_step_num;
+     out << YAML::Key << "expanded_step_length" << YAML::Value << command_controller->expanded_step_length;
+     out << YAML::Key << "expanded_side_step_length" << YAML::Value << command_controller->expanded_side_step_length;
+     out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << command_controller->expanded_step_angle_rad;
+     out << YAML::Key << "expanded_step_time" << YAML::Value << command_controller->expanded_step_time;
 
      out << YAML::Key << "centered_step_num" << YAML::Value << foot_set_command_msg.step_num;
      out << YAML::Key << "centered_step_length" << YAML::Value << foot_set_command_msg.step_length;
      out << YAML::Key << "centered_side_step_length" << YAML::Value << foot_set_command_msg.side_step_length;
      out << YAML::Key << "centered_step_angle_radian" << YAML::Value << foot_set_command_msg.step_angle_rad;
      out << YAML::Key << "centered_step_time" << YAML::Value << foot_set_command_msg.step_time;
-
-     out << YAML::EndMap;
-     std::ofstream fout(path_.c_str());
-     fout << out.c_str(); // dump it back into the file
   }
 
-}
+  out << YAML::EndMap;
+  std::ofstream fout(path_.c_str());
+  fout << out.c_str(); // dump it back into the file
+
+}*/
 
 void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg)
 {
@@ -730,7 +723,6 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
   foot_set_command_msg.side_step_length = msg->side_step_length;
   foot_set_command_msg.step_angle_rad = msg->step_angle_rad;
   foot_set_command_msg.step_time = msg->step_time;
-
   foot_set_command_msg.command = msg->command;
 
   foot_step_command_pub.publish(foot_set_command_msg);
@@ -738,7 +730,7 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
 
 void FootStepPlanner::alice_id_Callback(const std_msgs::String::ConstPtr& alice_id)
 {
-/*  std::string step_path_;
+  std::string step_path_;
   if(alice_id->data == "1")
   {
     step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter1.yaml";
@@ -747,12 +739,12 @@ void FootStepPlanner::alice_id_Callback(const std_msgs::String::ConstPtr& alice_
   {
     step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter2.yaml";
   }
-  command_controller.parse_step_param_data(step_path_);*/
+  command_controller->parse_step_param_data(step_path_);
 }
-void FootStepPlanner::current_status_Callback(const std_msgs::String::ConstPtr& log_moving_status)
+/*void FootStepPlanner::current_status_Callback(const std_msgs::String::ConstPtr& log_moving_status)
 {
   command_controller.current_status = log_moving_status->data;
-}
+}*/
 /////////////////////////
 /////////////////////////
 /////////////////////////
@@ -760,8 +752,8 @@ void FootStepPlanner::current_status_Callback(const std_msgs::String::ConstPtr& 
 Command_generator::Command_generator()
 {
   //Default_Setting//
-  Input_Text();
-  Make_Log();
+  //Input_Text();
+  //Make_Log();
   command_switch = 0;
   speed_switch = 2;
   FootParam.step_num = 0;
@@ -769,7 +761,22 @@ Command_generator::Command_generator()
   FootParam.side_step_length = 0;
   FootParam.step_angle_rad = 0;
   FootParam.step_time = 0;
-  start_time = clock();
+  default_step_num = 0;
+  default_step_length = 0;
+  default_side_step_length = 0;
+  default_step_angle_rad = 0;
+  default_step_time = 0;
+  expanded_step_num = 0;
+  expanded_step_length = 0;
+  expanded_side_step_length = 0;
+  expanded_step_angle_rad = 0;
+  expanded_step_time = 0;
+  centered_step_num = 0;
+  centered_step_length = 0;
+  centered_side_step_length = 0;
+  centered_step_angle_rad = 0;
+  centered_step_time = 0;
+// start_time = clock();
   //////////////////
 
   ROS_INFO("command_generator_start");
@@ -848,7 +855,7 @@ void Command_generator::parse_step_param_data(std::string path)
   centered_step_time = doc["centered_step_time"].as<double>();
 }
 
-void Command_generator::Make_Log(void)
+/*void Command_generator::Make_Log(void)
 {
   time_t curr_time;
   struct tm *curr_tm;
@@ -940,7 +947,7 @@ void Command_generator::Input_Text(void)
     i +=1;
   }
   inFile.close();
-}
+}*/
 /*int main(int argc, char** argv)
 {
   Command_generator command_controller;
