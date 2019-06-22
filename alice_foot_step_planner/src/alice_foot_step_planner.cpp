@@ -85,6 +85,7 @@ void FootStepPlanner::initialize()
   //foot_step_2d_pub    = nh.advertise<alice_foot_step_generator::Step2DArray>("/heroehs/alice_foot_step_generator/footsteps_2d", 1);
 
   //sub
+  step_data_apply_sub = nh.subscribe("/heroehs/alice_foot_step_generator/walking_command", 10, &FootStepPlanner::stepDataApplyMsgCallback, this);
   move_command_sub_         = nh.subscribe("/heroehs/move_command", 10, &FootStepPlanner::moveCommandStatusMsgCallback, this);
   walking_module_status_sub = nh.subscribe("/heroehs/status", 10, &FootStepPlanner::walkingModuleStatusMsgCallback, this);
   environment_detector_sub  = nh.subscribe("/heroehs/environment_detector", 5, &FootStepPlanner::environmentDetectorMsgCallback, this);
@@ -430,6 +431,7 @@ void FootStepPlanner::parse_online_balance_param(std::string path)
   set_balance_param_client.call(set_balance_param_msg);
 
 }
+
 void FootStepPlanner::parse_online_joint_feedback_param(std::string path)
 {
   YAML::Node doc; // YAML file class 선언!
@@ -617,8 +619,98 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 
   return true;
 }
+void FootStepPlanner::stepDataApplyMsgCallback(const alice_foot_step_generator::FootStepCommand::ConstPtr& msg)
+{
+  foot_set_command_msg.step_num = msg->step_num;
+  foot_set_command_msg.step_length = msg->step_length;
+  foot_set_command_msg.side_step_length = msg->side_step_length;
+  foot_set_command_msg.step_angle_rad = msg->step_angle_rad;
+  foot_set_command_msg.step_time = msg->step_time;
 
-// joystic
+  foot_set_command_msg.command = msg->command;
+
+  YAML::Emitter out;
+  std::string path_;
+  if(alice_id_int == 1) path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter1.yaml";
+  if(alice_id_int == 2) path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter2.yaml";
+
+  if(foot_set_command_msg.command == "default stop")
+  {
+     out << YAML::BeginMap;
+     out << YAML::Key << "default_step_num" << YAML::Value << foot_set_command_msg.step_num;
+     out << YAML::Key << "default_step_length" << YAML::Value << foot_set_command_msg.step_length;
+     out << YAML::Key << "default_side_step_length" << YAML::Value << foot_set_command_msg.side_step_length;
+     out << YAML::Key << "default_step_angle_radian" << YAML::Value << foot_set_command_msg.step_angle_rad;
+     out << YAML::Key << "default_step_time" << YAML::Value << foot_set_command_msg.step_time;
+
+     out << YAML::Key << "expanded_step_num" << YAML::Value << command_controller.expanded_step_num;
+     out << YAML::Key << "expanded_step_length" << YAML::Value << command_controller.expanded_step_length;
+     out << YAML::Key << "expanded_side_step_length" << YAML::Value << command_controller.expanded_side_step_length;
+     out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << command_controller.expanded_step_angle_rad;
+     out << YAML::Key << "expanded_step_time" << YAML::Value << command_controller.expanded_step_time;
+
+     out << YAML::Key << "centered_step_num" << YAML::Value << command_controller.centered_step_num;
+     out << YAML::Key << "centered_step_length" << YAML::Value << command_controller.centered_step_length;
+     out << YAML::Key << "centered_side_step_length" << YAML::Value << command_controller.centered_side_step_length;
+     out << YAML::Key << "centered_step_angle_radian" << YAML::Value << command_controller.centered_step_angle_rad;
+     out << YAML::Key << "centered_step_time" << YAML::Value << command_controller.centered_step_time;
+
+     out << YAML::EndMap;
+     std::ofstream fout(path_.c_str());
+     fout << out.c_str(); // dump it back into the file
+  }
+  else if(foot_set_command_msg.command == "expanded stop")
+  {
+     out << YAML::BeginMap;
+     out << YAML::Key << "default_step_num" << YAML::Value << command_controller.default_step_num;
+     out << YAML::Key << "default_step_length" << YAML::Value << command_controller.default_step_length;
+     out << YAML::Key << "default_side_step_length" << YAML::Value << command_controller.default_side_step_length;
+     out << YAML::Key << "default_step_angle_radian" << YAML::Value << command_controller.default_step_angle_rad;
+     out << YAML::Key << "default_step_time" << YAML::Value << command_controller.default_step_time;
+
+     out << YAML::Key << "expanded_step_num" << YAML::Value << foot_set_command_msg.step_num;
+     out << YAML::Key << "expanded_step_length" << YAML::Value << foot_set_command_msg.step_length;
+     out << YAML::Key << "expanded_side_step_length" << YAML::Value << foot_set_command_msg.side_step_length;
+     out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << foot_set_command_msg.step_angle_rad;
+     out << YAML::Key << "expanded_step_time" << YAML::Value << foot_set_command_msg.step_time;
+
+     out << YAML::Key << "centered_step_num" << YAML::Value << command_controller.centered_step_num;
+     out << YAML::Key << "centered_step_length" << YAML::Value << command_controller.centered_step_length;
+     out << YAML::Key << "centered_side_step_length" << YAML::Value << command_controller.centered_side_step_length;
+     out << YAML::Key << "centered_step_angle_radian" << YAML::Value << command_controller.centered_step_angle_rad;
+     out << YAML::Key << "centered_step_time" << YAML::Value << command_controller.centered_step_time;
+
+     out << YAML::EndMap;
+     std::ofstream fout(path_.c_str());
+     fout << out.c_str(); // dump it back into the file
+  }
+  else if(foot_set_command_msg.command == "centered stop")
+  {
+     out << YAML::BeginMap;
+     out << YAML::Key << "default_step_num" << YAML::Value << command_controller.default_step_num;
+     out << YAML::Key << "default_step_length" << YAML::Value << command_controller.default_step_length;
+     out << YAML::Key << "default_side_step_length" << YAML::Value << command_controller.default_side_step_length;
+     out << YAML::Key << "default_step_angle_radian" << YAML::Value << command_controller.default_step_angle_rad;
+     out << YAML::Key << "default_step_time" << YAML::Value << command_controller.default_step_time;
+
+     out << YAML::Key << "expanded_step_num" << YAML::Value << command_controller.expanded_step_num;
+     out << YAML::Key << "expanded_step_length" << YAML::Value << command_controller.expanded_step_length;
+     out << YAML::Key << "expanded_side_step_length" << YAML::Value << command_controller.expanded_side_step_length;
+     out << YAML::Key << "expanded_step_angle_radian" << YAML::Value << command_controller.expanded_step_angle_rad;
+     out << YAML::Key << "expanded_step_time" << YAML::Value << command_controller.expanded_step_time;
+
+     out << YAML::Key << "centered_step_num" << YAML::Value << foot_set_command_msg.step_num;
+     out << YAML::Key << "centered_step_length" << YAML::Value << foot_set_command_msg.step_length;
+     out << YAML::Key << "centered_side_step_length" << YAML::Value << foot_set_command_msg.side_step_length;
+     out << YAML::Key << "centered_step_angle_radian" << YAML::Value << foot_set_command_msg.step_angle_rad;
+     out << YAML::Key << "centered_step_time" << YAML::Value << foot_set_command_msg.step_time;
+
+     out << YAML::EndMap;
+     std::ofstream fout(path_.c_str());
+     fout << out.c_str(); // dump it back into the file
+  }
+}
+
 void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg)
 {
   foot_set_command_msg.step_num = msg->step_num;
@@ -631,8 +723,6 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
 
   foot_step_command_pub.publish(foot_set_command_msg);
 }
-
-
 
 void FootStepPlanner::alice_id_Callback(const std_msgs::String::ConstPtr& alice_id)
 {

@@ -46,6 +46,7 @@ public:
 	FootStepPlanner();
 	~FootStepPlanner();
 
+
 	std::string balance_param_file;
 	std::string joint_feedback_file;
 
@@ -60,6 +61,7 @@ public:
 
 
 	ros::Subscriber command_generator_sub;
+	ros::Subscriber step_data_apply_sub;
 
 	ros::Publisher  foot_step_command_pub;
 	ros::Publisher  on_process_pub;
@@ -94,7 +96,7 @@ public:
 	void moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command);
 	void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
 	void commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg);
-
+  void stepDataApplyMsgCallback(const alice_foot_step_generator::FootStepCommand::ConstPtr& msg);
 	bool setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
 			alice_walking_module_msgs::SetBalanceParam::Response &res);
 
@@ -112,6 +114,7 @@ public:
 	void read_kick_param();
 	void parse_init_data_(const std::string &path);
 	void parse_online_balance_param(std::string path);
+	void parse_step_param_data(std::string path);
 	void parse_online_joint_feedback_param(std::string path);
 	void change_walking_kick_mode(std::string mode, std::string kick_mode);
 
@@ -140,6 +143,7 @@ class Command_generator
 public:
   Command_generator();
   void parse_step_param_data(std::string path);
+  void step_save(int alice_id, std::string command);
   std_msgs::String motion_command;
   std_msgs::String speed_command;
   alice_foot_step_generator::FootStepCommand FootParam;

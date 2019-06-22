@@ -13,7 +13,3 @@ centered_step_length: 0.02
 centered_side_step_length: 0.05
 centered_step_angle_radian: 0.1
 centered_step_time: 5
-foot_step_dsp: 0.4
-foot_step_foot_z_swap: 0.06
-foot_step_body_z_swap: 0
-foot_step_y_zmp_conv: -0.03
