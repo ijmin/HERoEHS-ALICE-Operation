@@ -77,6 +77,17 @@ void FootStepPlanner::initialize()
     ROS_ERROR("NO file path in the ROS parameters.");
   }
 
+  std::string step_path_;
+  if(alice_id_int == 1)
+  {
+    step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter1.yaml";
+  }
+  else if(alice_id_int == 2)
+  {
+    step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter2.yaml";
+  }
+  command_controller.parse_step_param_data(step_path_);
+
   //pub
   foot_step_command_pub     = nh.advertise<alice_foot_step_generator::FootStepCommand>("/heroehs/alice_foot_step_generator/walking_command", 1);
   on_process_pub            = nh.advertise<std_msgs::Bool>("/heroehs/alice/on_process", 1);
@@ -626,9 +637,9 @@ void FootStepPlanner::stepDataApplyMsgCallback(const alice_foot_step_generator::
   foot_set_command_msg.side_step_length = msg->side_step_length;
   foot_set_command_msg.step_angle_rad = msg->step_angle_rad;
   foot_set_command_msg.step_time = msg->step_time;
-
   foot_set_command_msg.command = msg->command;
 
+  if(foot_set_command_msg.command != "default stop" && foot_set_command_msg.command != "expanded stop" && foot_set_command_msg.command != "centered stop") return;
   YAML::Emitter out;
   std::string path_;
   if(alice_id_int == 1) path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter1.yaml";
@@ -709,6 +720,7 @@ void FootStepPlanner::stepDataApplyMsgCallback(const alice_foot_step_generator::
      std::ofstream fout(path_.c_str());
      fout << out.c_str(); // dump it back into the file
   }
+
 }
 
 void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg)
@@ -726,7 +738,7 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
 
 void FootStepPlanner::alice_id_Callback(const std_msgs::String::ConstPtr& alice_id)
 {
-  std::string step_path_;
+/*  std::string step_path_;
   if(alice_id->data == "1")
   {
     step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter1.yaml";
@@ -735,7 +747,7 @@ void FootStepPlanner::alice_id_Callback(const std_msgs::String::ConstPtr& alice_
   {
     step_path_ = ros::package::getPath("alice_foot_step_planner") + "/config/step_parameter2.yaml";
   }
-  command_controller.parse_step_param_data(step_path_);
+  command_controller.parse_step_param_data(step_path_);*/
 }
 void FootStepPlanner::current_status_Callback(const std_msgs::String::ConstPtr& log_moving_status)
 {
