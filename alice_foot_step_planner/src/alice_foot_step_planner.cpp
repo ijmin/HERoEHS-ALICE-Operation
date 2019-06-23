@@ -117,6 +117,7 @@ void FootStepPlanner::initialize()
 
   parse_online_balance_param(balance_param_file);
   parse_online_joint_feedback_param(joint_feedback_file);
+  read_kick_param();
 }
 void FootStepPlanner::data_initialize()
 {
@@ -507,6 +508,7 @@ void FootStepPlanner::change_walking_kick_mode(std::string mode, std::string kic
   }
   else
   {
+    ROS_INFO("KICK COB :: %f", kick_y_cob_);
     if(!kick_mode.compare("right kick"))
       set_balance_param_msg.request.balance_param.cob_y_offset_m = kick_y_cob_;
     else

@@ -4,7 +4,7 @@ default_side_step_length: 0.05
 default_step_angle_radian: 0.1
 default_step_time: 5
 expanded_step_num: 1
-expanded_step_length: 0.07000000000000001
+expanded_step_length: 0.07
 expanded_side_step_length: 0.05
 expanded_step_angle_radian: 0.3
 expanded_step_time: 5
