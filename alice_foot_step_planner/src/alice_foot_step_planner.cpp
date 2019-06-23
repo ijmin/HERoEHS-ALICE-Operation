@@ -244,11 +244,14 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
   {
     return;
   }
-  if(previous_motion_check != motion_check && motion_check == false)
+
+  if(move_command->key != "left_kick" && move_command->key != "right_kick")
   {
-    change_walking_kick_mode("walking", "");
-    previous_motion_check = motion_check;
-    ROS_INFO("1111111111111111111");
+    if(previous_motion_check != motion_check && motion_check == false)
+    {
+      change_walking_kick_mode("walking", "");
+      previous_motion_check = motion_check;
+    }
   }
 
   if(move_command->key == "forward_precision" || move_command->key == "backward_precision" ||
