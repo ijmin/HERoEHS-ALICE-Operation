@@ -177,6 +177,9 @@ public:
    bool motion_check;
    bool previous_motion_check;
 
+   //command check 0.8;
+   bool command_interval_check;
+
 
 private:
 

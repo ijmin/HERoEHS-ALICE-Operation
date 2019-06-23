@@ -30,6 +30,7 @@ FootStepPlanner::FootStepPlanner()
   motion_check  = false;
   previous_motion_check = 0;
   command_controller = new Command_generator;
+  command_interval_check = 0;
   //readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
@@ -240,6 +241,8 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
+  if(command_interval_check == 0)
+    return;
   /////////////////////////////////////// motion check
   if(motion_check == true)
   {
@@ -405,6 +408,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     }
 
     foot_step_command_pub.publish(foot_set_command_msg);
+    command_interval_check = 0;
     return;
   }
 }
