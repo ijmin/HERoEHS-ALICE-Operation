@@ -26,6 +26,9 @@ FootStepPlanner::FootStepPlanner()
   step_rad_max = 0;
   step_rad_min = 0;
 
+  walking_check = false;
+  motion_check  = false;
+  previous_motion_check = 0;
   command_controller = new Command_generator;
   //readIDAlice();
 }
@@ -45,6 +48,16 @@ void FootStepPlanner::walkingModuleStatusMsgCallback(const robotis_controller_ms
     ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
   else
     ROS_ERROR_STREAM("[Robot] : " << msg->status_msg);
+
+  if(!msg->status_msg.compare("Walking_Started"))
+  {
+    walking_check = true;
+  }
+  if(!msg->status_msg.compare("Walking_Finished"))
+  {
+    walking_check = false;
+    motion_check = false;
+  }
 }
 void FootStepPlanner::environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg)
 {
@@ -105,7 +118,7 @@ void FootStepPlanner::initialize()
 
 
 
-  command_generator_sub  = nh.subscribe("/heroehs/command_generator", 5, &FootStepPlanner::commandGeneratorMsgCallback, this);
+  //command_generator_sub  = nh.subscribe("/heroehs/command_generator", 5, &FootStepPlanner::commandGeneratorMsgCallback, this);
 
 
   //service
@@ -226,10 +239,22 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
+  /////////////////////////////////////// motion check
+  if(motion_check == true)
+  {
+    return;
+  }
+  if(previous_motion_check != motion_check && motion_check == false)
+  {
+    change_walking_kick_mode("walking", "");
+    previous_motion_check = motion_check;
+    ROS_INFO("1111111111111111111");
+  }
+
   if(move_command->key == "forward_precision" || move_command->key == "backward_precision" ||
       move_command->key == "left_precision" || move_command->key == "right_precision")
   {
-    change_walking_kick_mode("walking", "");
+    //change_walking_kick_mode("walking", "");
 
     /*if(msg->command == 2)
       {
@@ -271,6 +296,8 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
   }
   else
   {
+    //change_walking_kick_mode("walking", "");
+
     if(move_command->key == "left")
     {
       command_controller->FootParam.command = "left";
@@ -343,18 +370,34 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     command_controller->Set_FootParam(alice_id_int);
     foot_set_command_msg = command_controller->FootParam;
 
-    if (move_command->key == "left_kick") //kick
+    if (move_command->key == "left_kick" && walking_check == true) //
+      return;
+    if (move_command->key == "right_kick" && walking_check == true)
+      return;
+
+    if (move_command->key == "left_kick" && walking_check == false) //kick
     {
+      walking_check = true;
       change_walking_kick_mode("kick", "left kick");
       foot_set_command_msg.command = "left kick";
       foot_step_command_pub.publish(foot_set_command_msg);
+      motion_check = true; // motion start
+      ///////////////////////////////////////
+      previous_motion_check = motion_check;
+      ///////////////////////////////////////
+      return;
     }
-    if(move_command->key == "right_kick")
+    if(move_command->key == "right_kick" && walking_check == false)
     {
+      walking_check = true;
       change_walking_kick_mode("kick", "right kick");
       foot_set_command_msg.command = "right kick";
       foot_step_command_pub.publish(foot_set_command_msg);
-
+      motion_check = true; // motion start
+      ///////////////////////////////////////
+      previous_motion_check = motion_check;
+      ///////////////////////////////////////
+      return;
     }
 
     foot_step_command_pub.publish(foot_set_command_msg);
@@ -583,6 +626,9 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
   fout << out.c_str(); // dump it back into the file
 
 
+  //parse_online_joint_feedback_param(joint_feedback_file);
+
+
   printf("Joint Feed Back SAVE!!\n");
   return true;
 }
@@ -627,6 +673,8 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
   out << YAML::EndMap;
   std::ofstream fout(balance_param_file.c_str());
   fout << out.c_str(); // dump it back into the file
+
+  //parse_online_balance_param(balance_param_file);
 
   printf("Balance Param SAVE!!\n");
 
@@ -718,7 +766,7 @@ bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::
 
 }*/
 
-void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg)
+/*void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg)
 {
   foot_set_command_msg.step_num = msg->step_num;
   foot_set_command_msg.step_length = msg->step_length;
@@ -726,9 +774,8 @@ void FootStepPlanner::commandGeneratorMsgCallback(const alice_foot_step_generato
   foot_set_command_msg.step_angle_rad = msg->step_angle_rad;
   foot_set_command_msg.step_time = msg->step_time;
   foot_set_command_msg.command = msg->command;
-
   foot_step_command_pub.publish(foot_set_command_msg);
-}
+}*/
 
 void FootStepPlanner::alice_id_Callback(const std_msgs::String::ConstPtr& alice_id)
 {
@@ -778,7 +825,7 @@ Command_generator::Command_generator()
   centered_side_step_length = 0;
   centered_step_angle_rad = 0;
   centered_step_time = 0;
-// start_time = clock();
+  // start_time = clock();
   //////////////////
 
   ROS_INFO("command_generator_start");

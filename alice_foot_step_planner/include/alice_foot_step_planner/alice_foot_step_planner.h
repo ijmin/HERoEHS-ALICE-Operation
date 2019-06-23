@@ -140,7 +140,7 @@ public:
   void walkingModuleStatusMsgCallback(const robotis_controller_msgs::StatusMsg::ConstPtr& msg);
   void moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command);
   void environmentDetectorMsgCallback(const alice_msgs::FoundObjectArray::ConstPtr& msg);
-  void commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg);
+  //void commandGeneratorMsgCallback(const alice_foot_step_generator::FootStepCommandConstPtr& msg);
   //void stepDataApplyMsgCallback(const alice_foot_step_generator::FootStepCommand::ConstPtr& msg);
   bool setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
       alice_walking_module_msgs::SetBalanceParam::Response &res);
@@ -171,6 +171,11 @@ public:
 
   //command generator
    Command_generator *command_controller;
+
+  // walking check & motion check
+   bool walking_check;
+   bool motion_check;
+   bool previous_motion_check;
 
 
 private:
