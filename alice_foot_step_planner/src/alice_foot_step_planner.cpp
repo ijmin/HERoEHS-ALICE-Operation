@@ -160,10 +160,11 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 
   if(!command.compare("forward") || !command.compare("backward") )
   {
-    if(distance >= step_length_max)
+    if(distance >= step_length_max*2)
     {
-      foot_set_command_msg.step_num = (int)(distance/step_length_max);
+      foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
       foot_set_command_msg.step_length = step_length_max;
+
     }
     else
     {
