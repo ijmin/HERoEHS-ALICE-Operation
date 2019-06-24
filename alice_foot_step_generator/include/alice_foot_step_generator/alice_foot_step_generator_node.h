@@ -74,11 +74,16 @@ public:
   void calcLeftKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data);
 
-  void calcTurnLeftAndRightKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+  void calcYRightKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data);
-  void calcTurnRightAndLeftKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
+  void calcYLeftKickStep(alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type* step_data_array,
       const alice_walking_module_msgs::StepData& ref_step_data);
 
+  double kick_dsp_ratio_;
+  double kick_height_m_;
+  double kick_back_time_, kick_back_m_;
+  double kick_time_, kick_far_m_, kick_pitch_rad_;
+  double kick_time_sec_;
 
   int    num_of_step_;
   double fb_step_length_m_;
@@ -106,19 +111,11 @@ public:
   double default_y_feet_offset_m_;
   double default_yaw_feet_offset_m_;
 
-  double kick_height_m_;
-  double kick_far_m_;
-  double kick_pitch_rad_;
-  double kick_time_sec_;
-
   int previous_step_type_;
   int revolute_type_;
 
 private:
   bool calcStep(const alice_walking_module_msgs::StepData& ref_step_data, int previous_step_type,  int desired_step_type, double desired_step_type_num);
-
-
-
 
   void calcFBStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction, double desired_step_type_num);
   void calcRLStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction);
@@ -133,6 +130,29 @@ private:
   Eigen::MatrixXd getInverseTransformation(Eigen::MatrixXd transform);
 
   alice_walking_module_msgs::AddStepDataArray::Request::_step_data_array_type step_data_array_;
+
+
+  double kick_dsp_ratio;
+  double kick_height_m;
+  double kick_back_time, kick_back_m;
+  double kick_time, kick_far_m, kick_pitch_rad;
+  double kick_time_sec;
+
+  int num_of_step;
+  std::vector<double> default_step_set;
+  std::vector<double> ep_step_set;
+  std::vector<double> ct_step_set;
+
+  double dsp_ratio_set;
+  double foot_z_swap_set;
+  double body_z_swap_set;
+  double y_zmp_conv_set;
+  double startend_time_set;
+
+  double y_kick_front_time,y_kick_front_x_m,y_kick_front_y_m;
+  double y_kick_time;
+
+
 
 
 };
