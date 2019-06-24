@@ -228,7 +228,6 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int rob
       foot_set_command_msg.step_time = 5;
     }*/
   }
-
   if(command.compare("centered left") || command.compare("centered right"))
   {
     if(yaw_rad > 0.3)
