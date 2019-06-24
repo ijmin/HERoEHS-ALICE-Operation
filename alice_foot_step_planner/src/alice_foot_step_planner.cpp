@@ -163,8 +163,8 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
   {
     if(distance >= step_length_max*3)
     {
-      //foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
-      foot_set_command_msg.step_num = 2;
+      foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
+      //foot_set_command_msg.step_num = 2;
       foot_set_command_msg.step_length = step_length_max;
 
     }
@@ -290,10 +290,10 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     {
 
       double temp_value = atof(move_command->value.c_str());
-      if(temp_value > 0)
+      if(move_command->key == "forward_precision")
         CalculateStepData(temp_value, 0, "forward");
-      else if(temp_value < 0)
-        CalculateStepData(fabs(temp_value), 0, "backward");
+      else if(move_command->key == "backward_precision")
+        CalculateStepData(temp_value, 0, "backward");
       else
       {
         CalculateStepData(0, 0, "stop");
@@ -302,10 +302,10 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     if(move_command->key == "left_precision" || move_command->key == "right_precision")
     {
       double temp_value = atof(move_command->value.c_str());
-      if(temp_value > 0)
+      if(move_command->key == "left_precision" )
         CalculateStepData(0, temp_value, "left");
-      else if(temp_value < 0)
-        CalculateStepData(0, fabs(temp_value), "right");
+      else if(move_command->key == "right_precision")
+        CalculateStepData(0, temp_value, "right");
       else
       {
         CalculateStepData(0, 0, "stop");
@@ -315,9 +315,9 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     {
 
       double temp_value = atof(move_command->value.c_str())*DEGREE2RADIAN;
-      if(temp_value > 0)
+      if(move_command->key == "turn_left_precision")
         AlignRobotYaw(temp_value, "turn left", walking_mode);
-      else if(temp_value < 0)
+      else if(move_command->key == "turn_right_precision")
         AlignRobotYaw(fabs(temp_value), "turn right", walking_mode);
       else
       {
@@ -330,13 +330,13 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       command_controller->Set_FootParam(alice_id_int);
       foot_set_command_msg = command_controller->FootParam;
       double temp_value = atof(move_command->value.c_str())*DEGREE2RADIAN;
-      if(temp_value > 0)
+      if(move_command->key == "centered_left_precision")
       {
         AlignRobotYaw(temp_value, "centered left", walking_mode);
       }
-      else if(temp_value < 0)
+      else if(move_command->key == "centered_right_precision" )
       {
-        AlignRobotYaw(fabs(temp_value), "centered right", walking_mode);
+        AlignRobotYaw(temp_value, "centered right", walking_mode);
       }
       else
       {
