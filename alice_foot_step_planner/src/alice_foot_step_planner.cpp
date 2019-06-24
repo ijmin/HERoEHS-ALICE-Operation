@@ -161,15 +161,18 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 
   if(!command.compare("forward") || !command.compare("backward") )
   {
-    if(distance >= step_length_max*2)
+    if(distance >= step_length_max*3)
     {
-      foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
+      //foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
+      foot_set_command_msg.step_num = 2;
       foot_set_command_msg.step_length = step_length_max;
 
     }
     else
     {
       foot_set_command_msg.step_num = 1;
+      if(distance >= step_length_max)
+        distance = step_length_max;
       foot_set_command_msg.step_length = distance;
     }
   }
@@ -198,17 +201,17 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int robot_id)
 {
 
-  if(yaw_rad >= 0.15)
+  if(yaw_rad >= 0.05)
   {
-    foot_set_command_msg.step_num = (int) (yaw_rad/0.15);
+    foot_set_command_msg.step_num = (int) (yaw_rad/0.05);
     if(robot_id == 1)
     {
-      foot_set_command_msg.step_angle_rad = 0.15;
+      foot_set_command_msg.step_angle_rad = 0.05;
       foot_set_command_msg.step_time = 2;
     }
     if(robot_id == 2)
     {
-      foot_set_command_msg.step_angle_rad = 0.15;
+      foot_set_command_msg.step_angle_rad = 0.05;
       foot_set_command_msg.step_time = 5;
     }
   }
@@ -264,21 +267,10 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
   }
 
   if(move_command->key == "forward_precision" || move_command->key == "backward_precision" ||
-      move_command->key == "left_precision" || move_command->key == "right_precision")
+      move_command->key == "left_precision" || move_command->key == "right_precision" ||
+      move_command->key == "turn_left_precision" || move_command->key == "turn_right_precision"   )
   {
     //change_walking_kick_mode("walking", "");
-
-    /*if(msg->command == 2)
-      {
-        if(msg->transform.z > 0)
-        {
-          AlignRobotYaw(msg->transform.z, "turn left", walking_mode);
-        }
-        if(msg->transform.z < 0)
-        {
-          AlignRobotYaw(fabs(msg->transform.z), "turn right", walking_mode);
-        }
-      }*/
 
     if(move_command->key == "forward_precision" || move_command->key == "backward_precision" )
     {
@@ -300,6 +292,32 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
         CalculateStepData(0, temp_value, "left");
       else if(temp_value < 0)
         CalculateStepData(0, fabs(temp_value), "right");
+      else
+      {
+        CalculateStepData(0, 0, "stop");
+      }
+    }
+    if(move_command->key == "turn_left_precision" || move_command->key == "turn_right_precision" )
+    {
+
+      double temp_value = atof(move_command->value.c_str())*DEGREE2RADIAN;
+      if(temp_value > 0)
+        AlignRobotYaw(temp_value, "turn left", walking_mode);
+      else if(temp_value < 0)
+        AlignRobotYaw(fabs(temp_value), "turn right", walking_mode);
+      else
+      {
+        CalculateStepData(0, 0, "stop");
+      }
+    }
+    if(move_command->key == "centered_left_precision" || move_command->key == "centered_right_precision" )
+    {
+
+      double temp_value = atof(move_command->value.c_str())*DEGREE2RADIAN;
+      if(temp_value > 0)
+        AlignRobotYaw(temp_value, "centered left", walking_mode);
+      else if(temp_value < 0)
+        AlignRobotYaw(fabs(temp_value), "centered right", walking_mode);
       else
       {
         CalculateStepData(0, 0, "stop");
