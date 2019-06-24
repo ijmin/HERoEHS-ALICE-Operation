@@ -244,9 +244,14 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
   if(command_interval_check == 0)
     return;
   /////////////////////////////////////// motion check
+
   if(motion_check == true)
   {
-    return;
+    if(walking_check == true) // 명령이 씹힌것
+    {
+      command_interval_check = 0;
+      return;
+    }
   }
 
   if(move_command->key != "left_kick" && move_command->key != "right_kick")
@@ -377,32 +382,34 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     command_controller->Set_FootParam(alice_id_int);
     foot_set_command_msg = command_controller->FootParam;
 
-    if (move_command->key == "left_kick" && walking_check == true) //
+    if ((move_command->key == "left_kick" || move_command->key == "right_kick" )&& walking_check == true)
+    {
+      command_interval_check = 0;
       return;
-    if (move_command->key == "right_kick" && walking_check == true)
-      return;
-
+    }
     if (move_command->key == "left_kick" && walking_check == false) //kick
     {
-      walking_check = true;
+      //walking_check = true;
       change_walking_kick_mode("kick", "left kick");
       foot_set_command_msg.command = "left kick";
       foot_step_command_pub.publish(foot_set_command_msg);
       motion_check = true; // motion start
       ///////////////////////////////////////
       previous_motion_check = motion_check;
+      command_interval_check = 0;
       ///////////////////////////////////////
       return;
     }
     if(move_command->key == "right_kick" && walking_check == false)
     {
-      walking_check = true;
+      //walking_check = true;
       change_walking_kick_mode("kick", "right kick");
       foot_set_command_msg.command = "right kick";
       foot_step_command_pub.publish(foot_set_command_msg);
       motion_check = true; // motion start
       ///////////////////////////////////////
       previous_motion_check = motion_check;
+      command_interval_check = 0;
       ///////////////////////////////////////
       return;
     }
