@@ -161,15 +161,18 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 
   if(!command.compare("forward") || !command.compare("backward") )
   {
-    if(distance >= step_length_max*2)
+    if(distance >= step_length_max*3)
     {
-      foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
+      //foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
+      foot_set_command_msg.step_num = 2;
       foot_set_command_msg.step_length = step_length_max;
 
     }
     else
     {
       foot_set_command_msg.step_num = 1;
+      if(distance >= step_length_max)
+        distance = step_length_max;
       foot_set_command_msg.step_length = distance;
     }
   }
@@ -269,18 +272,6 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
   {
     //change_walking_kick_mode("walking", "");
 
-    /*if(msg->command == 2)
-      {
-        if(msg->transform.z > 0)
-        {
-          AlignRobotYaw(msg->transform.z, "turn left", walking_mode);
-        }
-        if(msg->transform.z < 0)
-        {
-          AlignRobotYaw(fabs(msg->transform.z), "turn right", walking_mode);
-        }
-      }*/
-
     if(move_command->key == "forward_precision" || move_command->key == "backward_precision" )
     {
 
@@ -314,6 +305,19 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
         AlignRobotYaw(temp_value, "turn left", walking_mode);
       else if(temp_value < 0)
         AlignRobotYaw(fabs(temp_value), "turn right", walking_mode);
+      else
+      {
+        CalculateStepData(0, 0, "stop");
+      }
+    }
+    if(move_command->key == "centered_left_precision" || move_command->key == "centered_right_precision" )
+    {
+
+      double temp_value = atof(move_command->value.c_str())*DEGREE2RADIAN;
+      if(temp_value > 0)
+        AlignRobotYaw(temp_value, "centered left", walking_mode);
+      else if(temp_value < 0)
+        AlignRobotYaw(fabs(temp_value), "centered right", walking_mode);
       else
       {
         CalculateStepData(0, 0, "stop");
