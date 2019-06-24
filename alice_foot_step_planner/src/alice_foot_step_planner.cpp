@@ -207,25 +207,39 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int rob
     if(robot_id == 1)
     {
       foot_set_command_msg.step_angle_rad = 0.05;
-      foot_set_command_msg.step_time = 2;
+      //foot_set_command_msg.step_time = 2;
     }
     if(robot_id == 2)
     {
       foot_set_command_msg.step_angle_rad = 0.05;
-      foot_set_command_msg.step_time = 5;
+      //foot_set_command_msg.step_time = 5;
     }
   }
   else
   {
     foot_set_command_msg.step_num = 1;
     foot_set_command_msg.step_angle_rad = yaw_rad;
-    if(robot_id == 1)
+    /* if(robot_id == 1)
     {
       foot_set_command_msg.step_time = 2;
     }
     if(robot_id == 2)
     {
       foot_set_command_msg.step_time = 5;
+    }*/
+  }
+
+  if(command.compare("centered left") || command.compare("centered right"))
+  {
+    if(yaw_rad > 0.3)
+    {
+      foot_set_command_msg.step_num = (int) (yaw_rad/0.3);
+      foot_set_command_msg.step_angle_rad = 0.3;
+    }
+    else
+    {
+      foot_set_command_msg.step_num = 1;
+      foot_set_command_msg.step_angle_rad = yaw_rad;
     }
   }
   foot_set_command_msg.command = command;
@@ -268,7 +282,8 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
 
   if(move_command->key == "forward_precision" || move_command->key == "backward_precision" ||
       move_command->key == "left_precision" || move_command->key == "right_precision" ||
-      move_command->key == "turn_left_precision" || move_command->key == "turn_right_precision"   )
+      move_command->key == "turn_left_precision" || move_command->key == "turn_right_precision"  ||
+      move_command->key == "centered_left_precision" || move_command->key == "centered_right_precision")
   {
     //change_walking_kick_mode("walking", "");
 
@@ -312,12 +327,18 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     }
     if(move_command->key == "centered_left_precision" || move_command->key == "centered_right_precision" )
     {
-
+      command_controller->step_type = "centered";
+      command_controller->Set_FootParam(alice_id_int);
+      foot_set_command_msg = command_controller->FootParam;
       double temp_value = atof(move_command->value.c_str())*DEGREE2RADIAN;
       if(temp_value > 0)
+      {
         AlignRobotYaw(temp_value, "centered left", walking_mode);
+      }
       else if(temp_value < 0)
+      {
         AlignRobotYaw(fabs(temp_value), "centered right", walking_mode);
+      }
       else
       {
         CalculateStepData(0, 0, "stop");
