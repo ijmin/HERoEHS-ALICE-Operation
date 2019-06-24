@@ -201,17 +201,17 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
 void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int robot_id)
 {
 
-  if(yaw_rad >= 0.05)
+  if(yaw_rad >= step_rad_max)
   {
-    foot_set_command_msg.step_num = (int) (yaw_rad/0.05);
+    foot_set_command_msg.step_num = (int) (yaw_rad/step_rad_max);
     if(robot_id == 1)
     {
-      foot_set_command_msg.step_angle_rad = 0.05;
+      foot_set_command_msg.step_angle_rad = step_rad_max;
       //foot_set_command_msg.step_time = 2;
     }
     if(robot_id == 2)
     {
-      foot_set_command_msg.step_angle_rad = 0.05;
+      foot_set_command_msg.step_angle_rad = step_rad_max;
       //foot_set_command_msg.step_time = 5;
     }
   }
