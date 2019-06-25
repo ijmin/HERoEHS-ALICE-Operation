@@ -16,5 +16,5 @@ centered_step_time: 2
 turn_step_num: 1
 turn_step_length: 0
 turn_side_step_length: 0.05
-turn_step_angle_radian: 0.3
+turn_step_angle_radian: 0.5
 turn_step_time: 2
