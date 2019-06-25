@@ -673,10 +673,6 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
   std::ofstream fout(joint_feedback_file.c_str());
   fout << out.c_str(); // dump it back into the file
 
-
-
-
-
   printf("Joint Feed Back SAVE!!\n");
   return true;
 }
