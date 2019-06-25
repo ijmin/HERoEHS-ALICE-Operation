@@ -31,6 +31,7 @@
 
 #define centered (3.0)
 #define expanded (4.0)
+#define ip_from_launch (5.0)
 
 #define MINIMUM_STEP_TIME_SEC  (0.4)
 
@@ -152,6 +153,7 @@ private:
   double y_kick_front_time,y_kick_front_x_m,y_kick_front_y_m;
   double y_kick_time;
 
+  int alice_id_int;
 
 
 
