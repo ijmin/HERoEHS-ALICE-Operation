@@ -64,6 +64,11 @@ public:
   double centered_side_step_length;
   double centered_step_angle_rad;
   double centered_step_time;
+  double turn_step_num;
+  double turn_step_length;
+  double turn_side_step_length;
+  double turn_step_angle_rad;
+  double turn_step_time;
 
   ros::Publisher vel_pub_;
   string step_type;

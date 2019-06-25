@@ -313,12 +313,15 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     }
     if(move_command->key == "turn_left_precision" || move_command->key == "turn_right_precision" )
     {
+      command_controller->step_type = "turn";
+      command_controller->Set_FootParam(alice_id_int);
+      foot_set_command_msg = command_controller->FootParam;
 
       double temp_value = atof(move_command->value.c_str())*DEGREE2RADIAN;
       if(move_command->key == "turn_left_precision")
         AlignRobotYaw(temp_value, "turn left", walking_mode);
       else if(move_command->key == "turn_right_precision")
-        AlignRobotYaw(fabs(temp_value), "turn right", walking_mode);
+        AlignRobotYaw(temp_value, "turn right", walking_mode);
       else
       {
         CalculateStepData(0, 0, "stop");
@@ -368,12 +371,12 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       command_controller->FootParam.command = "backward";
       command_controller->step_type = "default";
     }
-    else if(move_command->key == "turn_left")
+    else if(move_command->key == "turn_left" && alice_id_int == 2)
     {
       command_controller->FootParam.command = "turn left";
       command_controller->step_type = "default";
     }
-    else if(move_command->key == "turn_right")
+    else if(move_command->key == "turn_right" && alice_id_int == 2)
     {
       command_controller->FootParam.command = "turn right";
       command_controller->step_type = "default";
@@ -397,6 +400,16 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     {
       command_controller->FootParam.command = "centered right";
       command_controller->step_type = "centered";
+    }
+    else if(move_command->key == "turn_right" && alice_id_int == 1)
+    {
+      command_controller->FootParam.command = "turn right";
+      command_controller->step_type = "turn";
+    }
+    else if(move_command->key == "turn_left" && alice_id_int == 1)
+    {
+      command_controller->FootParam.command = "turn left";
+      command_controller->step_type = "turn";
     }
     else if(move_command->key == "stop")
     {
@@ -498,42 +511,35 @@ void FootStepPlanner::parse_online_balance_param(std::string path)
     return;
   }
 
-  set_balance_param_msg.request.updating_duration = doc["updating_duration"].as<double>();
-  set_balance_param_msg.request.balance_param.cob_x_offset_m = doc["cob_x_offset_m"].as<double>();
-  set_balance_param_msg.request.balance_param.cob_y_offset_m = doc["cob_y_offset_m"].as<double>();
-
-  //gain load //
-  set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain = doc["foot_roll_gyro_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain = doc["foot_roll_gyro_d_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain = doc["foot_pitch_gyro_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain = doc["foot_pitch_gyro_d_gain"].as<double>();
-
-  set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain = doc["foot_roll_angle_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain = doc["foot_roll_angle_d_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain = doc["foot_pitch_angle_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain = doc["foot_pitch_angle_d_gain"].as<double>();
-
-  set_balance_param_msg.request.balance_param.foot_x_force_p_gain = doc["foot_x_force_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_x_force_d_gain = doc["foot_x_force_d_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_y_force_p_gain = doc["foot_y_force_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_y_force_d_gain = doc["foot_y_force_d_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_z_force_p_gain = doc["foot_z_force_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_z_force_d_gain = doc["foot_z_force_d_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain = doc["foot_roll_torque_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain = doc["foot_roll_torque_d_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain = doc["foot_pitch_torque_p_gain"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain = doc["foot_pitch_torque_d_gain"].as<double>();
-
-  set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency = doc["roll_gyro_cut_off_frequency"].as<double>();
-  set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency = doc["pitch_gyro_cut_off_frequency"].as<double>();
-
-  set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency = doc["roll_angle_cut_off_frequency"].as<double>();
-  set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency = doc["pitch_angle_cut_off_frequency"].as<double>();
-
-  set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency = doc["foot_x_force_cut_off_frequency"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency = doc["foot_y_force_cut_off_frequency"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency = doc["foot_z_force_cut_off_frequency"].as<double>();
-  set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency = doc["foot_roll_torque_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.updating_duration                                 = doc["updating_duration"].as<double>();
+  set_balance_param_msg.request.balance_param.cob_x_offset_m                      = doc["cob_x_offset_m"].as<double>();
+  set_balance_param_msg.request.balance_param.cob_y_offset_m                      = doc["cob_y_offset_m"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_roll_gyro_p_gain               = doc["foot_roll_gyro_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_roll_gyro_d_gain               = doc["foot_roll_gyro_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_pitch_gyro_p_gain              = doc["foot_pitch_gyro_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_pitch_gyro_d_gain              = doc["foot_pitch_gyro_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_roll_angle_p_gain              = doc["foot_roll_angle_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_roll_angle_d_gain              = doc["foot_roll_angle_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_pitch_angle_p_gain             = doc["foot_pitch_angle_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_pitch_angle_d_gain             = doc["foot_pitch_angle_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_x_force_p_gain                 = doc["foot_x_force_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_x_force_d_gain                 = doc["foot_x_force_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_y_force_p_gain                 = doc["foot_y_force_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_y_force_d_gain                 = doc["foot_y_force_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_z_force_p_gain                 = doc["foot_z_force_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_z_force_d_gain                 = doc["foot_z_force_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_roll_torque_p_gain             = doc["foot_roll_torque_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_roll_torque_d_gain             = doc["foot_roll_torque_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_pitch_torque_p_gain            = doc["foot_pitch_torque_p_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_pitch_torque_d_gain            = doc["foot_pitch_torque_d_gain"].as<double>();
+  set_balance_param_msg.request.balance_param.roll_gyro_cut_off_frequency         = doc["roll_gyro_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.balance_param.pitch_gyro_cut_off_frequency        = doc["pitch_gyro_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.balance_param.roll_angle_cut_off_frequency        = doc["roll_angle_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.balance_param.pitch_angle_cut_off_frequency       = doc["pitch_angle_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_x_force_cut_off_frequency      = doc["foot_x_force_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_y_force_cut_off_frequency      = doc["foot_y_force_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_z_force_cut_off_frequency      = doc["foot_z_force_cut_off_frequency"].as<double>();
+  set_balance_param_msg.request.balance_param.foot_roll_torque_cut_off_frequency  = doc["foot_roll_torque_cut_off_frequency"].as<double>();
   set_balance_param_msg.request.balance_param.foot_pitch_torque_cut_off_frequency = doc["foot_pitch_torque_cut_off_frequency"].as<double>();
 
   set_balance_param_client.call(set_balance_param_msg);
@@ -554,43 +560,32 @@ void FootStepPlanner::parse_online_joint_feedback_param(std::string path)
     ROS_ERROR("Fail to load yaml file!");
     return;
   }
-  joint_feedback_gain_msg.request.updating_duration = doc["updating_duration"].as<double>();
+  joint_feedback_gain_msg.request.updating_duration                 = doc["updating_duration"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain  = doc["r_leg_hip_y_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain  = doc["r_leg_hip_y_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain  = doc["r_leg_hip_r_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain  = doc["r_leg_hip_r_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain  = doc["r_leg_hip_p_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain  = doc["r_leg_hip_p_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain   = doc["r_leg_an_p_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain   = doc["r_leg_an_p_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain   = doc["r_leg_kn_p_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain   = doc["r_leg_kn_p_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain   = doc["r_leg_an_r_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain   = doc["r_leg_an_r_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain  = doc["l_leg_hip_y_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain  = doc["l_leg_hip_y_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain  = doc["l_leg_hip_r_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain  = doc["l_leg_hip_r_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain  = doc["l_leg_hip_p_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain  = doc["l_leg_hip_p_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain   = doc["l_leg_kn_p_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain   = doc["l_leg_kn_p_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain   = doc["l_leg_an_p_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain   = doc["l_leg_an_p_d_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain   = doc["l_leg_an_r_p_gain"].as<double>();
+  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain   = doc["l_leg_an_r_d_gain"].as<double>();
 
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_p_gain = doc["r_leg_hip_y_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_y_d_gain = doc["r_leg_hip_y_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_p_gain = doc["r_leg_hip_r_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_r_d_gain = doc["r_leg_hip_r_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_p_gain = doc["r_leg_hip_p_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_hip_p_d_gain = doc["r_leg_hip_p_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_p_gain = doc["r_leg_an_p_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_p_d_gain = doc["r_leg_an_p_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_p_gain = doc["r_leg_kn_p_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_kn_p_d_gain = doc["r_leg_kn_p_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_p_gain = doc["r_leg_an_r_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.r_leg_an_r_d_gain = doc["r_leg_an_r_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_p_gain = doc["l_leg_hip_y_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_y_d_gain = doc["l_leg_hip_y_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_p_gain = doc["l_leg_hip_r_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_r_d_gain = doc["l_leg_hip_r_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_p_gain = doc["l_leg_hip_p_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_hip_p_d_gain = doc["l_leg_hip_p_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_p_gain = doc["l_leg_kn_p_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_kn_p_d_gain = doc["l_leg_kn_p_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_p_gain = doc["l_leg_an_p_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_p_d_gain = doc["l_leg_an_p_d_gain"].as<double>();
-
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_p_gain = doc["l_leg_an_r_p_gain"].as<double>();
-  joint_feedback_gain_msg.request.feedback_gain.l_leg_an_r_d_gain = doc["l_leg_an_r_d_gain"].as<double>();
 
   joint_feedback_gain_client.call(joint_feedback_gain_msg);
 
@@ -679,7 +674,7 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
   fout << out.c_str(); // dump it back into the file
 
 
-  //parse_online_joint_feedback_param(joint_feedback_file);
+
 
 
   printf("Joint Feed Back SAVE!!\n");
@@ -689,6 +684,8 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
 bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
     alice_walking_module_msgs::SetBalanceParam::Response &res)
 {
+  cout << req.balance_param;
+
   YAML::Emitter out;
   //std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 
@@ -878,6 +875,11 @@ Command_generator::Command_generator()
   centered_side_step_length = 0;
   centered_step_angle_rad = 0;
   centered_step_time = 0;
+  turn_step_num = 0;
+  turn_step_length = 0;
+  turn_side_step_length = 0;
+  turn_step_angle_rad = 0;
+  turn_step_time = 0;
   // start_time = clock();
   //////////////////
 
@@ -908,6 +910,19 @@ void Command_generator::Set_FootParam(int alice_id)
     FootParam.side_step_length = centered_side_step_length;
     FootParam.step_angle_rad = centered_step_angle_rad;
     FootParam.step_time = centered_step_time;
+  }
+  else if(step_type == "turn")
+  {
+    if(alice_id == 1)
+    {
+      FootParam.step_num = turn_step_num;
+      FootParam.step_length = turn_step_length;
+      FootParam.side_step_length = turn_side_step_length;
+      FootParam.step_angle_rad = turn_step_angle_rad;
+      FootParam.step_time =  turn_step_time;
+    }
+    else
+      return;
   }
   if(alice_id == 1)
   {
@@ -955,125 +970,13 @@ void Command_generator::parse_step_param_data(std::string path)
   centered_side_step_length = doc["centered_side_step_length"].as<double>();
   centered_step_angle_rad = doc["centered_step_angle_radian"].as<double>();
   centered_step_time = doc["centered_step_time"].as<double>();
+
+  turn_step_num         = doc["turn_step_num"].as<double>();
+  turn_step_length      = doc["turn_step_length"].as<double>();
+  turn_side_step_length = doc["turn_side_step_length"].as<double>();
+  turn_step_angle_rad   = doc["turn_step_angle_rad"].as<double>();
+  turn_step_time        = doc["turn_step_time"].as<double>();
 }
-
-/*void Command_generator::Make_Log(void)
-{
-  time_t curr_time;
-  struct tm *curr_tm;
-  int year, month, day;
-  curr_time = time(NULL);
-  curr_tm = localtime(&curr_time);
-  year = curr_tm->tm_year + 1900;
-  month = curr_tm->tm_mon + 1;
-  day = curr_tm->tm_mday;
-  init_hour = curr_tm->tm_hour;
-  init_min = curr_tm->tm_min;
-  init_sec = curr_tm->tm_sec;
-  char Logname[256];
-  sprintf(Logname,"%d-%d-%d-%d-%d-%d",year,month,day,init_hour,init_min,init_sec);
-  init_log_path = ros::package::getPath("command_generator") + "/log/" + Logname + ".txt";
-  out.open(init_log_path.c_str());
-  out<<"command|";
-  out<<"status|";
-  out<<"accept/ignore|";
-  out<<"step_time|";
-  out<<"step_num|";
-  out<<"step_length|";
-  out<<"side_step_length|";
-  out<<"step_angle_rad|";
-  out<<"logtime|"<<'\n';
-}
-
-void Command_generator::Write_Log(void)
-{
-  clock_t curr_t;
-  curr_t = clock();
-  float result_time;
-  result_time = (float)(curr_t-start_time)/(CLOCKS_PER_SEC);
-  time_t curr_time;
-  struct tm *curr_tm;
-  int year, month, day, hour, min, sec;
-  curr_time = time(NULL);
-  curr_tm = localtime(&curr_time);
-  year = curr_tm->tm_year + 1900;
-  month = curr_tm->tm_mon + 1;
-  day = curr_tm->tm_mday;
-  hour = curr_tm->tm_hour - init_hour;
-  min = curr_tm->tm_min - init_min;
-  sec = curr_tm->tm_sec - init_sec;
-  if(sec < 0)
-  {
-    sec = sec+60;
-    min = min - 1;
-  }
-  if(min < 0)
-  {
-    min = min+60;
-    hour = hour - 1;
-  }
-  if(hour < 0)
-  {
-    hour = hour+24;
-  }
-  if(FootParam.command == current_status)accept_or_ignore = "accept";
-  else accept_or_ignore = "ignore";
-  char Logname[256];
-  sprintf(Logname,"%d:%d:%d",hour,min,sec);
-  out<<FootParam.command<<"|";
-  out<<current_status<<"|";
-  out<<accept_or_ignore<<"|";
-  out<<FootParam.step_time<<"|";
-  out<<FootParam.step_num<<"|";
-  out<<FootParam.step_length<<"|";
-  out<<FootParam.side_step_length<<"|";
-  out<<FootParam.step_angle_rad<<"|";
-  out<<Logname<<"|"<<'\n';
-}
-void Command_generator::Input_Text(void)
-{
-  int i = 0;
-  size_t found;
-  string init_pose_path;
-  ifstream inFile;
-  init_pose_path = ros::package::getPath("command_generator") + "/command_input.txt";
-  inFile.open(init_pose_path.c_str());
-  for(string line; std::getline(inFile,line);)
-  {
-    found=line.find("=");
-
-    switch(i)
-    {
-    case 0: Command_Period = atof(line.substr(found+2).c_str()); break;
-    }
-    i +=1;
-  }
-  inFile.close();
-}*/
-/*int main(int argc, char** argv)
-{
-  Command_generator command_controller;
-  float count;
-  count = 0;
-
-  while(ros::ok())
-  {
-
-    if(count > 1000*command_controller.Command_Period)
-    {
-      if(command_controller.command_switch > 0)
-      {
-        command_controller.vel_pub_.publish(command_controller.FootParam);
-        command_controller.Write_Log();
-      }
-      count = 0;
-    }
-    else count += 1;
-    usleep(1000);
-    ros::spinOnce();
-  }
-  command_controller.out.close();
-}*/
 
 
 
