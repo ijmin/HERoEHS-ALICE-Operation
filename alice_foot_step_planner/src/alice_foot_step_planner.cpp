@@ -680,8 +680,6 @@ bool FootStepPlanner::setJointFeedBackGainServiceCallback(alice_walking_module_m
 bool FootStepPlanner::setBalanceParamServiceCallback(alice_walking_module_msgs::SetBalanceParam::Request  &req,
     alice_walking_module_msgs::SetBalanceParam::Response &res)
 {
-  cout << req.balance_param;
-
   YAML::Emitter out;
   //std::string path_ = ros::package::getPath("alice_foot_step_planner") + "/data/balance_param.yaml";// 로스 패키지에서 YAML파일의 경로를 읽어온다.
 
