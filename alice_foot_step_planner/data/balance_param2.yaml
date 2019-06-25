@@ -4,9 +4,9 @@ foot_roll_gyro_p_gain: 0.2
 foot_roll_gyro_d_gain: 0
 foot_pitch_gyro_p_gain: 0.2
 foot_pitch_gyro_d_gain: 0
-foot_roll_angle_p_gain: 0.3
+foot_roll_angle_p_gain: 0.4
 foot_roll_angle_d_gain: 0
-foot_pitch_angle_p_gain: 0.3
+foot_pitch_angle_p_gain: 0.4
 foot_pitch_angle_d_gain: 0
 foot_x_force_p_gain: 0.04
 foot_x_force_d_gain: 0

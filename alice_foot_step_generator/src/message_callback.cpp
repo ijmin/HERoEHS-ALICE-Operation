@@ -76,13 +76,13 @@ void publish_status(void)
   else if(g_foot_stp_generator.previous_step_type_ == BACKWARD_WALKING)
     pub_status_msg.data="backward";
   else if(g_foot_stp_generator.previous_step_type_ == RIGHTWARD_WALKING)
-    pub_status_msg.data="rightward";
+    pub_status_msg.data="right";
   else if(g_foot_stp_generator.previous_step_type_ == LEFTWARD_WALKING)
-    pub_status_msg.data="leftward";
+    pub_status_msg.data="left";
   else if(g_foot_stp_generator.previous_step_type_ == LEFT_ROTATING_WALKING)
-    pub_status_msg.data="left rotating";
+    pub_status_msg.data="turn left";
   else if(g_foot_stp_generator.previous_step_type_ == RIGHT_ROTATING_WALKING)
-    pub_status_msg.data="right rotating";
+    pub_status_msg.data="turn right";
   else if(g_foot_stp_generator.previous_step_type_ == REVOLUTE_LEFT_WALKING && g_foot_stp_generator.revolute_type_ == centered)
     pub_status_msg.data="centered left";
   else if(g_foot_stp_generator.previous_step_type_ == REVOLUTE_RIGHT_WALKING && g_foot_stp_generator.revolute_type_ == centered)
