@@ -37,13 +37,15 @@ alice_foot_step_generator::FootStepCommand last_command;
 double g_last_command_time = 0;
 alice_walking_module_msgs::StepData ref_stp_data_com[1];
 
+int alice_id=0;
+
 bool g_is_running_check_needed = false;
 
 void initialize(void)
 {
   ros::NodeHandle nh;
 
-
+  alice_id  = nh.param<int>("alice_userid",0);
 
   g_get_ref_step_data_client      = nh.serviceClient<alice_walking_module_msgs::GetReferenceStepData>("/heroehs/online_walking/get_reference_step_data");
   g_add_step_data_array_client    = nh.serviceClient<alice_walking_module_msgs::AddStepDataArray>("/heroehs/online_walking/add_step_data");
@@ -284,11 +286,11 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   }
   else
   {
-    if(msg->command =="expanded stop"||msg->command =="expanded right"||msg->command =="expanded left")
+    //if(msg->command =="expanded stop"||msg->command =="expanded right"||msg->command =="expanded left")
       g_foot_stp_generator.ep_step_time_sec_ = msg->step_time;
-    else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
+    //else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.ct_step_time_sec_ = msg->step_time;
-    else
+    //else
       g_foot_stp_generator.step_time_sec_ = msg->step_time;
   }
 
@@ -354,7 +356,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, LEFT_ROTATING_WALKING, 0);
+    if(alice_id==2)
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, LEFT_ROTATING_WALKING, 0);
+    else if(alice_id==1)
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, REVOLUTE_LEFT_WALKING, ip_from_launch);
     g_is_running_check_needed = false;
 
   }
@@ -364,7 +369,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       if(isRunning() == true)
         return;
 
-    g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, RIGHT_ROTATING_WALKING, 0);
+    if(alice_id==2)
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, RIGHT_ROTATING_WALKING, 0);
+    else if(alice_id==1)
+      g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, REVOLUTE_RIGHT_WALKING, ip_from_launch);
     g_is_running_check_needed = false;
   }
   else if(msg->command == "right")

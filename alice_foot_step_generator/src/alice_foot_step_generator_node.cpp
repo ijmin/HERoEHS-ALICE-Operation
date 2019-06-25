@@ -147,7 +147,7 @@ void FootStepGenerator::readFootStep_Yaml()
   y_zmp_conv_set= kick_doc["y_zmp_convergence_m"].as<double>();
   startend_time_set= kick_doc["start_end_time_sec"].as<double>();
 
-  int alice_id_int  = kick_doc["id"].as<double>();
+  alice_id_int  = kick_doc["id"].as<double>();
 
   std::stringstream alice_id_stream;
   alice_id_stream << alice_id_int;
@@ -359,7 +359,7 @@ void FootStepGenerator::getStepDataFromStepData2DArray(alice_walking_module_msgs
     if(fabs(stp_data.position_data.right_foot_pose.yaw - stp_data.position_data.left_foot_pose.yaw) > M_PI)
     {
       stp_data.position_data.body_pose.yaw = 0.5*(stp_data.position_data.right_foot_pose.yaw + stp_data.position_data.left_foot_pose.yaw)
-                                                                                                                                                                                                                                                                    - sign(0.5*(stp_data.position_data.right_foot_pose.yaw - stp_data.position_data.left_foot_pose.yaw))*M_PI;
+                                                                                                                                                                                                                                                                                                    - sign(0.5*(stp_data.position_data.right_foot_pose.yaw - stp_data.position_data.left_foot_pose.yaw))*M_PI;
     }
     else
     {
@@ -680,7 +680,7 @@ bool FootStepGenerator::calcStep(const alice_walking_module_msgs::StepData& ref_
     if(fabs(step_data_array_[stp_idx].position_data.right_foot_pose.yaw - step_data_array_[stp_idx].position_data.left_foot_pose.yaw) > M_PI)
     {
       step_data_array_[stp_idx].position_data.body_pose.yaw = 0.5*(step_data_array_[stp_idx].position_data.right_foot_pose.yaw + step_data_array_[stp_idx].position_data.left_foot_pose.yaw)
-                                                                                  - sign(0.5*(step_data_array_[stp_idx].position_data.right_foot_pose.yaw - step_data_array_[stp_idx].position_data.left_foot_pose.yaw))*M_PI;
+                                                                                                                  - sign(0.5*(step_data_array_[stp_idx].position_data.right_foot_pose.yaw - step_data_array_[stp_idx].position_data.left_foot_pose.yaw))*M_PI;
     }
     else
     {
@@ -961,7 +961,10 @@ void FootStepGenerator::calcRLStep(const alice_walking_module_msgs::StepData& re
 void FootStepGenerator::calcRoStep(const alice_walking_module_msgs::StepData& ref_step_data, int direction)
 {
   alice_walking_module_msgs::StepData stp_data[num_of_step_];
+
+
   stp_data[0] = ref_step_data;
+
   if(ref_step_data.time_data.walking_state == alice_walking_module_msgs::StepTimeData::IN_WALKING)
   {
     stp_data[0].time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
@@ -1159,6 +1162,7 @@ void FootStepGenerator::calcRoStep(const alice_walking_module_msgs::StepData& re
 
   }
 
+
   for(int stp_idx = 0; stp_idx < num_of_step_; stp_idx++)
   {
     step_data_array_.push_back(stp_data[stp_idx]);
@@ -1193,8 +1197,17 @@ void FootStepGenerator::calcRevRLStep(const alice_walking_module_msgs::StepData&
     dispose_y =  (double)direction*eps_step_length_m_;
     dispose_yaw = (double)direction*ep_step_angle_rad_;
     dispose_time = ep_step_time_sec_;
-
   }
+
+  else if(desired_step_type_num == ip_from_launch)
+  {
+
+    dispose_x = fb_step_length_m_;
+    dispose_y =  (double)direction*rl_step_length_m_;
+    dispose_yaw = (double)direction*rotate_step_angle_rad_;
+    dispose_time = step_time_sec_;
+  }
+
 
 
   foot_left.resize(4,1);
@@ -1611,7 +1624,6 @@ void FootStepGenerator::calcRevRLStep(const alice_walking_module_msgs::StepData&
 
   }
   //ROS_INFO("+++++++++++++++++++++++++");
-   *
    */
 }
 
