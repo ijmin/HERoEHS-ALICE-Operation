@@ -974,7 +974,7 @@ void Command_generator::parse_step_param_data(std::string path)
   turn_step_num         = doc["turn_step_num"].as<double>();
   turn_step_length      = doc["turn_step_length"].as<double>();
   turn_side_step_length = doc["turn_side_step_length"].as<double>();
-  turn_step_angle_rad   = doc["turn_step_angle_rad"].as<double>();
+  turn_step_angle_rad   = doc["turn_step_angle_radian"].as<double>();
   turn_step_time        = doc["turn_step_time"].as<double>();
 }
 
