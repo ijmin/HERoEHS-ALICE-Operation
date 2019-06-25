@@ -284,11 +284,11 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   }
   else
   {
-    if(msg->command =="expanded stop"||msg->command =="expanded right"||msg->command =="expanded left")
+    //if(msg->command =="expanded stop"||msg->command =="expanded right"||msg->command =="expanded left")
       g_foot_stp_generator.ep_step_time_sec_ = msg->step_time;
-    else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
+    //else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.ct_step_time_sec_ = msg->step_time;
-    else
+    //else
       g_foot_stp_generator.step_time_sec_ = msg->step_time;
   }
 
