@@ -9,8 +9,8 @@ expanded_side_step_length: 0.05
 expanded_step_angle_radian: 0.3
 expanded_step_time: 2
 centered_step_num: 1
-centered_step_length: 0.03
-centered_side_step_length: 0.08
+centered_step_length: 0.05
+centered_side_step_length: 0.1
 centered_step_angle_radian: 0.3
 centered_step_time: 2
 
