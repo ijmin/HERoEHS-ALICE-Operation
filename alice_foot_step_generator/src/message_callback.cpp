@@ -170,13 +170,26 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       && (last_command.step_angle_rad == msg->step_angle_rad))
   {
     //prevent double click & switching foot step time
-    if( (fabs(now_time - g_last_command_time) < 2*last_command.step_time) )
+    if( last_command.step_time < 1.6 )
     {
-      ROS_ERROR("Receive same command in short time & Foot Step Switching time");
-      return;
+      if( (fabs(now_time - g_last_command_time) < 3*last_command.step_time) )
+      {
+        ROS_ERROR("Receive same command in short time & Foot Step Switching time");
+        return;
+      }
+    }
+    else
+    {
+      if( (fabs(now_time - g_last_command_time) < 2*last_command.step_time) )
+      {
+        ROS_ERROR("Receive same command in short time & Foot Step Switching time");
+        return;
+      }
     }
 
   }
+  if(last_command.command == "stop" && (msg->command == "stop"))
+    return;
 
   g_last_command_time = now_time;
 
@@ -194,6 +207,8 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   ROS_INFO_STREAM("  step_length      : " << msg->step_length);
   ROS_INFO_STREAM("  side_step_length : " << msg->side_step_length );
   ROS_INFO_STREAM("  step_angle_rad   : " << msg->step_angle_rad );
+
+
 
   if((msg->step_num == 0)
       && (msg->command != "left kick")
@@ -289,11 +304,11 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   else
   {
     //if(msg->command =="expanded stop"||msg->command =="expanded right"||msg->command =="expanded left")
-      g_foot_stp_generator.ep_step_time_sec_ = msg->step_time;
+    g_foot_stp_generator.ep_step_time_sec_ = msg->step_time;
     //else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
-      g_foot_stp_generator.ct_step_time_sec_ = msg->step_time;
+    g_foot_stp_generator.ct_step_time_sec_ = msg->step_time;
     //else
-      g_foot_stp_generator.step_time_sec_ = msg->step_time;
+    g_foot_stp_generator.step_time_sec_ = msg->step_time;
   }
 
   g_foot_stp_generator.num_of_step_ = 2*(msg->step_num) + 2;
