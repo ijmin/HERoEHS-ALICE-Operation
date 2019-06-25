@@ -198,6 +198,8 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   if((msg->step_num == 0)
       && (msg->command != "left kick")
       && (msg->command != "right kick")
+      && (msg->command != "y type left kick")
+      && (msg->command != "y type right kick")
       && (msg->command != "expanded stop")
       && (msg->command != "centered stop")
       && (msg->command != "y walking type")
