@@ -320,6 +320,13 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   ref_step_data = get_ref_stp_data_srv.response.reference_step_data;
   ref_stp_data_com[0] = ref_step_data;
 
+  if(isRunning() && (ref_stp_data_com[0].time_data.walking_state==alice_walking_module_msgs::StepTimeData::IN_WALKING_ENDING))
+  {
+    ROS_ERROR("RUNNING STOP STEP ++++++++++!");
+    return;
+  }
+
+
 
   //calc step data
 
@@ -464,7 +471,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
         return;
 
     g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, STOP_WALKING, 0);
-    g_is_running_check_needed = true;
+    g_is_running_check_needed = false;
   }
   else
   {
