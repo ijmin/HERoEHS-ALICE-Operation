@@ -170,22 +170,13 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       && (last_command.step_angle_rad == msg->step_angle_rad))
   {
     //prevent double click & switching foot step time
-    if( last_command.step_time < 1.6 )
+
+    if( (fabs(now_time - g_last_command_time) < 2*last_command.step_time) )
     {
-      if( (fabs(now_time - g_last_command_time) < 3*last_command.step_time) )
-      {
-        ROS_ERROR("Receive same command in short time & Foot Step Switching time");
-        return;
-      }
+      ROS_ERROR("Receive same command in short time & Foot Step Switching time");
+      return;
     }
-    else
-    {
-      if( (fabs(now_time - g_last_command_time) < 2*last_command.step_time) )
-      {
-        ROS_ERROR("Receive same command in short time & Foot Step Switching time");
-        return;
-      }
-    }
+
 
   }
   if(last_command.command == "stop" && (msg->command == "stop"))
@@ -473,7 +464,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
         return;
 
     g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, STOP_WALKING, 0);
-    g_is_running_check_needed = false;
+    g_is_running_check_needed = true;
   }
   else
   {
