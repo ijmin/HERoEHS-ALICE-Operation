@@ -185,6 +185,9 @@ public:
    //command check 0.8;
    bool command_interval_check;
 
+   //stop command
+   std::string previous_command;
+
 
 private:
 

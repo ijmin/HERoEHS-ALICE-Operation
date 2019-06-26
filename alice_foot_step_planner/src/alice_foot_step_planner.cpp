@@ -31,6 +31,7 @@ FootStepPlanner::FootStepPlanner()
   previous_motion_check = 0;
   command_controller = new Command_generator;
   command_interval_check = 0;
+  previous_command = "stop";
   //readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
@@ -257,6 +258,12 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
+
+  if(previous_command == "stop" && walking_check == true)
+    return;
+
+
+
   if(command_interval_check == 0)
     return;
   /////////////////////////////////////// motion check
@@ -433,6 +440,8 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     command_controller->Set_FootParam(alice_id_int);
     foot_set_command_msg = command_controller->FootParam;
 
+    previous_command = move_command->key;
+
     if ((move_command->key == "left_kick" || move_command->key == "right_kick" || move_command->key == "y_type_left_kick" || move_command->key == " y_type_right_kick")&& walking_check == true)
     {
       command_interval_check = 0;
@@ -445,6 +454,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       foot_set_command_msg.command = "left kick";
       foot_step_command_pub.publish(foot_set_command_msg);
       motion_check = true; // motion start
+      previous_command = move_command->key;
       ///////////////////////////////////////
       previous_motion_check = motion_check;
       command_interval_check = 0;
@@ -458,6 +468,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       foot_set_command_msg.command = "right kick";
       foot_step_command_pub.publish(foot_set_command_msg);
       motion_check = true; // motion start
+      previous_command = move_command->key;
       ///////////////////////////////////////
       previous_motion_check = motion_check;
       command_interval_check = 0;
@@ -471,6 +482,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       foot_set_command_msg.command = "y type left kick";
       foot_step_command_pub.publish(foot_set_command_msg);
       motion_check = true; // motion start
+      previous_command = move_command->key;
       ///////////////////////////////////////
       previous_motion_check = motion_check;
       command_interval_check = 0;
@@ -484,6 +496,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       foot_set_command_msg.command = "y type right kick";
       foot_step_command_pub.publish(foot_set_command_msg);
       motion_check = true; // motion start
+      previous_command = move_command->key;
       ///////////////////////////////////////
       previous_motion_check = motion_check;
       command_interval_check = 0;
