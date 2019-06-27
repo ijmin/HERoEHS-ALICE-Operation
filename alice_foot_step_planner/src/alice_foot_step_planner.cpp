@@ -234,11 +234,15 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int rob
     if(yaw_rad > 0.3)
     {
       foot_set_command_msg.step_num = (int) (yaw_rad/0.3);
+      foot_set_command_msg.step_length = 0.3*(1-cos(0.3));
+      foot_set_command_msg.side_step_length = 0.3*sin(0.3);
       foot_set_command_msg.step_angle_rad = 0.3;
     }
     else
     {
       foot_set_command_msg.step_num = 1;
+      foot_set_command_msg.step_length = 0.3*(1-cos(yaw_rad));
+      foot_set_command_msg.side_step_length = 0.3*sin(yaw_rad);
       foot_set_command_msg.step_angle_rad = yaw_rad;
     }
   }
