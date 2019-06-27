@@ -1205,10 +1205,10 @@ void FootStepGenerator::calcRevRLStep(const alice_walking_module_msgs::StepData&
   else if(desired_step_type_num == ip_from_launch)
   {
 
-    dispose_x = fb_step_length_m_;
-    dispose_y =  (double)direction*rl_step_length_m_;
-    dispose_yaw = (double)direction*rotate_step_angle_rad_;
-    dispose_time = step_time_sec_;
+    dispose_x = ep_step_length_m_;
+    dispose_y =  (double)direction*eps_step_length_m_;
+    dispose_yaw = (double)direction*ep_step_angle_rad_;
+    dispose_time = ep_step_time_sec_;
   }
 
 

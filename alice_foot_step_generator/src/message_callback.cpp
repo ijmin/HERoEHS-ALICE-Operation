@@ -214,6 +214,9 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       && (msg->command != "default stop"))
     return;
 
+
+
+
   //set walking parameter
   if(msg->step_length < 0)
   {
@@ -222,6 +225,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       g_foot_stp_generator.ep_step_length_m_= msg->step_length;
     else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.ct_step_length_m_=  msg->step_length;
+    else if(alice_id==1 && ( msg->command == "turn right" || msg->command == "turn left") )
+    {
+      g_foot_stp_generator.ep_step_length_m_= msg->step_length;
+    }
     else
       g_foot_stp_generator.fb_step_length_m_ = 0;
     ROS_ERROR_STREAM("step_length is negative.");
@@ -233,6 +240,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       g_foot_stp_generator.ep_step_length_m_= msg->step_length;
     else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.ct_step_length_m_= msg->step_length;
+    else if(alice_id==1 && ( msg->command == "turn right" || msg->command == "turn left") )
+    {
+      g_foot_stp_generator.ep_step_length_m_= msg->step_length;
+    }
     else
       g_foot_stp_generator.fb_step_length_m_ = msg->step_length;
   }
@@ -243,6 +254,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       g_foot_stp_generator.eps_step_length_m_= msg->side_step_length;
     else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.cts_step_length_m_= msg->side_step_length;
+    else if(alice_id==1 && ( msg->command == "turn right" || msg->command == "turn left") )
+    {
+      g_foot_stp_generator.eps_step_length_m_= msg->side_step_length;
+    }
     else
       g_foot_stp_generator.rl_step_length_m_ = 0;
     ROS_ERROR_STREAM("side_step_length is negative.");
@@ -254,6 +269,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       g_foot_stp_generator.eps_step_length_m_= msg->side_step_length;
     else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.cts_step_length_m_= msg->side_step_length;
+    else if(alice_id==1 && ( msg->command == "turn right" || msg->command == "turn left") )
+    {
+      g_foot_stp_generator.eps_step_length_m_= msg->side_step_length;
+    }
     else
       g_foot_stp_generator.rl_step_length_m_ = msg->side_step_length;
 
@@ -265,6 +284,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       g_foot_stp_generator.ep_step_angle_rad_= 0;
     else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.ct_step_angle_rad_= 0;
+    else if(alice_id==1 && ( msg->command == "turn right" || msg->command == "turn left") )
+    {
+      g_foot_stp_generator.ep_step_angle_rad_= 0;
+    }
     else
       g_foot_stp_generator.rotate_step_angle_rad_ = 0;
     ROS_ERROR_STREAM("step_angle_rad is negative.");
@@ -276,6 +299,10 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       g_foot_stp_generator.ep_step_angle_rad_= msg->step_angle_rad;
     else if(msg->command =="centered stop"||msg->command =="centered right"||msg->command =="centered left")
       g_foot_stp_generator.ct_step_angle_rad_= msg->step_angle_rad;
+    else if(alice_id==1 && ( msg->command == "turn right" || msg->command == "turn left") )
+    {
+      g_foot_stp_generator.ep_step_angle_rad_= msg->step_angle_rad;
+    }
     else
       g_foot_stp_generator.rotate_step_angle_rad_ = msg->step_angle_rad;
 
