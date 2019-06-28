@@ -235,7 +235,7 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int rob
 }
 void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 {
-  data_initialize();// have to modify
+  //data_initialize();// have to modify
   double desired_distance_ = 0;
   desired_distance_ = sqrt(pow(x,2) + pow(y,2));
   if(command.compare("stop"))
@@ -247,15 +247,14 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
 
+
+
   if(previous_command == "stop" && walking_check == true)
     return;
-
-
 
   if(command_interval_check == 0)
     return;
   /////////////////////////////////////// motion check
-
   if(motion_check == true)
   {
     if(walking_check == true) // 명령이 씹힌것
@@ -349,6 +348,9 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
         CalculateStepData(0, 0, "stop");
       }
     }
+
+    command_interval_check = 0;
+    return;
   }
   else
   {
