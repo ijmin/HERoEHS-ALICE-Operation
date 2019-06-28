@@ -173,6 +173,7 @@ public:
   double kick_y_cob_;
   int alice_id_int;
   double side_step_length_max , side_step_length_min, step_rad_max, step_rad_min;
+  double forward_extended_length;
 
   //command generator
    Command_generator *command_controller;
