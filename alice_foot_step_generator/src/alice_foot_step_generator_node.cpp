@@ -37,7 +37,8 @@ FootStepGenerator::FootStepGenerator()
   kick_far_m_  =kick_far_m;
   kick_pitch_rad_  =kick_pitch_rad;
   kick_time_sec_  =kick_time_sec;
-
+  kick_side_m_=kick_side_m;
+  kick_side_time_=kick_side_time;
 
   num_of_step_             = num_of_step;
 
@@ -125,6 +126,8 @@ void FootStepGenerator::readFootStep_Yaml()
   kick_dsp_ratio = kick_doc["kick_dsp_ratio"].as<double>();
   kick_height_m = kick_doc["kick_height_m"].as<double>();
   kick_back_time = kick_doc["kick_back_time"].as<double>();
+  kick_side_m = kick_doc["kick_side_m"].as<double>();
+  kick_side_time = kick_doc["kick_side_time"].as<double>();
   kick_back_m = kick_doc["kick_back_m"].as<double>();
   kick_time = kick_doc["kick_time"].as<double>();
   kick_far_m   = kick_doc["kick_far_m"].as<double>();
@@ -1844,6 +1847,15 @@ void FootStepGenerator::calcRightKickStep(alice_walking_module_msgs::AddStepData
   step_data_array_.push_back(step_data_msg);
   //std::cout << "kick_height11 :::::::: "<< kick_height_m_ << std::endl;
 
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.abs_step_time += 0.2;//kick_time_sec_*0.5;
+  step_data_msg.time_data.dsp_ratio = 0;
+
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
+  step_data_msg.position_data.right_foot_pose.y -= kick_side_m_;
+  step_data_msg.position_data.right_foot_pose.pitch = 0.0;
+  step_data_msg.position_data.foot_z_swap = 0;
+  step_data_array_.push_back(step_data_msg);
 
   //StepData 4 kick - 2nd : move right foot back
   step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
@@ -1874,6 +1886,7 @@ void FootStepGenerator::calcRightKickStep(alice_walking_module_msgs::AddStepData
 
   step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::RIGHT_FOOT_SWING;
   step_data_msg.position_data.right_foot_pose.x = 0;
+  step_data_msg.position_data.right_foot_pose.y += kick_side_m_;
   step_data_msg.position_data.right_foot_pose.pitch = 0;
   step_data_msg.position_data.foot_z_swap = 0.0;
   step_data_array_.push_back(step_data_msg);
@@ -1960,6 +1973,15 @@ void FootStepGenerator::calcLeftKickStep(alice_walking_module_msgs::AddStepDataA
   step_data_array_.push_back(step_data_msg);
 
   //std::cout << "kick_height11 :::::::: "<< kick_height_m_ << std::endl;
+  step_data_msg.time_data.walking_state = alice_walking_module_msgs::StepTimeData::IN_WALKING;
+  step_data_msg.time_data.abs_step_time += 0.2;//kick_time_sec_*0.5;
+  step_data_msg.time_data.dsp_ratio = 0;
+
+  step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
+  step_data_msg.position_data.left_foot_pose.y += kick_side_m_;
+  step_data_msg.position_data.left_foot_pose.pitch = 0.0;
+  step_data_msg.position_data.foot_z_swap = 0;
+  step_data_array_.push_back(step_data_msg);
 
 
   //StepData 4 kick - 2nd : move right foot back
@@ -1990,6 +2012,7 @@ void FootStepGenerator::calcLeftKickStep(alice_walking_module_msgs::AddStepDataA
 
   step_data_msg.position_data.moving_foot = alice_walking_module_msgs::StepPositionData::LEFT_FOOT_SWING;
   step_data_msg.position_data.left_foot_pose.x = 0;
+  step_data_msg.position_data.left_foot_pose.y -= kick_side_m_;
   step_data_msg.position_data.left_foot_pose.pitch = 0;
   step_data_msg.position_data.foot_z_swap = 0.0;
   step_data_array_.push_back(step_data_msg);

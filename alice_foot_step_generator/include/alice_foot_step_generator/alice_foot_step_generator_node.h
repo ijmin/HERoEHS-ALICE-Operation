@@ -85,6 +85,7 @@ public:
   double kick_back_time_, kick_back_m_;
   double kick_time_, kick_far_m_, kick_pitch_rad_;
   double kick_time_sec_;
+  double kick_side_m_, kick_side_time_;
 
   int    num_of_step_;
   double fb_step_length_m_;
@@ -138,6 +139,7 @@ private:
   double kick_back_time, kick_back_m;
   double kick_time, kick_far_m, kick_pitch_rad;
   double kick_time_sec;
+  double kick_side_m,kick_side_time;
 
   int num_of_step;
   std::vector<double> default_step_set;

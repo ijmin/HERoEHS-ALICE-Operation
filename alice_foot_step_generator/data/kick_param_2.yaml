@@ -3,6 +3,8 @@ kick_dsp_ratio: 1.0
 kick_height_m: 0.08
 kick_back_time: 0.7
 kick_back_m: 0.1
+kick_side_time: 0.0
+kick_side_m: 0.1
 kick_time: 0.2
 kick_far_m: 0.23
 kick_pitch: 15.0
