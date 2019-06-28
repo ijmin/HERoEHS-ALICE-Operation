@@ -31,7 +31,7 @@ FootStepPlanner::FootStepPlanner()
   previous_motion_check = 0;
   command_controller = new Command_generator;
   command_interval_check = 0;
-  previous_command = "stop";
+  previous_command = "";
   forward_extended_length = 0.07;
   //readIDAlice();
 }
@@ -169,8 +169,8 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
       foot_set_command_msg.step_num = (int)((distance+step_length_max)/(step_length_max*2)+0.1);
       //foot_set_command_msg.step_num = 2;
       foot_set_command_msg.step_length = step_length_max;
-      if(!command.compare("forward"))
-        foot_set_command_msg.step_length = step_length_max + forward_extended_length;
+     /* if(!command.compare("forward"))
+        foot_set_command_msg.step_length = step_length_max + forward_extended_length;*/
     }
     else
     {
@@ -246,15 +246,13 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
-
-
-
   if(previous_command == "stop" && walking_check == true)
     return;
 
   if(command_interval_check == 0)
     return;
   /////////////////////////////////////// motion check
+
   if(motion_check == true)
   {
     if(walking_check == true) // 명령이 씹힌것
@@ -350,7 +348,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
     }
 
     command_interval_check = 0;
-    return;
+    //return;
   }
   else
   {
