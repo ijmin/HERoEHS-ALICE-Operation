@@ -167,7 +167,7 @@ void FootStepGenerator::readFootStep_Yaml()
     ROS_ERROR("Fail to load kinematics yaml file!");
     return;
   }
-  leg_offset_ = kinematics_doc["leg_side_offset_m"].as<double>();
+  leg_offset_ = kinematics_doc["default_y_offset_foot"].as<double>()*2;
   y_steptype_offset_y_= kinematics_doc["y_steptype_y_offeset"].as<double>();
   y_steptype_offset_yaw_= kinematics_doc["y_steptype_yaw_offeset"].as<double>()*RAD2DEG;
 }
