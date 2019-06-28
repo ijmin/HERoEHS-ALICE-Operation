@@ -246,13 +246,14 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
+  ROS_INFO("1111111111111111111\n");
   if(previous_command == "stop" && walking_check == true)
     return;
-
+  ROS_INFO("222222222222222222222\n");
   if(command_interval_check == 0)
     return;
   /////////////////////////////////////// motion check
-
+  ROS_INFO("3333333333333333333333\n");
   if(motion_check == true)
   {
     if(walking_check == true) // 명령이 씹힌것
@@ -261,6 +262,8 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       return;
     }
   }
+
+  ROS_INFO("444444444444444444\n");
 
   if(move_command->key != "left_kick" && move_command->key != "right_kick" && move_command->key != "y_type_left_kick" && move_command->key != "y_type_right_kick")
   {
@@ -277,7 +280,7 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       move_command->key == "centered_left_precision" || move_command->key == "centered_right_precision")
   {
     //change_walking_kick_mode("walking", "");
-
+    previous_command = move_command->key;
     if(move_command->key == "forward_precision" || move_command->key == "backward_precision" )
     {
       command_controller->step_type = "default";
