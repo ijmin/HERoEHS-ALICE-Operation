@@ -4,9 +4,9 @@ kick_height_m: 0.08
 kick_back_time: 0.7
 kick_back_m: 0.1
 kick_side_time: 0.0
-kick_side_m: 0.1
-kick_time: 0.2
-kick_far_m: 0.23
+kick_side_m: 0.0
+kick_time: 0.4
+kick_far_m: 0.15
 kick_pitch: 15.0
 kick_time_sec: 1.6  #not use
 kick_y_cob: 0.05     #planner
