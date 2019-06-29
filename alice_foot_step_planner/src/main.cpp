@@ -25,20 +25,18 @@ int main( int argc , char **argv )
   while(ros::ok())
   {
     ros::spinOnce();
-    if(current_stop_time > 1000*100 && current_stop_time < 1000*100.8)
+    if(current_stop_time > 1000*30)
     {
       foot_step_planner-> foot_set_command_msg.command = "stop";
       foot_step_planner->foot_step_command_pub.publish(foot_step_planner->foot_set_command_msg);
       foot_step_planner->command_interval_check = 0;
-      count = 0;
-    }
-    else if(current_stop_time >= 1000*100.8)
-    {
       current_stop_time = 0;
     }
     else
+    {
+      foot_step_planner->command_interval_check = 1;
       current_stop_time += 1;
-
+    }
 
     if(count > 1000*0.8)
     {
