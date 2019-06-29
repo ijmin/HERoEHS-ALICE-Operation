@@ -503,7 +503,7 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
         return;
 
     g_foot_stp_generator.getStepData( &add_stp_data_srv.request.step_data_array, ref_step_data, STOP_WALKING, 0);
-    g_is_running_check_needed = false;
+    g_is_running_check_needed = true;
   }
   else
   {
