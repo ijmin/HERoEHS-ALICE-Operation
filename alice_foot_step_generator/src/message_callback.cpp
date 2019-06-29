@@ -170,6 +170,11 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
       && (last_command.step_angle_rad == msg->step_angle_rad))
   {
     //prevent double click & switching foot step time
+    if( (last_command.step_num == 1) && isRunning() )
+    {
+       ROS_ERROR("STEP NUM 1 --->>> STOP");
+       return;
+    }
 
     if( (fabs(now_time - g_last_command_time) < 2*last_command.step_time) )
     {
