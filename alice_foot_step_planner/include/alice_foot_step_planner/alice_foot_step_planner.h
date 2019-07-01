@@ -188,6 +188,8 @@ public:
 
    //stop command
    std::string previous_command;
+   std::string receive_command_key;
+   std::string receive_command_value;
 
 
 private:

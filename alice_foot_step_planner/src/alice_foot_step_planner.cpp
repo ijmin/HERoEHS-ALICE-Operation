@@ -33,6 +33,8 @@ FootStepPlanner::FootStepPlanner()
   command_interval_check = 0;
   previous_command = "";
   forward_extended_length = 0.07;
+  receive_command_key = "";
+  receive_command_value = "";
   //readIDAlice();
 }
 FootStepPlanner::~FootStepPlanner()
@@ -246,14 +248,14 @@ void FootStepPlanner::CalculateStepData(double x, double y, std::string command)
 }
 void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyValue::ConstPtr& move_command)
 {
-  //ROS_INFO("1111111111111111111\n");
+  receive_command_key   = move_command->key;
+  receive_command_value = move_command->value;
+
   if(previous_command == "stop" && walking_check == true)
     return;
-  //ROS_INFO("222222222222222222222\n");
   if(command_interval_check == 0)
     return;
   /////////////////////////////////////// motion check
-  //ROS_INFO("3333333333333333333333\n");
   if(motion_check == true)
   {
     if(walking_check == true) // 명령이 씹힌것
@@ -262,9 +264,6 @@ void FootStepPlanner::moveCommandStatusMsgCallback(const diagnostic_msgs::KeyVal
       return;
     }
   }
-
-  //ROS_INFO("444444444444444444\n");
-
   if(move_command->key != "left_kick" && move_command->key != "right_kick" && move_command->key != "y_type_left_kick" && move_command->key != "y_type_right_kick")
   {
     if(previous_motion_check != motion_check && motion_check == false)
