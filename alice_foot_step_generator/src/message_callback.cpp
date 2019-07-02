@@ -184,10 +184,6 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
 
 
   }
-  if(last_command.command == "stop" && (msg->command == "stop"))
-    return;
-
-  g_last_command_time = now_time;
 
   last_command.command          = msg->command;
   last_command.step_num         = msg->step_num;
@@ -195,6 +191,12 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
   last_command.step_length      = msg->step_length;
   last_command.side_step_length = msg->side_step_length;
   last_command.step_angle_rad   = msg->step_angle_rad;
+
+  if(last_command.command == "stop" && (msg->command == "stop"))
+    return;
+
+  g_last_command_time = now_time;
+
 
   ROS_INFO("[Demo]  : Walking Command");
   ROS_INFO_STREAM("  command          : " << msg->command );
