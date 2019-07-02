@@ -34,7 +34,7 @@ int main( int argc , char **argv )
     }
     else
     {
-      foot_step_planner->command_interval_check = 1;
+      //foot_step_planner->command_interval_check = 1;
       current_stop_time += 1;
     }
 
