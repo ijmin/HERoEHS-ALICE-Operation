@@ -32,7 +32,6 @@ FootStepPlanner::FootStepPlanner()
   command_controller = new Command_generator;
   command_interval_check = 0;
   previous_command = "";
-  forward_extended_length = 0.07;
   receive_command_key = "";
   receive_command_value = "";
   //readIDAlice();
@@ -911,6 +910,7 @@ Command_generator::Command_generator()
   turn_side_step_length = 0;
   turn_step_angle_rad = 0;
   turn_step_time = 0;
+  forward_extended_length = 0.07;
   // start_time = clock();
   //////////////////
 
@@ -925,6 +925,10 @@ void Command_generator::Set_FootParam(int alice_id)
     FootParam.side_step_length = default_side_step_length;
     FootParam.step_angle_rad = default_step_angle_rad;
     FootParam.step_time = default_step_time;
+
+    if(FootParam.command == "forward")
+      FootParam.step_length = default_step_length + forward_extended_length;
+
   }
   else if(step_type == "expanded")
   {

@@ -76,6 +76,8 @@ public:
   void Write_Log(void);
   int command_switch;
   string speed_switch;
+
+  double forward_extended_length;
 /*  string init_log_path;
   string current_status;
   string accept_or_ignore;
@@ -173,7 +175,6 @@ public:
   double kick_y_cob_;
   int alice_id_int;
   double side_step_length_max , side_step_length_min, step_rad_max, step_rad_min;
-  double forward_extended_length;
 
   //command generator
    Command_generator *command_controller;
