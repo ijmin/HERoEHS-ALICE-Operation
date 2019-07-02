@@ -25,6 +25,16 @@ int main( int argc , char **argv )
   while(ros::ok())
   {
     ros::spinOnce();
+    if(count > 1000*0.8)
+    {
+      foot_step_planner->command_interval_check = 1;
+      count = 0;
+    }
+    else
+    {
+      count += 1;
+    }
+
     if(current_stop_time > 1000*90)
     {
       foot_step_planner-> foot_set_command_msg.command = "stop";
@@ -38,15 +48,6 @@ int main( int argc , char **argv )
       current_stop_time += 1;
     }
 
-    if(count > 1000*0.8)
-    {
-      foot_step_planner->command_interval_check = 1;
-      count = 0;
-    }
-    else
-    {
-      count += 1;
-    }
     usleep(1000);
   }
   //ros::spin();
