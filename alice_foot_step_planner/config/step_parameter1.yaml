@@ -6,7 +6,7 @@ default_step_time: 0.85
 expanded_step_num: 4
 expanded_step_length: 0.12
 expanded_side_step_length: 0.1
-expanded_step_angle_radian: 0.52
+expanded_step_angle_radian: 0.173333
 expanded_step_time: 0.85
 centered_step_num: 4
 centered_step_length: 0.05
