@@ -910,7 +910,7 @@ Command_generator::Command_generator()
   turn_side_step_length = 0;
   turn_step_angle_rad = 0;
   turn_step_time = 0;
-  forward_extended_length = 0.07;
+  forward_extended_length = 0.0;
   // start_time = clock();
   //////////////////
 
