@@ -17,10 +17,15 @@ int main( int argc , char **argv )
   double count = 0;
   double current_stop_time = 0;
   bool command_lock = false;
+  double stop_motion_time = 5;
   foot_step_planner = new alice::FootStepPlanner;
   ros::init( argc , argv , "alice_foot_step_planner" );
 
   foot_step_planner->initialize();
+  if(foot_step_planner->alice_id_int==1)
+    stop_motion_time=0.85;
+  else
+    stop_motion_time=5.0;
 
   while(ros::ok())
   {
@@ -38,7 +43,7 @@ int main( int argc , char **argv )
     if(current_stop_time > 1000*90)
     {
       foot_step_planner-> foot_set_command_msg.command = "stop";
-      foot_step_planner-> foot_set_command_msg.step_time = 0.85;
+      foot_step_planner-> foot_set_command_msg.step_time = stop_motion_time;
       foot_step_planner->foot_step_command_pub.publish(foot_step_planner->foot_set_command_msg);
       foot_step_planner->command_interval_check = 0;
       current_stop_time = 0;
