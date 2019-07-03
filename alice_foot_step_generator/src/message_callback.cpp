@@ -185,6 +185,12 @@ void walkingCommandCallback(const alice_foot_step_generator::FootStepCommand::Co
 
   }
 
+  if( (last_command.step_num == 1) && isRunning() )
+  {
+     ROS_ERROR("STEP NUM 1 --->>> STOP");
+     return;
+  }
+
   if(last_command.command == "stop" && (msg->command == "stop"))
     return;
 
