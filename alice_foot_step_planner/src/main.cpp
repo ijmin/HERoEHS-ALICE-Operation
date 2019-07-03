@@ -38,6 +38,7 @@ int main( int argc , char **argv )
     if(current_stop_time > 1000*90)
     {
       foot_step_planner-> foot_set_command_msg.command = "stop";
+      foot_step_planner-> foot_set_command_msg.step_time = 0.85;
       foot_step_planner->foot_step_command_pub.publish(foot_step_planner->foot_set_command_msg);
       foot_step_planner->command_interval_check = 0;
       current_stop_time = 0;
