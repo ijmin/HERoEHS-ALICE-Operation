@@ -190,8 +190,8 @@ void FootStepPlanner::DecideStepNumLength(double distance , std::string command,
     }
     else
     {
-      foot_set_command_msg.step_num = 1;
-      foot_set_command_msg.side_step_length = distance;
+      foot_set_command_msg.step_num = 2;
+      foot_set_command_msg.side_step_length = distance/2;
     }
   }
 
@@ -211,8 +211,8 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int rob
   }
   else
   {
-    foot_set_command_msg.step_num = 1;
-    foot_set_command_msg.step_angle_rad = yaw_rad;
+    foot_set_command_msg.step_num = 2;
+    foot_set_command_msg.step_angle_rad = yaw_rad/2;
   }
   if(!command.compare("centered left") || !command.compare("centered right"))
   {
@@ -225,10 +225,10 @@ void FootStepPlanner::AlignRobotYaw(double yaw_rad, std::string command, int rob
     }
     else
     {
-      foot_set_command_msg.step_num = 1;
-      foot_set_command_msg.step_length = 0.3*(1-cos(yaw_rad));
-      foot_set_command_msg.side_step_length = 0.3*sin(yaw_rad);
-      foot_set_command_msg.step_angle_rad = yaw_rad;
+      foot_set_command_msg.step_num = 2;
+      foot_set_command_msg.step_length = 0.3*(1-cos(yaw_rad))/2;
+      foot_set_command_msg.side_step_length = 0.3*sin(yaw_rad)/2;
+      foot_set_command_msg.step_angle_rad = yaw_rad/2;
     }
   }
   foot_set_command_msg.command = command;
