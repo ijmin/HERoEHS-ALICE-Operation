@@ -1,6 +1,6 @@
 cob_x_offset_m: -0.01
 cob_y_offset_m: 0
-foot_roll_gyro_p_gain: 0.2
+foot_roll_gyro_p_gain: 0.4
 foot_roll_gyro_d_gain: 0
 foot_pitch_gyro_p_gain: 0.2
 foot_pitch_gyro_d_gain: 0
@@ -12,7 +12,7 @@ foot_x_force_p_gain: 0.04
 foot_x_force_d_gain: 0
 foot_y_force_p_gain: 0.04
 foot_y_force_d_gain: 0
-foot_z_force_p_gain: 0.024
+foot_z_force_p_gain: 0.014
 foot_z_force_d_gain: 0
 foot_roll_torque_p_gain: 0.008
 foot_roll_torque_d_gain: 0
